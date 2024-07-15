@@ -8,10 +8,10 @@ const SideBar = () => {
             <div className={styles.profile}>
                 <ul className={styles.nav}>
                     <li>
-                        <Link className={styles.navLink} href="#" to={'/store'}>마이페이지</Link>
+                        <Link to={'/store'} className={styles['nav-link']} >마이페이지</Link>
                     </li>
                     <li>
-                        <a className={styles.navLink} href="#">개인정보수정</a>
+                        <a className={styles.navLink}>개인정보수정</a>
                     </li>
                 </ul>
                 <div className={styles.stats}>
