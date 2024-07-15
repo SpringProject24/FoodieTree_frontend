@@ -1,10 +1,10 @@
 import React from 'react';
-import SideBar from "../../components/store/SideBar";
+import MyPageEdit from "../../components/store/MyPageEdit";
 
 const StoreMyPageEdit = () => {
     return (
         <>
-            <SideBar />
+            <MyPageEdit />
         </>
     );
 };
