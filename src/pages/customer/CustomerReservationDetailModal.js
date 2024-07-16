@@ -1,12 +1,17 @@
 import React from 'react';
-import {useModal} from "../common/ModalProvider";
 
-const CustomerReservationDetailModal = ({reservation}) => {
+const CustomerReservationDetailModal = ({reservationDetail}) => {
 
     return (
+        <>
         <div>
-
+            예약 상세 조회 모달
         </div>
+            <div>
+                <div>예약자: {reservationDetail.nickname}</div>
+                <div>예약시간: {reservationDetail.reservationTime}</div>
+            </div>
+        </>
     );
 };
 
