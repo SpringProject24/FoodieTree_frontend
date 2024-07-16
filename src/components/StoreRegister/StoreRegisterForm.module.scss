@@ -1,21 +1,29 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 .registration {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 20px 50px;
   position: relative;
+  color: #4b4a47;
+  //border: 1px solid lawngreen;
+  width: 800px;
+  margin: 0 auto;
+  text-align: left;
+  font-family: "Pretendard Variable", Pretendard, sans-serif ;
 
   h2 {
-    font-weight: bolder;
-    font-size: larger;
+    font-weight: 700;
+    font-size: 1.2rem;
     margin-top: 30px;
     margin-bottom: 60px;
   }
   label {
     display: block;
-    margin-bottom: 5px;
+    margin: 0 0 5px 5px;
+    font-weight: 700;
   }
-  label, input {
+  input, select {
     width: 70%;
     margin: 0 auto;
   }
@@ -26,38 +34,43 @@
     margin-bottom: 30px;
   }
   select {
-    width: 100%;
+    //width: 100%;
     height: 30px;
     margin-bottom: 40px;
   }
 
+  .btn-approval {
+    //box-shadow:inset 0px 1px 0px 0px #a4e271;
+    background: linear-gradient(45deg, #43e97b 0%, #38f9d7 100%);
+    border-radius:6px;
+    //border:1px solid mediumvioletred;
+    display:block;
+    cursor:pointer;
+    //color:#ffffff;
+    color:var(--color-gray-600);
+    font-size:1rem;
+    font-weight:bold;
+    padding:15px 35px;
+    text-decoration:none;
+    //text-shadow:0px 1px 0px #528009;
+    text-align: center;
+    position: relative;
+    left: 50%;
+    transform: translateX(-60%);
+    margin-bottom: 60px;
+    transition: 300ms;
+    width: 200px;
+
+
+    &hover {
+      background:linear-gradient(to bottom, #43e97b 0%, #38f9d7 100%);
+      //border:1px solid #43e97b;
+    }
+    &active {
+      position:relative;
+      top:1px;
+    }
+  }
 }
 
 
-.btn-approval {
-  //box-shadow:inset 0px 1px 0px 0px #a4e271;
-  background: linear-gradient(to bottom, #43e97b 5%, #38f9d7 100%);
-  border-radius:6px;
-  border:1px solid #43e97b;
-  display:inline-block;
-  cursor:pointer;
-  color:#ffffff;
-  font-size:15px;
-  font-weight:bold;
-  padding:6px 24px;
-  text-decoration:none;
-  //text-shadow:0px 1px 0px #528009;
-  position: relative;
-  left: 25%;
-  margin-bottom: 100px;
-  transition: 300ms;
-
-  &hover {
-    background:linear-gradient(to bottom, #43e97b 5%, #38f9d7 100%);
-    border:1px solid #43e97b;
-  }
-  &active {
-    position:relative;
-    top:1px;
-  }
-}
