@@ -5,6 +5,8 @@ import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
 import StoreMyPageEdit from "../pages/store/StoreMyPageEdit";
 import StoreMyPageOutlet from "../pages/store/StoreMyPageOutlet";
+import CustomerMyPageOutlet from "../pages/customer/CustomerMyPageOutlet";
+import CustomerMyPageEdit from "../pages/customer/CustomerMyPageEdit";
 
 const homeRouter = [
   {
@@ -24,7 +26,14 @@ const storeRouter = [
   },
   {
     path: 'edit',
-    element: <StoreMyPageEdit />
+    element: <StoreMyPageEdit/>
+  }
+];
+
+const customerRouter = [
+  {
+    path: 'edit',
+    element: <CustomerMyPageEdit />
   }
 ]
 
@@ -46,7 +55,8 @@ export const router = createBrowserRouter([
       },
       {
         path: '/customer',
-        element: <div>customer page</div>
+        element: <CustomerMyPageOutlet />,
+        children: customerRouter
       }
     ]
   },
