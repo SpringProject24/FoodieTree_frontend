@@ -6,6 +6,7 @@ const SideBar = () => {
     return (
         <>
             <div className={styles.profile}>
+                <h2>xxxx@xxxx.com</h2>
                 <ul className={styles.nav}>
                     <li>
                         <Link to={'/store'} className={styles['nav-link']} >마이페이지</Link>
@@ -19,9 +20,9 @@ const SideBar = () => {
                         <img src="/assets/img/mypage-carbon.png" alt="leaf"/>
                         <div>kg의 이산화탄소 배출을 줄였습니다</div>
                     </div>
-                    <div id="community" >
-                        <img src="/assets/img/mypage-community.png" alt="community"/>
-                        <div>지금까지 명의 손님을 만났어요</div>
+                    <div id="community">
+                        <img src="/assets/img/mypage-pigbank.png" alt="community"/>
+                        <div>지금까지 xxx원을 아꼈어요</div>
                     </div>
                 </div>
             </div>

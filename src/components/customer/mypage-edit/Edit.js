@@ -1,7 +1,15 @@
 import React from 'react';
 import styles from './Edit.module.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUser, faClock, faPhone, faDollarSign, faKey, faPenToSquare} from "@fortawesome/free-solid-svg-icons";
+import {
+    faUser,
+    faClock,
+    faPhone,
+    faDollarSign,
+    faKey,
+    faPenToSquare,
+    faCircleXmark
+} from "@fortawesome/free-solid-svg-icons";
 import {faSquareCheck} from "@fortawesome/free-regular-svg-icons";
 
 const Edit = () => {
@@ -17,77 +25,19 @@ const Edit = () => {
                     <div className={styles["input-area"]}>
                         <div className={styles["input-wrapper"]}>
                             <div className={styles.icon}><FontAwesomeIcon icon={faUser}/></div>
-                            <div>상호명</div>
-                            <div id="store-name-mypage-edit">가게이름</div>
+                            <input type="text" id="nickname"/>
+                            <FontAwesomeIcon icon={faSquareCheck}/>
                         </div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}><FontAwesomeIcon icon={faUser}/></div>
-                            <div>이메일</div>
-                            <div id="store-id-mypage-edit">이메일주소</div>
-                        </div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}><FontAwesomeIcon icon={faClock}/></div>
-                            <div>픽업 시작 시간
-                                <label>
-                                    <input/>
-                                </label>
-                                <FontAwesomeIcon icon={faSquareCheck}/>
-                            </div>
-                        </div>
-                        <div id="error-message" style={{color: "red", display: "none"}}>픽업 시작 시간은 픽업 마감
-                            시간보다 늦을 수 없습니다.
-                        </div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}><FontAwesomeIcon icon={faClock}/></div>
-                            <div>픽업 마감 시간
-                                <label>
-                                    <input/>
-                                </label>
-                                <FontAwesomeIcon icon={faSquareCheck}/>
-                            </div>
-                        </div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}><FontAwesomeIcon icon={faUser}/></div>
-                            <div className="icon"><i className="fa-solid fa-user"></i></div>
-                            <div>기본 수량 값
-                                <span id="product-count-move">
-                                    <label>
-                                        <input type={"number"} min={1}/>
-                                    </label>
-                                    <FontAwesomeIcon icon={faSquareCheck}/>
-                                </span>
-                            </div>
-                        </div>
-                        <div id="product-cnt-error-message"
-                             style={{display: 'none', color: 'red'}}></div>
                         <div className={styles["input-wrapper"]}>
                             <div className={styles.icon}><FontAwesomeIcon icon={faPhone}/></div>
-                            <div>가게 전화번호
+                            <div>
                                 <span id="store-phone-number-move">
                                     <label>
-                                        <input id="business-number-input" min="1"/>
+                                        <input id="customer-number-input" min="1"/>
                                     </label>
                                     <FontAwesomeIcon icon={faSquareCheck}/>
                                 </span>
                             </div>
-                        </div>
-                        <div id="business-num-error-message"
-                             style={{display: 'none', color: 'red'}}></div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}>
-                                <FontAwesomeIcon icon={faDollarSign}/>
-                            </div>
-                            <div id="special-box-price-des">
-                                스페셜박스 가격
-                            </div>
-                            <span id="special-box-price-move">
-                                <select id="price">
-                                    <option value="3900">3900</option>
-                                    <option value="5900">5900</option>
-                                    <option value="7900">7900</option>
-                                </select>
-                                <FontAwesomeIcon icon={faSquareCheck}/>
-                            </span>
                         </div>
                         <div className={styles["input-wrapper"]}>
                             <div className={styles.icon}>
@@ -108,6 +58,57 @@ const Edit = () => {
                         </a>
                         <button>이미지 변경</button>
                     </div>
+                </div>
+            </div>
+            <div className={styles['edit-box']}>
+                <div className={styles.title}>
+                    <h3 className={styles["title-text"]}>
+                        <span> 선호지역 </span>
+                    </h3>
+                </div>
+                <div className={styles['edit-wrapper']}>
+                    <ul className={styles.preferred} id="preferred-area">
+                        <li id="area-1">
+                            <span>서울시 마포구</span>
+                            <FontAwesomeIcon className={styles.xmark} icon={faCircleXmark}/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div className={styles['edit-box']}>
+                <div className={styles.title}>
+                    <h3 className={styles["title-text"]}>
+                        <span> 선호음식 </span>
+                    </h3>
+                </div>
+                <div className={styles['edit-wrapper']}>
+                    <ul className={styles.preferred} id="preferred-area">
+                        <li id="food-1">
+                            <div className={styles["img-box"]}>
+                                <img src={'/assets/img/defaultImage.jpg'} alt="선호음식이미지"/>
+                            </div>
+                            <span>양식</span>
+                            <FontAwesomeIcon className={styles.xmark} icon={faCircleXmark}/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div className={styles['edit-box']}>
+                <div className={styles.title}>
+                    <h3 className={styles["title-text"]}>
+                        <span> 최애가게 </span>
+                    </h3>
+                </div>
+                <div className={styles['edit-wrapper']}>
+                    <ul className={styles.preferred} id="preferred-area">
+                        <li id="store-id">
+                            <div className={styles["img-box"]}>
+                                <img src={'/assets/img/defaultImage.jpg'} alt="선호음식이미지"/>
+                            </div>
+                            <span>양식</span>
+                            <FontAwesomeIcon className={styles.xmark} icon={faCircleXmark}/>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
