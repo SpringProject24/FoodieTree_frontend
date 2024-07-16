@@ -1,6 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './SignUpForm.module.scss';
 
+import koreanImg from '../../assets/img/korean.jpg'
+import chineseImg from '../../assets/img/chinese.jpg';
+import japaneseImg from '../../assets/img/japanese.jpg';
+import westernImg from '../../assets/img/western.jpg';
+import dessertImg from '../../assets/img/dessert.jpg';
+import cafeImg from '../../assets/img/cafe.jpg';
+import etcImg from '../../assets/img/etc.jpg';
+
+const foodImages = {
+  '한식': koreanImg,
+  '중식': chineseImg,
+  '일식': japaneseImg,
+  '양식': westernImg,
+  '디저트': dessertImg,
+  '카페': cafeImg,
+  '기타': etcImg,
+};
+
 const SignUpForm = () => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
@@ -10,23 +28,23 @@ const SignUpForm = () => {
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [map, setMap] = useState(null);
 
-  useEffect(() => {
-    if (step === 4) {
-      const script = document.createElement('script');
-      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_API_KEY}`;
-      script.async = true;
-      script.onload = () => {
-        const container = document.getElementById('map');
-        const options = {
-          center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-          level: 3
-        };
-        const map = new window.kakao.maps.Map(container, options);
-        setMap(map);
-      };
-      document.head.appendChild(script);
-    }
-  }, [step]);
+  // useEffect(() => {
+  //   if (step === 4) {
+  //     const script = document.createElement('script');
+  //     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_API_KEY}`;
+  //     script.async = true;
+  //     script.onload = () => {
+  //       const container = document.getElementById('map');
+  //       const options = {
+  //         center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+  //         level: 3
+  //       };
+  //       const map = new window.kakao.maps.Map(container, options);
+  //       setMap(map);
+  //     };
+  //     document.head.appendChild(script);
+  //   }
+  // }, [step]);
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handleVerificationCodeChange = (e) => setVerificationCode(e.target.value);
@@ -45,11 +63,11 @@ const SignUpForm = () => {
   };
 
   const handleNextStep = () => {
-    if (step === 3 && selectedFoods.length === 0) {
+    if (step === 4 && selectedFoods.length === 0) {
       alert('선호하는 음식을 1개 이상 선택해주세요.');
       return;
     }
-    if (step === 3 && selectedFoods.length > 3) {
+    if (step === 4 && selectedFoods.length > 3) {
       alert('선호하는 음식은 최대 3개까지 선택 가능합니다.');
       return;
     }
