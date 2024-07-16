@@ -1,13 +1,27 @@
 
-import React from 'react';
+import React, {useState} from 'react';
 import CategoryBtn from './CategoryBtn';
 import styles from './FoodNav.module.scss';
 import bannerImg from '../../assets/images/userMain/header.jpg';
 
-const FoodNav = ({ categories }) => {
+const FoodNav = ({ categories, stores }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const handleCategoryClick = (category) => {
     console.log(`Selected category: ${category}`);
   };
+
+
+const handleNextClick = () => {
+  if(currentIndex<stores.length-4){
+    setCurrentIndex(currentIndex+4);
+  }
+};
+const handlePrevClick = () => {
+  if(currentIndex>0){
+    setCurrentIndex(currentIndex-4);
+  }
+};
 
   return (
     <>
@@ -31,6 +45,27 @@ const FoodNav = ({ categories }) => {
           ))}
         </div>
       </div>
+
+
+    {/* ✅ 내가 찜한 가게 리스트 */}
+    <div className={styles.list1}>
+    <h2 className={styles.title1}>❤️ 내가 찜한 가게</h2>
+      <div className={styles['favorite-store-list']}>
+        <button className={`${styles['nav-button']} ${styles.left}`} onClick={handlePrevClick}>&lt;</button>
+        <div className={styles['storeList']}>
+          {stores.map((store, index) => (
+            <div key={index} className={styles['store-item']}>
+              <img src={store.image} alt={store.name} />
+              <p className={styles['store-name']}>{store.name}</p>
+              <p className={styles['store-price']}>{store.price}</p>
+            </div>
+          ))}
+        </div>
+
+        <button className={`${styles['nav-button']} ${styles.right}`} onClick={handleNextClick}>&gt;</button>
+      </div>
+    </div>
+
     </>
   );
 }
