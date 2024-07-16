@@ -3,6 +3,7 @@ import {createBrowserRouter} from "react-router-dom";
 import RootLayout from '../layout/RootLayout';
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
+import ProductMainPage from "../pages/product/ProductMainPage";
 
 const homeRouter = [
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: '/customer',
         element: <div>customer page</div>
+      },
+      {
+        path: '/product',
+        element: <ProductMainPage/>
       }
     ]
   },
