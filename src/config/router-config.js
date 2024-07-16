@@ -4,7 +4,7 @@ import RootLayout from '../layout/RootLayout';
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
 import StoreMyPageEdit from "../pages/store/StoreMyPageEdit";
-import StoreMyPage from "../pages/store/StoreMyPage";
+import StoreMyPageOutlet from "../pages/store/StoreMyPageOutlet";
 
 const homeRouter = [
   {
@@ -18,6 +18,10 @@ const homeRouter = [
 ];
 
 const storeRouter = [
+  {
+    index: true,
+    element: <div>storemypage~</div>
+  },
   {
     path: 'edit',
     element: <StoreMyPageEdit />
@@ -37,7 +41,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/store',
-        element: <StoreMyPage />,
+        element: <StoreMyPageOutlet />,
         children: storeRouter
       },
       {

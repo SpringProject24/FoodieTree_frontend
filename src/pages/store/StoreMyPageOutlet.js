@@ -1,7 +1,7 @@
 import React from 'react';
 import {Outlet} from "react-router-dom";
 
-const StoreMyPage = () => {
+const StoreMyPageOutlet = () => {
     return (
         <>
             <div>store page</div>
@@ -10,4 +10,4 @@ const StoreMyPage = () => {
     );
 };
 
-export default StoreMyPage;
+export default StoreMyPageOutlet;

@@ -11,7 +11,7 @@ const SideBar = () => {
                         <Link to={'/store'} className={styles['nav-link']} >마이페이지</Link>
                     </li>
                     <li>
-                        <a className={styles.navLink}>개인정보수정</a>
+                        <Link to={'/store/edit'} className={styles['nav-link']} >개인정보수정</Link>
                     </li>
                 </ul>
                 <div className={styles.stats}>
