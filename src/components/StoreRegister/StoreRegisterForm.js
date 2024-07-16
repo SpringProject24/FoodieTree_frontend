@@ -14,7 +14,7 @@ const StoreRegisterForm = () => {
     {name: '일식', value: 'JAPANESE'},
     {name: '카페', value: 'CAFE'},
     {name: '디저트', value: 'DESSERT'},
-    {name: '기타', value: 'DESSERT'},
+    {name: '기타', value: 'ELSE'},
   ];
   // input 상태관리
   const [values, setValues] = useState({
@@ -30,6 +30,7 @@ const StoreRegisterForm = () => {
 
     setValues(prevValues => {
       const { name, value } = e.target;
+        console.log('가게등록 setValue: ', value)
       return {
         ...prevValues,
         [name]: value

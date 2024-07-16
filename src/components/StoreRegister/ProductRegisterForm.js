@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {Form} from "react-router-dom";
 import UploadInput from "./UploadInput";
 import SelectBox from "./SelectBox";
+import formStyle from './StoreRegisterForm.module.scss';
+
 
 const ProductRegisterForm = () => {
 
@@ -29,11 +31,13 @@ const ProductRegisterForm = () => {
     {name: '7900원', value: 7900},
   ]
 
-  return (
+    const submitHandler = (e) => {
 
-    <Form className={} onSubmit={}>
+    };
+    return (
+
+    <Form className={formStyle.registration} onSubmit={submitHandler}>
       <UploadInput/>
-
 
       <label htmlFor="productCnt">상품 수량 :</label>
       <input
@@ -54,7 +58,7 @@ const ProductRegisterForm = () => {
         onChange={changeHandler}
       />
 
-      <button className="btn-approval" type="submit">상품 등록하기</button>
+      <div className={formStyle["btn-approval"]}>상품 등록하기</div>
     </Form>
   );
 };
