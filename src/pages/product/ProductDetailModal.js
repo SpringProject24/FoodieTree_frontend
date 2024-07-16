@@ -60,10 +60,6 @@ const ProductDetailModal = ({closeModal}) => {
                                         <i className="fa-solid fa-basket-shopping" />
                                         <span>음식종류</span>
                                     </div>
-                                    <div className={styles['prod-rate']}>
-                                        <i className="fa-solid fa-star" />
-                                        <span>평점</span>
-                                    </div>
                                     <div className={styles['prod-time']}>
                                         <i className="fa-solid fa-clock" />
                                         <span>픽업시간</span>
