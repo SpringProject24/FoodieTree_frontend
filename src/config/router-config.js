@@ -1,8 +1,8 @@
 import {createBrowserRouter} from "react-router-dom";
-
 import RootLayout from '../layout/RootLayout';
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
+import StoreMyPage from "../pages/store/StoreMyPage";
 
 const homeRouter = [
   {
@@ -14,6 +14,13 @@ const homeRouter = [
     element: <div>sign-in page</div>
   }
 ];
+
+const storeRouter = [
+  {
+    index: true,
+    element: <StoreMyPage />
+  }
+]
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +35,8 @@ export const router = createBrowserRouter([
       },
       {
         path: '/store',
-        element: <div>store page</div>
+        element: <StoreMyPage />,
+        children: storeRouter
       },
       {
         path: '/customer',
