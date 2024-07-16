@@ -3,6 +3,7 @@ import styles from './Edit.module.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser, faClock, faPhone, faDollarSign, faKey, faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {faSquareCheck} from "@fortawesome/free-regular-svg-icons";
+import ProfileImgBtn from "./ProfileImgBtn";
 
 const Edit = () => {
     return (
@@ -97,17 +98,7 @@ const Edit = () => {
                             <button className="btn calendar-button" id="reset-pw-btn">비밀번호 재설정</button>
                         </div>
                     </div>
-                    <div id="store-mypage-image-edit" className={styles["image-wrapper"]}>
-                        <input type="file" name="profileImage" id="profileImage" accept="image/*"
-                               style={{display: "none"}}/>
-                        <a href="#" id="avatar" className={styles.avatar}>
-                            <FontAwesomeIcon className={styles.i} icon={faPenToSquare}/>
-                            <img
-                                src={'/assets/img/defaultImage.jpg'}
-                                alt="Customer profile image"/>
-                        </a>
-                        <button>이미지 변경</button>
-                    </div>
+                    <ProfileImgBtn />
                 </div>
             </div>
         </div>
