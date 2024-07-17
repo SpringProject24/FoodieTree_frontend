@@ -1,36 +1,30 @@
+import React from "react";
+import CategoryBtn from "./CategoryBtn";
+import styles from "./FoodNav.module.scss";
+import bannerImg from "../../assets/images/userMain/header.jpg";
+import { register } from "swiper/element";
+import { useRef, useEffect } from "react";
 
-import React, {useState} from 'react';
-import CategoryBtn from './CategoryBtn';
-import styles from './FoodNav.module.scss';
-import bannerImg from '../../assets/images/userMain/header.jpg';
-
+register();
 const FoodNav = ({ categories, stores }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const swiperElRef = useRef(null);
 
-  const handleCategoryClick = (category) => {
-    console.log(`Selected category: ${category}`);
-  };
+  // useEffect(() => {
+  //   // listen for Swiper events using addEventListener
+  //   swiperElRef.current.addEventListener("swiperprogress", (e) => {
+  //     const [swiper, progress] = e.detail;
+  //     console.log(progress);
+  //   });
 
-
-const handleNextClick = () => {
-  if(currentIndex<stores.length-4){
-    setCurrentIndex(currentIndex+4);
-  }
-};
-const handlePrevClick = () => {
-  if(currentIndex>0){
-    setCurrentIndex(currentIndex-4);
-  }
-};
-
+  //   swiperElRef.current.addEventListener("swiperslidechange", (e) => {
+  //     console.log("slide changed");
+  //   });
+  // }, []);
   return (
     <>
-      <header className={styles['App-header']}>
+      <header className={styles["App-header"]}>
         <div className={styles.banner}>
-          <img
-            src={bannerImg}
-            alt="banner Image 나중에 바꿀 예정"
-          />
+          <img src={bannerImg} alt="banner Image 나중에 바꿀 예정🚩" />
         </div>
         <div className={styles.title}>
           <h1>환경을 생각하는 착한 소비</h1>
@@ -39,35 +33,48 @@ const handlePrevClick = () => {
       </header>
 
       <div className={styles.nav}>
-        <div className={styles['food-nav']}>
-          {categories.map(category => (
-            <CategoryBtn key={category} label={category} onClick={() => handleCategoryClick(category)} />
+        <div className={styles["food-nav"]}>
+          {categories.map((category) => (
+            <CategoryBtn key={category} label={category} />
           ))}
         </div>
       </div>
 
-
-    {/* ✅ 내가 찜한 가게 리스트 */}
-    <div className={styles.list1}>
-    <h2 className={styles.title1}>❤️ 내가 찜한 가게</h2>
-      <div className={styles['favorite-store-list']}>
-        <button className={`${styles['nav-button']} ${styles.left}`} onClick={handlePrevClick}>&lt;</button>
-        <div className={styles['storeList']}>
-          {stores.map((store, index) => (
-            <div key={index} className={styles['store-item']}>
-              <img src={store.image} alt={store.name} />
-              <p className={styles['store-name']}>{store.name}</p>
-              <p className={styles['store-price']}>{store.price}</p>
-            </div>
-          ))}
+      {/* 내가 찜한 가게 리스트 */}
+      <div className={styles.list1}>
+        <h2 className={styles.title1}>❤️ 내가 찜한 가게</h2>
+        <div className={styles["favorite-store-list"]}>
+          {/* <Swiper
+            slidesPerView={4}
+            spaceBetween={10}
+            navigation
+            pagination={{ clickable: true }}
+          >
+            {stores.map((store, index) => (
+              <SwiperSlide key={index} className={styles.storeItem}>
+                <img src={store.image} alt={store.name} />
+                <p className={styles.storeName}>{store.name}</p>
+                <p className={styles.storePrice}>{store.price}</p>
+              </SwiperSlide>
+            ))}
+          </Swiper> */}
         </div>
-
-        <button className={`${styles['nav-button']} ${styles.right}`} onClick={handleNextClick}>&gt;</button>
+        {/* <swiper-container
+          ref={swiperElRef}
+          slides-per-view="1"
+          navigation="true"
+          pagination="true"
+        >
+          <swiper-slide>Slide 1</swiper-slide>
+          <swiper-slide>Slide 2</swiper-slide>
+          <swiper-slide>Slide 3</swiper-slide>
+          <swiper-slide>Slide 4</swiper-slide>
+          <swiper-slide>Slide 5</swiper-slide>
+          <swiper-slide>Slide 6</swiper-slide>
+        </swiper-container> */}
       </div>
-    </div>
-
     </>
   );
-}
+};
 
 export default FoodNav;
