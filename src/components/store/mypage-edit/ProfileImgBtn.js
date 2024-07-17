@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import styles from "./ProfileImgBtn.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
+import {STORE_URL} from "../../../config/host-config";
 
 const ProfileImgBtn = () => {
     const inputRef = useRef();
@@ -12,7 +13,6 @@ const ProfileImgBtn = () => {
     }
 
     const onChangeHandler = () => {
-        console.log(inputRef.current.files[0]);
         const target = URL.createObjectURL(inputRef.current.files[0]);
         setImg(target);
     }
@@ -20,16 +20,16 @@ const ProfileImgBtn = () => {
     const onClickHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        console.log(inputRef)
         formData.append('storeImg', inputRef.current.files[0]);
-        const response = await fetch('/store/mypage/edit/update/img', {
+        const response = await fetch(STORE_URL + '/mypage/edit/update/img', {
             method: 'POST',
             body: formData
         });
-        const result = await response.json();
-        if (result) {
+        if (response.ok) {
             alert("가게 이미지가 성공적으로 업데이트 되었습니다.");
-            return;
+        } else {
+            const errMsg = await response.text();
+            alert(errMsg);
         }
     }
 
