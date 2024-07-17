@@ -3,6 +3,7 @@ import Profile from '../../components/store/mypage/Profile';
 import styles from './StoreMyPage.module.scss';
 import ReservationList from "../../components/store/mypage/ReservationList";
 import ProductCount from "../../components/store/mypage/ProductCount";
+import Calendar from "../../components/store/mypage/Calendar";
 
 // 더미데이터
 const storeInfo = {
@@ -23,7 +24,6 @@ const reservations = [
         pickupTimeF: "",
         pickedUpAtF: "",
     },
-    // 다른 예약 상태들 추가
 ];
 
 const StoreMyPage = () => (
@@ -33,7 +33,7 @@ const StoreMyPage = () => (
             <div className={styles.content}>
                 <ReservationList reservations={reservations} />
                 <ProductCount />
-                {/*<Calendar />*/}
+                <Calendar />
             </div>
         </div>
     </div>
