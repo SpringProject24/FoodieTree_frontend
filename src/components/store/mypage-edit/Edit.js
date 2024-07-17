@@ -1,9 +1,10 @@
-import React from 'react';
 import styles from './Edit.module.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser, faClock, faPhone, faDollarSign, faKey, faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {faSquareCheck} from "@fortawesome/free-regular-svg-icons";
 import ProfileImgBtn from "./ProfileImgBtn";
+import PickUpStart from "./PickUpStart";
+import PickUpEnd from "./PickUpEnd";
 
 const Edit = () => {
     return (
@@ -26,30 +27,10 @@ const Edit = () => {
                             <div>이메일</div>
                             <div id="store-id-mypage-edit">이메일주소</div>
                         </div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}><FontAwesomeIcon icon={faClock}/></div>
-                            <div>픽업 시작 시간
-                                <label>
-                                    <input/>
-                                </label>
-                                <FontAwesomeIcon icon={faSquareCheck}/>
-                            </div>
-                        </div>
-                        <div id="error-message" style={{color: "red", display: "none"}}>픽업 시작 시간은 픽업 마감
-                            시간보다 늦을 수 없습니다.
-                        </div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}><FontAwesomeIcon icon={faClock}/></div>
-                            <div>픽업 마감 시간
-                                <label>
-                                    <input/>
-                                </label>
-                                <FontAwesomeIcon icon={faSquareCheck}/>
-                            </div>
-                        </div>
+                        <PickUpStart/>
+                        <PickUpEnd/>
                         <div className={styles["input-wrapper"]}>
                             <div className={styles.icon}><FontAwesomeIcon icon={faUser}/></div>
-                            <div className="icon"><i className="fa-solid fa-user"></i></div>
                             <div>기본 수량 값
                                 <span id="product-count-move">
                                     <label>
@@ -98,7 +79,7 @@ const Edit = () => {
                             <button className="btn calendar-button" id="reset-pw-btn">비밀번호 재설정</button>
                         </div>
                     </div>
-                    <ProfileImgBtn />
+                    <ProfileImgBtn/>
                 </div>
             </div>
         </div>
