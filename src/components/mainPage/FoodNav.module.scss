@@ -1,10 +1,13 @@
+
 .App-header {
   text-align: center;
+  // background-color: #f0f0f0;
   padding: 15px 0;
 }
 
-.App-header .title {
+.App-header .title{
   margin: 80px 0;
+  // background-color: aqua;
 }
 
 .App-header h1 {
@@ -29,12 +32,13 @@
   display: block;
 }
 
-.nav {
+
+.nav{
   width: 60%;
+  // background-color: red;
   margin: 0 auto;
 }
-
-.food-nav {
+.food-nav{
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -42,17 +46,19 @@
   margin-bottom: 20px;
 }
 
-.list1 {
+
+// 내가 찜한 가게 리스트 ===================================
+.list1{
   margin: 0 auto;
   position: relative;
   background-color: beige;
-  width: 80%;
+  inline-size: 80%;
 }
-
-.list1 .title1 {
+.list1 .title1{
   padding: 20px 20px 0 20px;
   font-size: 22px;
   font-weight: 600;
+  text-align: left;
 }
 
 .favorite-store-list {
@@ -63,10 +69,19 @@
   display: flex;
   align-items: center;
   padding: 0 10px;
+  // background-color: skyblue;
+}
+
+.storeList {
+  display: flex;
+  transition: transform 0.3s ease;
+  width: 400%;
+  height: 300px;
+  // background-color: purple;
 }
 
 .storeItem {
-  flex: 0 0 25%;
+  flex: 0 0 25%; 
   box-sizing: border-box;
   padding: 10px 10px 0 10px;
   text-align: center;
@@ -80,29 +95,43 @@
   display: block;
 }
 
-.storeItem p {
+.storeItem p{
   height: 15%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-.storeItem .storeName {
+.storeItem .storeName{
   font-size: 20px;
   font-weight: 600;
 }
-
-.storeItem .storePrice {
+.storeItem .storePrice{
   font-size: 20px;
   color: #7CAF74;
   font-weight: 600;
 }
 
-// .swiper-button-next,
-// .swiper-button-prev {
-//   color: rgba(124, 175, 116, 0.8);
-// }
+.navButton {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  background-color: rgba(124, 175, 116, 0.8);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 900;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1;
+}
+.navButton:hover{
+  background-color: rgba(124, 175, 116, 0.8);
+}
 
-// .swiper-pagination-bullet {
-//   background-color: rgba(124, 175, 116, 0.8);
-// }
+.navButton.left {
+  left: 0;
+}
+
+.navButton.right {
+  right: 0;
+}
