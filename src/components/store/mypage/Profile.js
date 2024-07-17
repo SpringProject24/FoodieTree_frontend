@@ -4,7 +4,7 @@ import styles from './Profile.module.scss';
 const Profile = ({ storeInfo, stats }) => (
     <div className={styles.profileSection}>
         <div className={styles.profile}>
-            <a href="#" id="avatar">
+            <a className={styles.imgBox} href="#" id="avatar">
                 <img src={storeInfo.storeImg || '/assets/img/defaultImage.jpg'} alt="store image" />
             </a>
             <h2>{storeInfo.storeName}</h2>
