@@ -2,6 +2,7 @@ import React from 'react';
 import Profile from '../../components/store/mypage/Profile';
 import styles from './StoreMyPage.module.scss';
 import ReservationList from "../../components/store/mypage/ReservationList";
+import ProductCount from "../../components/store/mypage/ProductCount";
 
 // 더미데이터
 const storeInfo = {
@@ -31,7 +32,7 @@ const StoreMyPage = () => (
             <Profile storeInfo={storeInfo} stats={stats} />
             <div className={styles.content}>
                 <ReservationList reservations={reservations} />
-                {/*<ProductCount />*/}
+                <ProductCount />
                 {/*<Calendar />*/}
             </div>
         </div>
