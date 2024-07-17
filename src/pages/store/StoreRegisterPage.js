@@ -7,7 +7,7 @@ const StoreRegisterPage = () => {
   return (
     <>
       <StoreRegisterForm />
-      <ProductRegisterForm/>
+      {/*<ProductRegisterForm/>*/}
     </>
   );
 };

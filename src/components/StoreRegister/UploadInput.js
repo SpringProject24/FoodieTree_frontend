@@ -1,20 +1,38 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styles from './ProductRegisterForm.module.scss';
+import {FaCamera} from "react-icons/fa";
 
-const UploadInput = () => {
-    // 파일 input DOM
-    const fileInputRef = useRef(null);
+const UploadInput = ({ onAdd }) => {
+  // 파일 input DOM
+  const fileInputRef = useRef(null);
+  // const previewImageRef = useRef(null);
 
-    // 파일 상태관리
-    const [selectedFile, setSelectedFile] = useState(null);
+  // 파일 상태관리
+  const [selectedFile, setSelectedFile] = useState(null);
+  // 미리보기 url 상태관리
+  const [previewUrl, setPreviewUrl] = useState(null);
 
-    //
-    const fileHandler = () => {
-        const files = fileInputRef.current.files;
-    };
-    return (
+  //
+  const fileHandler = () => {
+    const file = fileInputRef.current.files[0];
+    if (file) setSelectedFile(file);
+    onAdd(file);
+  };
+
+  useEffect(() => {
+    if (selectedFile) {
+      const objectUrl = URL.createObjectURL(selectedFile);
+      setPreviewUrl(objectUrl);
+
+      // cleanup 미리보기 URL
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  }, [selectedFile]);
+
+  return (
     <div className={styles['image-upload']}>
       <input
+        ref={fileInputRef}
         type="file"
         id="productImage"
         name="proImage"
@@ -23,12 +41,16 @@ const UploadInput = () => {
         // multiple
         required
       />
-      {!selectedFile && <label htmlFor="productImage">상품 사진 업로드 (Drag & Drop)</label>}
+      {!selectedFile &&
+        <label htmlFor="productImage">
+          {"랜덤팩을 맛있게 보여줄 사진을\n\n한 장만 업로드 해주세요!"}
+        </label>
+      }
       {
-          selectedFile &&
-          <div className={styles['image-preview']}>
-            <img src={'#'} alt='product image' />
-          </div>
+        selectedFile &&
+        <div className={styles['image-preview']}>
+          <img src={''+previewUrl || '#'} alt='product image'/>
+        </div>
 
       }
     </div>

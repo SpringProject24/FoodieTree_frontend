@@ -6,6 +6,8 @@ import Home from "../pages/Home";
 // import StoreMyPageEdit from "../pages/store/StoreMyPageEdit";
 // import StoreMyPage from "../pages/store/StoreMyPage";
 import StoreRegisterPage from "../pages/store/StoreRegisterPage";
+import {storeRegisterAction} from "../components/StoreRegister/StoreRegisterForm";
+import ProductRegisterForm, {productRegisterAction} from "../components/StoreRegister/ProductRegisterForm";
 
 const homeRouter = [
   {
@@ -25,7 +27,13 @@ const storeRouter = [
   },
   {
     path: 'approval',
-    element: <StoreRegisterPage />
+    element: <StoreRegisterPage />,
+    action: storeRegisterAction
+  },
+  {
+    path: 'product/approval',
+    element: <ProductRegisterForm />, // 임시로 Form
+    action: productRegisterAction
   }
 ]
 
