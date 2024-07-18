@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './PreferredArea.module.scss';
 
-const PreferredArea = ({ preferredAreas }) => {
+const PreferredArea = ({ preferredAreas = [] }) => {
     return (
         <div className={styles.preferredAreaForm}>
             <div className={styles.title}>
@@ -11,9 +11,13 @@ const PreferredArea = ({ preferredAreas }) => {
             </div>
             <div className={styles.infoWrapper}>
                 <ul className={`${styles.infoList} ${styles.area}`}>
-                    {/*{preferredAreas.map((area, index) => (*/}
-                    {/*    <li key={index}>{area}</li>*/}
-                    {/*))}*/}zz
+                    {preferredAreas.length > 0 ? (
+                        preferredAreas.map((area, index) => (
+                            <li key={index}>{area}</li>
+                        ))
+                    ) : (
+                        <li>선호 지역이 없습니다.</li>
+                    )}
                 </ul>
             </div>
         </div>
