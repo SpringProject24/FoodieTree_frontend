@@ -22,8 +22,9 @@
     .close {
       color: #aaa;
       float: right;
-      font-size: 28px;
+      font-size: 35px;
       font-weight: bold;
+      padding: 15px;
 
       &:hover,
       &:focus {
@@ -31,6 +32,9 @@
         text-decoration: none;
         cursor: pointer;
       }
+    }
+    .modalInnerContent{
+      padding: 45px;
     }
   }
 }
