@@ -5,6 +5,10 @@ import {faSquareCheck} from "@fortawesome/free-regular-svg-icons";
 import ProfileImgBtn from "./ProfileImgBtn";
 import PickUpStart from "./PickUpStart";
 import PickUpEnd from "./PickUpEnd";
+import ProductCount from "./ProductCount";
+import PhoneNumber from "./PhoneNumber";
+import ProductPrice from "./ProductPrice";
+import PasswordReset from "./PasswordReset";
 
 const Edit = () => {
     return (
@@ -19,65 +23,20 @@ const Edit = () => {
                     <div className={styles["input-area"]}>
                         <div className={styles["input-wrapper"]}>
                             <div className={styles.icon}><FontAwesomeIcon icon={faUser}/></div>
-                            <div>상호명</div>
+                            <span>상호명</span>
                             <div id="store-name-mypage-edit">가게이름</div>
                         </div>
                         <div className={styles["input-wrapper"]}>
                             <div className={styles.icon}><FontAwesomeIcon icon={faUser}/></div>
-                            <div>이메일</div>
-                            <div id="store-id-mypage-edit">이메일주소</div>
+                            <span>이메일</span>
+                            <span id="store-id-mypage-edit">이메일주소</span>
                         </div>
                         <PickUpStart/>
                         <PickUpEnd/>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}><FontAwesomeIcon icon={faUser}/></div>
-                            <div>기본 수량 값
-                                <span id="product-count-move">
-                                    <label>
-                                        <input type={"number"} min={1}/>
-                                    </label>
-                                    <FontAwesomeIcon icon={faSquareCheck}/>
-                                </span>
-                            </div>
-                        </div>
-                        <div id="product-cnt-error-message"
-                             style={{display: 'none', color: 'red'}}></div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}><FontAwesomeIcon icon={faPhone}/></div>
-                            <div>가게 전화번호
-                                <span id="store-phone-number-move">
-                                    <label>
-                                        <input id="business-number-input" min="1"/>
-                                    </label>
-                                    <FontAwesomeIcon icon={faSquareCheck}/>
-                                </span>
-                            </div>
-                        </div>
-                        <div id="business-num-error-message"
-                             style={{display: 'none', color: 'red'}}></div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}>
-                                <FontAwesomeIcon icon={faDollarSign}/>
-                            </div>
-                            <div id="special-box-price-des">
-                                스페셜박스 가격
-                            </div>
-                            <span id="special-box-price-move">
-                                <select id="price">
-                                    <option value="3900">3900</option>
-                                    <option value="5900">5900</option>
-                                    <option value="7900">7900</option>
-                                </select>
-                                <FontAwesomeIcon icon={faSquareCheck}/>
-                            </span>
-                        </div>
-                        <div className={styles["input-wrapper"]}>
-                            <div className={styles.icon}>
-                                <FontAwesomeIcon icon={faKey}/>
-                            </div>
-                            <div className="icon"><i className="fa-solid fa-key"></i></div>
-                            <button className="btn calendar-button" id="reset-pw-btn">비밀번호 재설정</button>
-                        </div>
+                        <ProductCount/>
+                        <PhoneNumber/>
+                        <ProductPrice />
+                        <PasswordReset />
                     </div>
                     <ProfileImgBtn/>
                 </div>
