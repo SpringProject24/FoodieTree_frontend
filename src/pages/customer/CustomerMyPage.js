@@ -4,6 +4,7 @@ import styles from "./CustomerMyPage.module.scss";
 import CustomerReservationList from "../../components/customer/mypage/CustomerReservationList";
 import PreferredArea from "../../components/customer/mypage/PreferredArea";
 import PreferredFood from "../../components/customer/mypage/PreferredFood";
+import FavoriteStore from "../../components/customer/mypage/FavoriteStore";
 
 const CustomerMyPage = () => {
   return (
@@ -15,6 +16,7 @@ const CustomerMyPage = () => {
                       <CustomerReservationList />
                       <PreferredArea />
                       <PreferredFood />
+                      <FavoriteStore />
                   </div>
               </div>
           </div>
