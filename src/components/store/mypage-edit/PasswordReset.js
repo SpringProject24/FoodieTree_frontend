@@ -5,7 +5,7 @@ import styles from './Edit.module.scss'
 import { useModal } from "./ModalProvider";
 
 const PasswordReset = () => {
-    const { openModal } = useModal();
+    // const { openModal } = useModal();
     return (
         <div className={styles["input-wrapper"]}>
             <div className={styles.icon}>
