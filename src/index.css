@@ -41,6 +41,8 @@
 
 body {
   margin: 0;
+  /*백그라운드 배경색 흰색 설정*/
+  background: white;
 }
 
 ul {

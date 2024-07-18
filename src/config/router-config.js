@@ -3,10 +3,8 @@ import {createBrowserRouter} from "react-router-dom";
 import RootLayout from '../layout/RootLayout';
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
-import StoreSignUpPage from "../pages/auth/StoreSignUpPage";
-import CustomerSignUpPage from "../pages/auth/CustomerSignUpPage";
-import CustomerLoginPage from "../pages/auth/CustomerLoginPage";
-import StoreLoginPage from "../pages/auth/StoreLoginPage";
+import SignUpPage from "../pages/auth/SignUpPage";
+import LoginPage from "../pages/auth/LoginPage";
 import EmailVerificationPage from "../pages/auth/EmailVerificationPage";
 
 
@@ -39,20 +37,12 @@ export const router = createBrowserRouter([
         element: <div>customer page</div>
       },
         {
-          path: 'customer-signUp',
-          element: <CustomerSignUpPage />
+          path: '/sign-up',
+          element: <SignUpPage />
         },
         {
-          path: 'store-signUp',
-          element: <StoreSignUpPage />
-        },
-        {
-          path: 'customer-login',
-          element: <CustomerLoginPage />
-        },
-        {
-          path: 'store-login',
-          element: <StoreLoginPage />
+          path: '/login',
+          element: <LoginPage />
         },
         {
           path: 'email-verification',
