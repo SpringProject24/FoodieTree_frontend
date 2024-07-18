@@ -31,7 +31,6 @@ const StoreRegisterForm = () => {
 
     setValues(prevValues => {
       const { name, value } = e.target;
-        console.log('가게등록 setValue: ', value)
       return {
         ...prevValues,
         [name]: value
@@ -105,11 +104,16 @@ export default StoreRegisterForm;
 export const storeRegisterAction = async ({request}) => {
 
   const formData = await request.formData();
-  // console.log('store 등록액션: ', formData.entries())
+  console.log('store 등록액션: ', formData)
   const payload = {
-    ... formData.entries()
-  };
-  console.log('store 등록액션 payload: ', payload)
+    bizLicenseNum: formData.get('bizLicenseNum'),
+    bizName: formData.get('bizName'),
+    bizAddress: formData.get('bizAddress'),
+    bizPhoneNum: formData.get('bizPhoneNum'),
+    bizCategory: formData.get('bizCategory'),
+  }
+  console.log('store 페이로드: ', payload)
+
   const response = await fetch(`${STORE_URL}/approval`, {
     method: 'POST',
     headers: {

@@ -35,7 +35,7 @@ const UploadInput = ({ onAdd }) => {
         ref={fileInputRef}
         type="file"
         id="productImage"
-        name="proImage"
+        name="productImage"
         accept="image/*"
         onChange={fileHandler}
         // multiple

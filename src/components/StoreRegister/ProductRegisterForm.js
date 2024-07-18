@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Form, redirect} from "react-router-dom";
 import UploadInput from "./UploadInput";
 import formStyle from './StoreRegisterForm.module.scss';
-import Chip from "./Chip";
+import radioStyle from './ProductRegisterForm.module.scss';
+import PriceRadioBox from "./PriceRadioBox";
 import {STORE_URL} from "../../config/host-config";
 
 
@@ -70,10 +71,11 @@ const ProductRegisterForm = () => {
       />
 
       <label htmlFor="price">랜덤팩 가격</label>
-      <Chip
+      <PriceRadioBox
         name={'price'}
         options={PRICE_OPTIONS}
         value={values.price}
+        className={radioStyle.chips}
         onChange={changeHandler}
         onPrice={onPrice}
       />
@@ -101,14 +103,18 @@ export const productRegisterAction = async ({request}) => {
     productImage: formData.get('productImage'),
   };
   console.log('product 등록액션 payload: ', payload)
+  const ent = formData.entries()
+  for(const e of ent) {
+    console.log(e[0], ' / ', e[1])
+  }
   const response = await fetch(`${STORE_URL}/product/approval`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       // 'Authorization': 'Bearer' + token,
     },
     // body: JSON.stringify(payload)
-    body: formData
+    body: payload
   });
   // 200 외 상태코드 처리
 
