@@ -1,3 +1,7 @@
+a:link, a:visited {
+  text-decoration: none;
+}
+
 .profileSection {
   display: flex;
   flex-direction: column;
@@ -54,6 +58,7 @@
         width: 100%;
 
         .navLink {
+          color: #111;
           padding: 10px 0;
           display: block;
           width: 100%;
