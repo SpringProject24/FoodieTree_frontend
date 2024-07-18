@@ -51,9 +51,13 @@
 .list1{
   margin: 0 auto;
   position: relative;
-  background-color: beige;
-  inline-size: 80%;
+  // background-color: beige;
+  inline-size: 70%;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-top: solid 1px #e7e7e7;
 }
+
 .list1 .title1{
   padding: 20px 20px 0 20px;
   font-size: 22px;
@@ -83,55 +87,73 @@
 .storeItem {
   flex: 0 0 25%; 
   box-sizing: border-box;
-  padding: 10px 10px 0 10px;
-  text-align: center;
+  padding: 10px;
+  position: relative;
+  height: 250px;
+  // background-color: aquamarine;
 }
 
 .storeItem img {
   width: 100%;
-  height: 70%;
+  height: 180px;
   object-fit: cover;
-  overflow: hidden;
   display: block;
+  border-radius: 10px;
 }
 
 .storeItem p{
   height: 15%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  padding: 10px 0 0 10px;
+  position: absolute;
 }
+
+.storeItem span{
+  // padding: 10px 10px 0 0;
+  position: absolute;
+  bottom: 10px;
+}
+
 .storeItem .storeName{
   font-size: 20px;
   font-weight: 600;
 }
-.storeItem .storePrice{
-  font-size: 20px;
-  color: #7CAF74;
+.storeItem .discount{
+  font-size: 15px;
   font-weight: 600;
+  color: #e84d4d;
+  left:10px;
+}
+.storeItem .storePrice{
+  font-size: 15px;
+  left:20px;
 }
 
-.navButton {
-  position: absolute;
-  top: 40%;
-  transform: translateY(-50%);
-  background-color: rgba(124, 175, 116, 0.8);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-weight: 900;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 1;
-}
-.navButton:hover{
-  background-color: rgba(124, 175, 116, 0.8);
-}
 
-.navButton.left {
-  left: 0;
-}
 
-.navButton.right {
-  right: 0;
-}
+
+// .navButton {
+//   position: absolute;
+//   top: 40%;
+//   transform: translateY(-50%);
+//   background-color: rgba(124, 175, 116, 0.8);
+//   color: white;
+//   border: none;
+//   border-radius: 10px;
+//   font-weight: 900;
+//   padding: 10px;
+//   cursor: pointer;
+//   z-index: 1;
+// }
+// .navButton:hover{
+//   background-color: rgba(124, 175, 116, 0.8);
+// }
+
+// .navButton.left {
+//   left: 0;
+// }
+
+// .navButton.right {
+//   right: 0;
+// }

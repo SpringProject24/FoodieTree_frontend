@@ -12,7 +12,6 @@ const FoodNav = ({categories, stores}) => {
   const swiperElRef = useRef(null);
 
   useEffect(() => {
-    // listen for Swiper events using addEventListener
     swiperElRef.current.addEventListener("swiperprogress", (e) => {
       const [swiper, progress] = e.detail;
       console.log(progress);
@@ -23,16 +22,6 @@ const FoodNav = ({categories, stores}) => {
     });
   }, []);
 
-  // const handleNextClick = () => {
-  //   if(currentIndex<stores.length-4){
-  //     setCurrentIndex(currentIndex+4);
-  //   }
-  // };
-  // const handlePrevClick = () => {
-  //   if(currentIndex>0){
-  //     setCurrentIndex(currentIndex-4);
-  //   }
-  // };
 
   return (
     <>
@@ -48,23 +37,17 @@ const FoodNav = ({categories, stores}) => {
 
       <div className={styles.nav}>
         <div className={styles["food-nav"]}>
-          {categories.map((category) => (
-            <CategoryBtn
-              key={category}
-              label={category}
-              // onClick={() => handleCategoryClick(category)}
-            />
-          ))}
+          
+            <CategoryBtn />
+          
         </div>
       </div>
 
       {/* 내가 찜한 가게 리스트 */}
       <div className={styles.list1}>
-        <h2 className={styles.title1}>❤️ 내가 찜한 가게</h2>
+        <h2 className={styles.title1}>내가 찜한 가게</h2>
         <div className={styles["favorite-store-list"]}>
-          {/* <button className={`${styles['navButton']} ${styles.left}`} onClick={handlePrevClick}>&lt;</button> */}
-
-                    {/* <button className={`${styles.navButton} ${styles.right}`} onClick={handleNextClick}>&gt;</button> */}
+     
         </div>
         <swiper-container
             ref={swiperElRef}
@@ -72,17 +55,71 @@ const FoodNav = ({categories, stores}) => {
             navigation="true"
             pagination="true"
           >
-            {/* <div className={styles.storeList}> */}
               {stores.map((store, index) => (
                 <swiper-slide>
                   <div key={index} className={styles.storeItem}>
                     <img src={store.image} alt={store.name} />
                     <p className={styles.storeName}>{store.name}</p>
-                    <p className={styles.storePrice}>{store.price}</p>
+                    <span className={styles.storePrice}>{store.price}</span>
                   </div>
                 </swiper-slide>
               ))}
-            {/* </div> */}
+          </swiper-container>
+
+      </div>
+
+
+      {/* 주변 가게 리스트 */}
+      <div className={styles.list1}>
+        <h2 className={styles.title1}>주변 가게</h2>
+        <div className={styles["favorite-store-list"]}>
+     
+        </div>
+        <swiper-container
+            ref={swiperElRef}
+            slides-per-view="5"
+            navigation="true"
+            pagination="true"
+          >
+              {stores.map((store, index) => (
+                <swiper-slide>
+                  <div key={index} className={styles.storeItem}>
+                    <img src={store.image} alt={store.name} />
+                    <p className={styles.storeName}>{store.name}</p>
+                    {/* <span className={styles.discount}>{store.discount}</span> */}
+                    <span className={styles.storePrice}>{store.price}</span>
+                  </div>
+                </swiper-slide>
+              ))}
+          </swiper-container>
+
+      </div>
+
+
+
+
+      {/* 추천 가게 리스트 */}
+      <div className={styles.list1}>
+        <h2 className={styles.title1}>추천 가게</h2>
+        <div className={styles["favorite-store-list"]}>
+     
+        </div>
+        <swiper-container
+            ref={swiperElRef}
+            slides-per-view="5"
+            navigation="true"
+            pagination="true"
+          >
+              {stores.map((store, index) => (
+                <swiper-slide>
+                  <div key={index} className={styles.storeItem}>
+                    <img src={store.image} alt={store.name} />
+                    <p className={styles.storeName}>{store.name}</p>
+                    {/* <span className={styles.discount}>{store.discount}</span> */}
+                    <span className={styles.storePrice}>{store.price}</span>
+                  </div>
+                </swiper-slide>
+              ))}
           </swiper-container>
 
       </div>
