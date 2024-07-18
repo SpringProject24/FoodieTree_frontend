@@ -1,155 +1,245 @@
-import React, { useState, useEffect } from 'react';
+// SignUpForm.jsx
+import React, { useState } from 'react';
+import _ from 'lodash';
 import styles from './SignUpForm.module.scss';
 
-import koreanImg from '../../assets/img/korean.jpg'
-import chineseImg from '../../assets/img/chinese.jpg';
-import japaneseImg from '../../assets/img/japanese.jpg';
-import westernImg from '../../assets/img/western.jpg';
-import dessertImg from '../../assets/img/dessert.jpg';
-import cafeImg from '../../assets/img/cafe.jpg';
-import etcImg from '../../assets/img/etc.jpg';
-import KakaoMap from "../KakaoMap";
-
-const foodImages = {
-  '한식': koreanImg,
-  '중식': chineseImg,
-  '일식': japaneseImg,
-  '양식': westernImg,
-  '디저트': dessertImg,
-  '카페': cafeImg,
-  '기타': etcImg,
-};
-
-const SignUpForm = () => {
-
-  const [step, setStep] = useState(1);
+const SignUpForm = ({ userType }) => {
   const [email, setEmail] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordChk, setPasswordChk] = useState('');
-  const [selectedFoods, setSelectedFoods] = useState([]);
-  const [map, setMap] = useState(null);
+  const [emailValid, setEmailValid] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleEmailChange = (e) => setEmail(e.target.value);
-  const handleVerificationCodeChange = (e) => setVerificationCode(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
-  const handlePasswordChkChange = (e) => setPasswordChk(e.target.value);
+  const BASE_URL = window.location.origin;
 
-    const handleFoodSelection = (food) => {
-      if (selectedFoods.includes(food)) {
-        setSelectedFoods(selectedFoods.filter(selectedFood => selectedFood !== food));
-      } else {
-        setSelectedFoods([...selectedFoods, food]);
-      }
-      console.log(food);
-    };
-
-  const handleNextStep = () => {
-    if (step === 4 && selectedFoods.length === 0) {
-      alert('선호하는 음식을 1개 이상 선택해주세요.');
-      return;
-    }
-    if (step === 4 && selectedFoods.length > 3) {
-      alert('선호하는 음식은 최대 3개까지 선택 가능합니다.');
-      return;
-    }
-    setStep(step + 1);
+  const checkIdInput = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
-  const handlePrevStep = () => setStep(step - 1);
+  const checkDupId = async (email) => {
+    try {
+      // const response = await fetch(`${BASE_URL}/store/check?type=account&keyword=${email}`);
+      // const result = await response.json();
+      const result = false; // 더미 값: 이메일이 유효하다고 가정
+      return !result;
+    } catch (error) {
+      console.error('Error:', error);
+      return false;
+    }
+  };
 
-  const handleSubmit = (e) => {
+  const sendVerificationLinkForSignUp = async (email) => {
+    try {
+      // const response = await fetch(`${BASE_URL}/email/sendVerificationLink`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     email,
+      //     purpose: 'signup',
+      //   }),
+      // });
+      const response = { ok: true }; // 더미 값: 요청이 성공했다고 가정
+      return response.ok;
+    } catch (error) {
+      console.error('Error sending verification link:', error);
+      return false;
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    const email = e.target.value;
+    setEmail(email);
+    if (checkIdInput(email)) {
+      debouncedCheckDupId(email);
+    } else {
+      setEmailValid(false);
+    }
+  };
+
+  const debouncedCheckDupId = _.debounce(async (email) => {
+    console.log(`Checking duplication for: ${email}`);
+    const isUnique = await checkDupId(email);
+    setEmailValid(isUnique);
+  }, 1000);
+
+  const handleSendVerificationLink = async (e) => {
     e.preventDefault();
-    // Submit form logic here
+    setIsLoading(true);
+    const result = await sendVerificationLinkForSignUp(email);
+    setIsLoading(false);
+    if (result) {
+      setVerificationSent(true);
+    } else {
+      alert('잠시 후 다시 시도해주세요.');
+    }
   };
 
   return (
-      <div className={styles.signUpForm}>
-        {step === 1 && (
-            <div className={styles.idWrapper}>
-              <h2>회원 등록을 위한 이메일을 입력해주세요!</h2>
-              <input type="text" value={email} onChange={handleEmailChange} placeholder="이메일을 입력해주세요" />
-              <button onClick={handleNextStep} disabled={!email}>인증코드 받기</button>
-            </div>
-        )}
-        {step === 2 && (
-            <div className={styles.idVerifyWrapper}>
-              <h2>해당 이메일로 인증코드가 전송되었습니다</h2>
-              <h3>이메일로 보낸 링크로 로그인해주세요</h3>
-              <input type="text" value={verificationCode} onChange={handleVerificationCodeChange} placeholder="인증코드를 입력해주세요" />
-              <button onClick={handleNextStep} disabled={!verificationCode}>이메일 인증번호 확인</button>
-              <button onClick={handlePrevStep}>이전</button>
-            </div>
-        )}
-      </div>
+    <div className={styles['sign-up-form']}>
+      <header>
+        <div className={styles.container}>
+          <div className={`${styles.logo} ${styles['margarine-regular']}`}>FoodieTree</div>
+          <div className={styles['logo-img']}>
+            <img src="/assets/img/img_2.png" alt="Logo" />
+          </div>
+        </div>
+      </header>
+      <section className={styles['input-area']}>
+        <form onSubmit={handleSendVerificationLink}>
+          <div className={styles.container}>
+            {verificationSent ? (
+              <div className={styles['verify-link-sent']}>
+                <h2>{userType} 회원 등록을 위한 인증 링크가 이메일로 발송되었습니다.</h2>
+                <p>이메일을 확인하여 인증을 완료해주세요.</p>
+              </div>
+            ) : (
+              <div className={styles['id-wrapper']}>
+                <h2>{userType} 회원 등록을 위한 이메일을 입력해주세요!</h2>
+                <input
+                  type="text"
+                  id="input-id"
+                  value={email}
+                  onChange={handleEmailChange}
+                  placeholder="이메일을 입력해주세요"
+                />
+                <button
+                  id="id-get-code-btn"
+                  className={!emailValid ? styles.disable : ''}
+                  disabled={!emailValid}
+                >
+                  인증 링크 발송
+                </button>
+              </div>
+            )}
+          </div>
+        </form>
+      </section>
+    </div>
   );
 };
 
 export default SignUpForm;
+
+// import React, { useState } from 'react';
+// import _ from 'lodash';
+
+// const SignUpForm = ({ userType }) => {
+//   const [email, setEmail] = useState('');
+//   const [emailValid, setEmailValid] = useState(false);
+//   const [verificationSent, setVerificationSent] = useState(false);
+//   const [isLoading, setIsLoading] = useState(false);
+
+//   const BASE_URL = window.location.origin;
+
+//   const checkIdInput = (email) => {
+//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     return emailRegex.test(email);
+//   };
+
+//   const checkDupId = async (email) => {
+//     try {
+//       // const response = await fetch(`${BASE_URL}/store/check?type=account&keyword=${email}`);
+//       // const result = await response.json();
+//       const result = false; // 더미 값: 이메일이 유효하다고 가정
+//       return !result;
+//     } catch (error) {
+//       console.error('Error:', error);
+//       return false;
+//     }
+//   };
+
+//   const sendVerificationLinkForSignUp = async (email) => {
+//     try {
+//       // const response = await fetch(`${BASE_URL}/email/sendVerificationLink`, {
+//       //   method: 'POST',
+//       //   headers: {
+//       //     'Content-Type': 'application/json',
+//       //   },
+//       //   body: JSON.stringify({
+//       //     email,
+//       //     purpose: 'signup',
+//       //   }),
+//       // });
+//       const response = { ok: true }; // 더미 값: 요청이 성공했다고 가정
+//       return response.ok;
+//     } catch (error) {
+//       console.error('Error sending verification link:', error);
+//       return false;
+//     }
+//   };
+
+//   const handleEmailChange = (e) => {
+//     const email = e.target.value;
+//     setEmail(email);
+//     if (checkIdInput(email)) {
+//       debouncedCheckDupId(email);
+//     } else {
+//       setEmailValid(false);
+//     }
+//   };
+
+//   const debouncedCheckDupId = _.debounce(async (email) => {
+//     console.log(`Checking duplication for: ${email}`);
+//     const isUnique = await checkDupId(email);
+//     setEmailValid(isUnique);
+//   }, 1000);
+
+//   const handleSendVerificationLink = async (e) => {
+//     e.preventDefault();
+//     setIsLoading(true);
+//     const result = await sendVerificationLinkForSignUp(email);
+//     setIsLoading(false);
+//     if (result) {
+//       setVerificationSent(true);
+//     } else {
+//       alert('잠시 후 다시 시도해주세요.');
+//     }
+//   };
+
 //   return (
 //     <div className="sign-up-form">
-//       {step === 1 && (
-//         <div className="id-wrapper">
-//           <h2>회원 등록을 위한 이메일을 입력해주세요!</h2>
-//           <input type="text" value={email} onChange={handleEmailChange} placeholder="이메일을 입력해주세요" />
-//           <button onClick={handleNextStep} disabled={!email}>인증코드 받기</button>
+//       <header>
+//         <div className="container">
+//           <div className="logo margarine-regular">FoodieTree</div>
+//           <div className="logo-img">
+//             <img src="/assets/img/img_2.png" alt="Logo" />
+//           </div>
 //         </div>
-//       )}
-//       {step === 2 && (
-//         <div className="id-verify-wrapper">
-//           <h2>해당 이메일로 인증코드가 전송되었습니다</h2>
-//           <h3>인증코드를 입력해주세요!</h3>
-//           <input type="text" value={verificationCode} onChange={handleVerificationCodeChange} placeholder="인증코드를 입력해주세요" />
-//           <button onClick={handleNextStep} disabled={!verificationCode}>이메일 인증번호 확인</button>
-//           <button onClick={handlePrevStep}>이전</button>
-//         </div>
-//       )}
-//       {step === 3 && (
-//         <div className="pass-wrapper">
-//           <h2>계속해서 비밀번호를 입력해주세요!</h2>
-//           <input type="password" value={password} onChange={handlePasswordChange} placeholder="비밀번호를 입력해주세요" />
-//           <input type="password" value={passwordChk} onChange={handlePasswordChkChange} placeholder="비밀번호를 확인해주세요" />
-//           <button onClick={handlePrevStep}>이전</button>
-//           <button onClick={handleNextStep} disabled={!password || password !== passwordChk}>계속</button>
-//         </div>
-//       )}
-//       {step === 4 && (
-//         <div className="food-wrapper">
-//           <h2>선호하는 음식을 선택해주세요!</h2>
-//           <p>(최대 3 종류)</p>
-//           <div className={styles.foods}>
-//             {Object.keys(foodImages).map(food => (
-//               <div key={food} className={`${styles.foodItem} ${selectedFoods.includes(food) ? styles.checked : ''}`}>
-//                 <input
-//                   type="checkbox"
-//                   value={food}
-//                   checked={selectedFoods.includes(food)}
-//                   onChange={() => handleFoodSelection(food)}
-//                 />
-//                 <label>
-//                   <span>{food}</span>
-//                   <img className={styles.foodItem} src={foodImages[food]} alt={food}/>
-//                 </label>
+//       </header>
+//       <section className="input-area">
+//         <form onSubmit={handleSendVerificationLink}>
+//           <div className="container">
+//             {verificationSent ? (
+//               <div className="verify-link-sent">
+//                 <h2>{userType} 회원 등록을 위한 인증 링크가 이메일로 발송되었습니다.</h2>
+//                 <p>이메일을 확인하여 인증을 완료해주세요.</p>
 //               </div>
-//             ))}
+//             ) : (
+//               <div className="id-wrapper">
+//                 <h2>{userType} 회원 등록을 위한 이메일을 입력해주세요!</h2>
+//                 <input
+//                   type="text"
+//                   id="input-id"
+//                   value={email}
+//                   onChange={handleEmailChange}
+//                   placeholder="이메일을 입력해주세요"
+//                 />
+//                 <button
+//                   id="id-get-code-btn"
+//                   className={!emailValid ? 'disable' : ''}
+//                   disabled={!emailValid}
+//                 >
+//                   인증 링크 발송
+//                 </button>
+//               </div>
+//             )}
 //           </div>
-//           <button onClick={handlePrevStep}>이전</button>
-//           <button onClick={handleNextStep}>계속</button>
-//         </div>
-//       )}
-//       {step === 5 && (
-//         <div className="location-wrapper">
-//           <h2>선호하는 지역을 선택해주세요!</h2>
-//           <p>(최대 3 곳)</p>
-//           <div id="map">
-//             <KakaoMap />
-//           </div>
-//           <button onClick={handlePrevStep}>이전</button>
-//           <button onClick={handleSubmit}>완료</button>
-//         </div>
-//       )}
+//         </form>
+//       </section>
 //     </div>
 //   );
 // };
-//
+
 // export default SignUpForm;

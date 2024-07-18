@@ -1,4 +1,4 @@
-/* SignUpForm.module.scss */
+/* LoginForm.module.scss */
 
 .container {
   width: 80%;
@@ -81,21 +81,25 @@ header {
       }
     }
 
-    .id-wrapper {
-      h2 {
+    .auto-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+
+      .auto-login-check {
         margin-bottom: 10px;
       }
-    }
 
-    .verify-link-sent {
-      h2 {
-        margin-bottom: 10px;
+      input {
+        margin-right: 10px;
+        width: 15px;
+        height: 15px;
+
+      }
+
+      label {
         font-size: 14px;
-      }
-
-      p {
-        font-size: 12px;
-        margin-bottom: 10px;
       }
     }
   }
@@ -107,3 +111,4 @@ footer {
   text-align: center;
   padding: 20px 0;
 }
+

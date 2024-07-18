@@ -1,11 +1,16 @@
-import React from 'react'
-import StoreSignUpForm from '../../components/auth/StoreSignUpForm';
+// pages/auth/StoreSignUpPage.jsx
+import React from 'react';
+import SignUpForm from '../../components/auth/SignUpForm';
 
 const StoreSignUpPage = () => {
-  return (
-    // 상점 회원가입 form
-    <StoreSignUpForm />
-  )
-}
+  const handleSignUp = (email, password) => {
+    // 상점 회원가입 로직 처리
+    console.log('Store Sign Up:', email, password);
+    
+  };
+
+  return <SignUpForm userType="store" onSignUp={handleSignUp} />;
+
+};
 
 export default StoreSignUpPage;
