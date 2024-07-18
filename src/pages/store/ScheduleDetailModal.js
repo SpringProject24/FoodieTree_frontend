@@ -51,34 +51,33 @@ const ScheduleDetailModal = ({ clickedDateInfo }) => {
     };
 
     return (
-        <div className="schedule-detail-modal">
-            <div className="modal-header">
-                <h2>일정 상세 정보</h2>
+        <div className={styles.scheduleDetailModal}>
+            <div className={styles.modalHeader}>
+                <h2>{clickedDate}</h2>
             </div>
-            <div className="modal-body">
-                <div className="date-info">
-                    <h3>{clickedDate}</h3>
+            <div className={styles.modalBody}>
+                <div className={styles.holidayInfo}>
                     {isHoliday ? (
                         <div>휴무일로 지정된 날짜입니다.</div>
                     ) : (
                         <div>정상 운영 날짜입니다.</div>
                     )}
                 </div>
-                <div className="store-info">
+                <div className={styles.storeInfo}>
                     <h3>가게 정보</h3>
                     {/* storeInfo에 관련된 정보 표시 */}
                 </div>
-                <div className="schedule-details">
+                <div className={styles.scheduleInfo}>
                     {/* 여기에 동적으로 변하는 일정 상세 정보를 표시 */}
                     <div>일정 상세 정보</div>
                 </div>
             </div>
-            <div className="modal-footer">
+            <div className={styles.modalFooter}>
                 {!isHoliday && (
-                    <button className="action-button" onClick={handleSetHoliday}>휴무일로 지정하기</button>
+                    <button className={styles.holidaySetBtn} onClick={handleSetHoliday}>휴무일로 지정하기</button>
                 )}
                 {isHoliday && (
-                    <button className="action-button" onClick={handleUndoHoliday}>휴무일 지정 취소하기</button>
+                    <button className={styles.holidayUndoBtn} onClick={handleUndoHoliday}>휴무일 지정 취소하기</button>
                 )}
                 {/*<button className="action-button" onClick={handleSetPickupTime}>픽업 시간 수정 하기</button>*/}
             </div>
