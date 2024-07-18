@@ -2,9 +2,13 @@ import React, {useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus, faPlus} from "@fortawesome/free-solid-svg-icons";
 import styles from "./AddProductAmountModal.module.scss";
+import {useModal} from "../common/ModalProvider";
 
-const AddProductAmountModal = ({products, closeModal, updateProductCount}) => {
-    const [initialCount, setInitialCount] = useState(0);
+const AddProductAmountModal = ({products, updateProductCount}) => {
+
+    const closeModal = useModal();
+
+    const [initialCount, setInitialCount] = useState(1);
     const [updateCount, setUpdateCount] = useState(0);
 
     const handleIncrease = () => {
@@ -25,7 +29,7 @@ const AddProductAmountModal = ({products, closeModal, updateProductCount}) => {
             <div className={styles.warning}>수량 추가 후 되돌리기 불가합니다.</div>
             <div className={styles.warning}>신중히 선택해주세요</div>
             <div id="product-amount-adjust-btn" className={styles.productAmtAdjustBtn}>
-                <button className={styles.adjustBtn} onClick={handleDecrease} disabled={initialCount <= 0}>
+                <button className={styles.adjustBtn} onClick={handleDecrease} disabled={initialCount <= 1}>
                     <FontAwesomeIcon icon={faMinus}/>
                 </button>
                 <p id="product-update-count" className={styles.initialCnt}>{initialCount}</p>
