@@ -15,7 +15,7 @@ const PreferredFood = ({ preferredFoods = [] }) => {
                         preferredFoods.map((food, index) => (
                             <li key={index}>
                                 <div className={styles.imgBox}>
-                                    <img src={food.foodImage} alt="선호음식이미지" />
+                                    <img src={food.foodImage} alt="선호음식이미지" className={styles.foodImage}/>
                                 </div>
                                 <span>{food.preferredFood}</span>
                             </li>

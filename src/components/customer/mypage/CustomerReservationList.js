@@ -3,7 +3,7 @@ import styles from './CustomerReservationList.module.scss';
 
 const BASE_URL = window.location.origin;
 
-const Reservation = ({ customerId }) => {
+const CustomerReservationList = ({ customerId }) => {
     const [reservations, setReservations] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
 
@@ -95,7 +95,7 @@ const Reservation = ({ customerId }) => {
     };
 
     return (
-        <div className={styles.ReservationListForm}>
+        <div className={styles.reservationListForm}>
             <div className={styles.title}>
                 <h3 className={styles.titleText}>
                     <span>예약 내역</span>
@@ -156,4 +156,4 @@ const Reservation = ({ customerId }) => {
     );
 };
 
-export default Reservation;
+export default CustomerReservationList;
