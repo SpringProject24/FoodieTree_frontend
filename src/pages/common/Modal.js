@@ -17,8 +17,11 @@ const ScheduleDetailModal = lazy(() => import("../store/ScheduleDetailModal"));
 
 const Modal = () => {
 
-    const {modalState, closeModal} = useModal();
-    const {type, props} = modalState;
+    const { modalState, closeModal } = useModal();
+    const { isOpen, type, props } = modalState;
+
+    if (!isOpen)return null;
+
 
     let ModalComponent;
 
@@ -52,7 +55,6 @@ const Modal = () => {
     }
 
     return ReactDOM.createPortal (
-        <>
             <div className={styles.modal}>
                 <div className={styles.modalContent}>
                     <span className={styles.close} onClick={closeModal}><FontAwesomeIcon icon={faTimes}/></span>
@@ -65,7 +67,6 @@ const Modal = () => {
                     </div>
                 </div>
             </div>
-        </>
         ,
         document.getElementById('modal-root')
     );
