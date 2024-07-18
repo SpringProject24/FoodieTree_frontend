@@ -68,12 +68,13 @@
   //border: 1px solid red;
   gap: 15px;
 
-  .chip{
+  label.chip{
+    display: block;
     width: 100px;
     //color: #ffffff;
     font-size: 1rem;
     color: var(--color-gray-400);
-    //font-weight: 700;
+    font-weight: 400;
     background: #ffffff;
     border: 1px solid var(--color-gray-400);
     padding: 10px 20px;
@@ -87,10 +88,22 @@
       background: #43e97b;
     }
   }
-  .picked {
+  label.picked {
     color: #43e97b;
     font-weight: 500;
     border: 1px solid #43e97b;
     background: #e3ffef;
   }
+
+  .radioInput {
+    //position: absolute;
+    //appearance: none;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    //opacity: 0;
+    //display: none;
+  }
+
 }

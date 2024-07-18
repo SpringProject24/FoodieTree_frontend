@@ -7,28 +7,35 @@ const PriceRadioBox = ({options, onPrice}) => {
   const [pickedPriceIndex, setPickedPriceIndex] = useState(null);
 
   // 가격 클릭 시 상태 업데이트 및 ProductRegisterForm에 전달
-  const clickHandler = (index, e) => {
+  const clickHandler = (index, value) => {
     setPickedPriceIndex(index);
-    onPrice(index);
+    onPrice(value);
   }
 
-  return ( <></>
-  //   <>
-  //       {
-  //         options.map((opt, index) => (
-  //
-  //           <input
-  //           key={opt.value}
-  //           value={opt.value}
-  //           className={`${styles.chip} ${pickedPriceIndex === index ? styles.picked : ''}`}
-  //           onClick={(e) => {clickHandler(index, e)}}
-  //           >
-  //           <label htmlFor={opt.value}>
-  //             {opt.name}
-  //           </label>
-  //         ))
-  //       }
-  //   </>
+  return (
+      <>
+        <div className={styles.chips}>
+          {options.map((opt, index) => (
+              <div key={opt.value}>
+                <input
+                    type="radio"
+                    id={`price-${opt.value}`}
+                    name="price"
+                    value={opt.value}
+                    checked={pickedPriceIndex === index}
+                    onChange={() => clickHandler(index, opt.value)}
+                    className={styles.radioInput}
+                />
+                <label
+                    htmlFor={`price-${opt.value}`}
+                    className={`${styles.chip} ${pickedPriceIndex === index ? styles.picked : ''}`}
+                >
+                  {opt.name}
+                </label>
+              </div>
+          ))}
+        </div>
+      </>
   );
 };
 

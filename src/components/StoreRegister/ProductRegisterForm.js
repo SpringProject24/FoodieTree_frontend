@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {Form, redirect} from "react-router-dom";
 import UploadInput from "./UploadInput";
 import formStyle from './StoreRegisterForm.module.scss';
-import radioStyle from './ProductRegisterForm.module.scss';
 import PriceRadioBox from "./PriceRadioBox";
 import {STORE_URL} from "../../config/host-config";
 
@@ -41,10 +40,11 @@ const ProductRegisterForm = () => {
       productImage: file
     }));
   };
-  const onPrice = (index) => {
+  const onPrice = (value) => {
     setValues(prevValues => ({
       ...prevValues,
-      price: PRICE_OPTIONS[index].value
+      // price: PRICE_OPTIONS[index].value
+      price: value
     }));
   };
 
@@ -67,6 +67,7 @@ const ProductRegisterForm = () => {
         value={values.productCnt}
         onChange={changeHandler}
         placeholder="매일 설정될 기본 수량입니다."
+        min={0}
         required
       />
 
@@ -75,7 +76,6 @@ const ProductRegisterForm = () => {
         name={'price'}
         options={PRICE_OPTIONS}
         value={values.price}
-        className={radioStyle.chips}
         onChange={changeHandler}
         onPrice={onPrice}
       />
@@ -96,24 +96,21 @@ export default ProductRegisterForm;
 export const productRegisterAction = async ({request}) => {
 
   const formData = await request.formData();
-  // console.log('product 등록액션: ', formData.entries())
-  const payload = {
-    productCnt: formData.get('productCnt'),
-    price: formData.get('price'),
-    productImage: formData.get('productImage'),
-  };
-  console.log('product 등록액션 payload: ', payload)
-  const ent = formData.entries()
-  for(const e of ent) {
-    console.log(e[0], ' / ', e[1])
-  }
+  const payload = new FormData();
+  payload.append('productCnt', formData.get('productCnt'));
+  payload.append('price', formData.get('price'));
+  payload.append('productImage', formData.get('productImage'));
+
+  console.log('payload 가격 확인: ', payload.get('price'))
+  console.log('payload 수량 확인: ', payload.get('productCnt'))
+  console.log('payload 이미지 확인: ', payload.get('productImage'))
+
   const response = await fetch(`${STORE_URL}/product/approval`, {
     method: 'POST',
     headers: {
       'Content-Type': 'multipart/form-data',
       // 'Authorization': 'Bearer' + token,
     },
-    // body: JSON.stringify(payload)
     body: payload
   });
   // 200 외 상태코드 처리
