@@ -1,6 +1,9 @@
 import React, {lazy, Suspense} from 'react';
 import styles from './Modal.module.scss';
 import {useModal} from "./ModalProvider";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMinus, faTimes} from "@fortawesome/free-solid-svg-icons";
+import ReactDOM from "react-dom";
 
 // 동적 import => 필요한 시점에만 로드 가능 (성능 개선)
 const EmailVerificationModal = lazy(() => import("./EmailVerificationModal"));
@@ -48,19 +51,23 @@ const Modal = () => {
             ModalComponent = null;
     }
 
-    return (
+    return ReactDOM.createPortal (
         <>
             <div className={styles.modal}>
                 <div className={styles.modalContent}>
-                    <span className={styles.close} onClick={closeModal}>&times;</span>
-                    {ModalComponent && (
-                        <Suspense fallback={<div>Loading...</div>}>
-                            <ModalComponent {...props}/>
-                        </Suspense>
-                    )}
+                    <span className={styles.close} onClick={closeModal}><FontAwesomeIcon icon={faTimes}/></span>
+                    <div className={styles.modalInnerContent}>
+                        {ModalComponent && (
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <ModalComponent {...props}/>
+                            </Suspense>
+                        )}
+                    </div>
                 </div>
             </div>
         </>
+        ,
+        document.getElementById('modal-root')
     );
 };
 
