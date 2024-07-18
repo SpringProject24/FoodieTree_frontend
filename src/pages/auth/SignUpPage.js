@@ -3,7 +3,7 @@ import SignUpForm from '../../components/auth/SignUpForm';
 
 const SignUpPage = () => {
   return (
-    //회원가입 form
+    //개인 회원가입 form
     <SignUpForm /> 
   )
 }

@@ -4,6 +4,7 @@ import RootLayout from '../layout/RootLayout';
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
 import SignUpPage from "../pages/auth/SignUpPage";
+import StoreSignUpPage from "../components/auth/StoreSignUpForm";
 
 const homeRouter = [
   {
@@ -13,6 +14,10 @@ const homeRouter = [
   {
     path: '/sign-up',
     element: <SignUpPage/>
+  },
+  {
+    path: '/store-sign-up',
+    element: <StoreSignUpPage/>
   }
 ];
 
