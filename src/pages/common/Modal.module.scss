@@ -1,4 +1,5 @@
 .modal {
+  font-size: 18px;
   display: block; // 모달 숨기기
   position: fixed; // 고정 위치
   z-index: 1; // 다른 요소들 위에
@@ -34,7 +35,8 @@
       }
     }
     .modalInnerContent{
-      padding: 45px;
+      padding: 78px 78px 62px;
+      text-align: center;
     }
   }
 }

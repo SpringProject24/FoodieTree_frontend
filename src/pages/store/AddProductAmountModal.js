@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus, faPlus} from "@fortawesome/free-solid-svg-icons";
 import styles from "./AddProductAmountModal.module.scss";
-const AddProductAmountModal = ({ products, closeModal, updateProductCount }) => {
+
+const AddProductAmountModal = ({products, closeModal, updateProductCount}) => {
     const [initialCount, setInitialCount] = useState(0);
     const [updateCount, setUpdateCount] = useState(0);
 
@@ -19,23 +20,23 @@ const AddProductAmountModal = ({ products, closeModal, updateProductCount }) => 
     };
 
     return (
-                <div className="product-add-item">
-                    <img src="/assets/img/caution2.png" alt="경고 이미지" />
-                    <div>수량 추가 후 되돌리기 불가합니다.</div>
-                    <div>신중히 선택해주세요</div>
-                    <div id="product-amount-adjust-btn">
-                        <button className="yellow-click" onClick={handleDecrease} disabled={initialCount <= 0}>
-                            <FontAwesomeIcon icon={faMinus} />
-                        </button>
-                        <p id="product-update-count">{initialCount}</p>
-                        <button className="yellow-click" onClick={handleIncrease}>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </button>
-                    </div>
-                    <div>오늘 남은 수량</div>
-                    <div>추가되는 상품 수: <span id="product-update-amount">{updateCount}</span></div>
-                    <button className="yellow-click" onClick={updateProductCount} disabled={updateCount === 0}>추가 확인</button>
-                </div>
+        <div className={styles.productAddItem}>
+            <img className={styles.img} src="/assets/img/caution2.png" alt="경고 이미지"/>
+            <div className={styles.warning}>수량 추가 후 되돌리기 불가합니다.</div>
+            <div className={styles.warning}>신중히 선택해주세요</div>
+            <div id="product-amount-adjust-btn" className={styles.productAmtAdjustBtn}>
+                <button className={styles.adjustBtn} onClick={handleDecrease} disabled={initialCount <= 0}>
+                    <FontAwesomeIcon icon={faMinus}/>
+                </button>
+                <p id="product-update-count" className={styles.initialCnt}>{initialCount}</p>
+                <button className={styles.adjustBtn} onClick={handleIncrease}>
+                    <FontAwesomeIcon icon={faPlus}/>
+                </button>
+            </div>
+            <div>오늘 남은 수량</div>
+            <div>추가되는 상품 수: <span id="product-update-amount">{updateCount}</span></div>
+            <button className={styles.confirmBtn} onClick={updateProductCount} disabled={updateCount === 0}>추가 확인</button>
+        </div>
     );
 };
 
