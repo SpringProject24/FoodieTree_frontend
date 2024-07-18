@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.scss';
+import commonStyles from '../../common.module.scss';
 
 const LoginForm = ({ userType }) => {
   const [email, setEmail] = useState('');

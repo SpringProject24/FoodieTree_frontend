@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import styles from './SignUpForm.module.scss';
+import commonStyles from '../../common.module.scss';
 
 const SignUpForm = ({ userType }) => {
   const [email, setEmail] = useState('');
