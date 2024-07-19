@@ -9,10 +9,10 @@ const SideBar = () => {
                 <h2>xxxx@xxxx.com</h2>
                 <ul className={styles.nav}>
                     <li>
-                        <Link to={'/store'} className={styles['nav-link']} >마이페이지</Link>
+                        <Link to={'/customer'} className={styles['nav-link']} >마이페이지</Link>
                     </li>
                     <li>
-                        <Link to={'/store/edit'} className={styles['nav-link']} >개인정보수정</Link>
+                        <Link to={'/customer/edit'} className={styles['nav-link']} >개인정보수정</Link>
                     </li>
                 </ul>
                 <div className={styles.stats}>
