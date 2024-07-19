@@ -54,9 +54,15 @@ const Modal = () => {
             ModalComponent = null;
     }
 
+    const handleClose = (e) => {
+        if (e.target === e.currentTarget) {
+            closeModal();
+        }
+    };
+
     return ReactDOM.createPortal (
-            <div className={styles.modal}>
-                <div className={styles.modalContent}>
+            <div className={styles.modal} onClick={handleClose}>
+                <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                     <span className={styles.close} onClick={closeModal}><FontAwesomeIcon icon={faTimes}/></span>
                     <div className={styles.modalInnerContent}>
                         {ModalComponent && (
