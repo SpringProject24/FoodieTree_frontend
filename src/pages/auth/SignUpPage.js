@@ -54,13 +54,14 @@ const SignUpPage = () => {
             <SignUpForm
                 userType={userType}
                 onSignUp={handleSignUp}
+
                 onResendEmail={handleResendEmail}
                 onVerificationSent={handleVerificationSent}
                 verificationSent={verificationSent} // verificationSent 상태 전달
             />
             <div className={'sub-wrapper'}>
               <Link className={styles['sub-login']} to="/login">
-                Login
+                Login 🌱
               </Link>
             </div>
           </div>

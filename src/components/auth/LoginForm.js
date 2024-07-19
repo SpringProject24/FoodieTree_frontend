@@ -5,7 +5,7 @@ import styles from './LoginForm.module.scss';
 import commonStyles from '../../common.module.scss';
 import _ from "lodash";
 
-const LoginForm = ({ userType, onResendEmail }) => {
+const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
   const [email, setEmail] = useState('');
   const [emailValid, setEmailValid] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
@@ -76,6 +76,7 @@ const LoginForm = ({ userType, onResendEmail }) => {
     setIsLoading(false);
     if (result) {
       setVerificationSent(true);
+      onVerificationSent(); // 상태를 부모 컴포넌트에 알림
     } else {
       alert('잠시 후 다시 시도해주세요.');
     }
@@ -85,7 +86,7 @@ const LoginForm = ({ userType, onResendEmail }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 주석 처리된 실제 로그인 요청 코드
+      //실제 로그인 요청 코드
       /*
       const response = await fetch(`${restfulapi~}/auth/login`, {
         method: 'POST',
@@ -113,17 +114,27 @@ const LoginForm = ({ userType, onResendEmail }) => {
     }
   };
 
+  const handleRetryLogin = () => {
+    console.log('Before resetting state:');
+    console.log('verificationSent:', verificationSent);
+    console.log('email:', email);
+    console.log('emailValid:', emailValid);
+
+    setVerificationSent(false);
+    setEmail('');
+    setEmailValid(false);
+
+
+    console.log('After resetting state:');
+    console.log('verificationSent:', verificationSent);
+    console.log('email:', email);
+    console.log('emailValid:', emailValid);
+
+  };
+
 
   return (
     <div className={styles['login-form']}>
-      {/*<header>*/}
-      {/*  <div className={styles.container}>*/}
-      {/*    <div className={`${styles.logo} ${styles['margarine-regular']}`}>FoodieTree</div>*/}
-      {/*    <div className={styles['logo-img']}>*/}
-      {/*      <img src="/assets/img/img_2.png" alt="Logo" />*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</header>*/}
       <section className={styles['input-area']}>
         <form onSubmit={handleSendVerificationLink}>
           <div className={styles.container}>
@@ -135,8 +146,10 @@ const LoginForm = ({ userType, onResendEmail }) => {
                   <button className={styles['resend-login-email-btn']} onClick={onResendEmail}>
                     이메일을 받지 못하셨나요? 재전송하기
                   </button>
+                  <button className={styles['retry-sign-up']} onClick={handleRetryLogin}>
+                    다른 이메일 주소로 로그인
+                  </button>
                 </div>
-
             ) : (
                 <div className={styles['id-wrapper']}>
                   <h2>{userType} 로그인을 위한 이메일 주소를 입력해주세요!</h2>
@@ -152,31 +165,12 @@ const LoginForm = ({ userType, onResendEmail }) => {
                       className={!emailValid ? styles.disable : ''}
                       disabled={!emailValid}
                   >
-                    로그인 링크 발송
+                    로그인 메일 발송
                   </button>
                 </div>
             )}
           </div>
         </form>
-        {/*<form onSubmit={handleSendVerificationLink}>*/}
-        {/*  <div className={styles.container}>*/}
-        {/*    <h2>{userType} 이메일로 로그인하기</h2>*/}
-        {/*    <input*/}
-        {/*        type="text"*/}
-        {/*        id="input-id"*/}
-        {/*        value={email}*/}
-        {/*        onChange={handleEmailChange}*/}
-        {/*        placeholder="이메일을 입력해주세요"*/}
-        {/*    />*/}
-        {/*    <div className={styles['auto-login']}>*/}
-        {/*      <input type="checkbox" id="auto-login"/>*/}
-        {/*      <label className={styles['auto-login-check']} htmlFor="auto-login">자동 로그인</label>*/}
-        {/*    </div>*/}
-        {/*    <button id="login-btn" type="submit">*/}
-        {/*      로그인*/}
-        {/*    </button>*/}
-        {/*  </div>*/}
-        {/*</form>*/}
       </section>
     </div>
   );

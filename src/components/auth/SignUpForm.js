@@ -1,7 +1,9 @@
 // SignUpForm.jsx
 import React, { useState } from 'react';
-import _ from 'lodash';
 import styles from './SignUpForm.module.scss';
+import commonStyles from '../../common.module.scss';
+import _ from 'lodash';
+
 
 
 const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) => {
@@ -95,11 +97,11 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
                     <h2>{userType} 회원 등록을 위한 인증 링크가 이메일로 발송되었습니다.</h2>
                     <p> [ {email} ] </p>
                     <p>이메일을 확인하여 인증을 완료해주세요.</p>
-                    <button className={styles['resend-login-email-btn']} onClick={onResendEmail}>
+                    <button className={styles['resend-signup-email-btn']} onClick={onResendEmail}>
                       이메일을 받지 못하셨나요? 재전송하기
                     </button>
                     <button className={styles['retry-sign-up']} onClick={handleRetrySignUp}>
-                      Sign Up other Email address
+                      다른 이메일 주소로 회원가입
                     </button>
                   </div>
               ) : (
@@ -117,7 +119,7 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
                         className={!emailValid ? styles.disable : ''}
                         disabled={!emailValid}
                     >
-                      인증 링크 발송
+                      회원가입 인증메일 발송
                     </button>
                   </div>
               )}
