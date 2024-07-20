@@ -5,3 +5,11 @@
   border-radius: 15px;
   display: flex;
 }
+
+@media (max-width: 400px) {
+  .container {
+    width: 100%;
+    border: none;
+    margin-top: 0;
+  }
+}

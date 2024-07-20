@@ -10,6 +10,7 @@ import LoginPage from "../pages/auth/LoginPage";
 import EmailVerificationPage from "../pages/auth/EmailVerificationPage";
 import StoreMyPage from "../pages/store/StoreMyPage";
 import CustomerMyPage from "../pages/customer/CustomerMyPage";
+import CustomerMyPageEdit from "../pages/customer/CustomerMyPageEdit";
 
 const homeRouter = [
     {
@@ -37,7 +38,7 @@ const customerMyPageRouter = [
     },
     {
         path: 'edit',
-        element: <div>Customer MyPage Edit Page</div>
+        element: <CustomerMyPageEdit/>
     }
 ];
 

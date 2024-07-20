@@ -1,11 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styles from './SideBar.module.scss';
 import {Link} from "react-router-dom";
 
-const SideBar = () => {
+const SideBar = ({isShow}) => {
+
+    useEffect(() => {
+        if (isShow) document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'unset';
+        }
+    }, [isShow]);
     return (
         <>
-            <div className={styles.profile}>
+            <div className={`${styles.profile} ${isShow ? styles.on : undefined }`}>
                 <h2>xxxx@xxxx.com</h2>
                 <ul className={styles.nav}>
                     <li>

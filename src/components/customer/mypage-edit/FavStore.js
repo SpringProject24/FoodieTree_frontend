@@ -44,7 +44,7 @@ const FavStore = () => {
                 <ul className={styles.preferred} id="preferred-area">
                     {
                         list.map(({text, img}, idx) => (
-                                <li id={idx}>
+                                <li id={idx} key={idx}>
                                     <div className={styles["img-box"]}>
                                         <img src={img} alt="선호음식이미지"/>
                                     </div>

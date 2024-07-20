@@ -46,7 +46,7 @@ const FavFood = () => {
                     {
                         list.map((item, idx) => {
                             return (
-                                <li id={idx}>
+                                <li id={idx} key={idx}>
                                     <div className={styles["img-box"]}>
                                         <img src={item.img} alt="선호음식이미지"/>
                                     </div>

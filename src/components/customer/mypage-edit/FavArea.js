@@ -45,7 +45,7 @@ const FavArea = () => {
                     {
                         list.map((item, idx) => {
                             return (
-                                <li id={idx}>
+                                <li id={idx} key={idx}>
                                     <span>{item.text}</span>
                                     <FontAwesomeIcon
                                         className={styles.xmark} icon={faCircleXmark}
