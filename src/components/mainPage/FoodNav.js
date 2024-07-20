@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CategoryBtn from "./CategoryBtn";
 import styles from "./FoodNav.module.scss";
-import bannerImg from "../../assets/images/userMain/header.jpg";
+// import bannerImg from "../../assets/images/userMain/header.jpg";
 
 import { useRef, useEffect } from "react";
 import { register } from "swiper/element/bundle";
@@ -25,7 +25,7 @@ const FoodNav = ({categories, stores}) => {
 
   return (
     <>
-      <header className={styles["App-header"]}>
+      {/* <header className={styles["App-header"]}>
         <div className={styles.banner}>
           <img src={bannerImg} alt="banner Image 나중에 바꿀 예정🚩" />
         </div>
@@ -33,15 +33,8 @@ const FoodNav = ({categories, stores}) => {
           <h1>환경을 생각하는 착한 소비</h1>
           <p>원하는 음식을 선택하세요!</p>
         </div>
-      </header>
+      </header> */}
 
-      <div className={styles.nav}>
-        <div className={styles["food-nav"]}>
-          
-            <CategoryBtn />
-          
-        </div>
-      </div>
 
       {/* 내가 찜한 가게 리스트 */}
       <div className={styles.list1}>
@@ -54,6 +47,7 @@ const FoodNav = ({categories, stores}) => {
             slides-per-view="4"
             navigation="true"
             pagination="true"
+            loop="true"
           >
               {stores.map((store, index) => (
                 <swiper-slide>
@@ -80,6 +74,7 @@ const FoodNav = ({categories, stores}) => {
             slides-per-view="5"
             navigation="true"
             pagination="true"
+            loop="true"
           >
               {stores.map((store, index) => (
                 <swiper-slide>
@@ -109,6 +104,7 @@ const FoodNav = ({categories, stores}) => {
             slides-per-view="5"
             navigation="true"
             pagination="true"
+            loop="true"
           >
               {stores.map((store, index) => (
                 <swiper-slide>
