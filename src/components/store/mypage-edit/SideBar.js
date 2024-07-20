@@ -1,11 +1,11 @@
-import React from 'react';
 import styles from './SideBar.module.scss';
 import {Link} from "react-router-dom";
 
-const SideBar = () => {
+const SideBar = ({isShow}) => {
     return (
         <>
-            <div className={styles.profile}>
+            <div className={styles.backdrop}></div>
+            <div className={`${styles.profile} ${isShow ? styles.on : undefined }`}>
                 <ul className={styles.nav}>
                     <li>
                         <Link to={'/store'} className={styles['nav-link']} >마이페이지</Link>
