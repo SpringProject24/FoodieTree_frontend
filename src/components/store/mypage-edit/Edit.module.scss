@@ -11,7 +11,6 @@
     position: relative;
     display: block;
     border-radius: 15px 15px 0 0;
-    margin-top: 20px;
 
     .title-text {
       height: 65px;
@@ -62,10 +61,8 @@
   }
 }
 
-.image-wrapper {
-  width: 200px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  position: relative;
+@media (max-width: 400px) {
+  .edit {
+    width: 100%;
+  }
 }

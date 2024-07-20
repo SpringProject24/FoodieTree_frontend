@@ -5,59 +5,73 @@ import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
 import StoreMyPageEdit from "../pages/store/StoreMyPageEdit";
 import StoreMyPageOutlet from "../pages/store/StoreMyPageOutlet";
-import CustomerMyPageOutlet from "../pages/customer/CustomerMyPageOutlet";
-import CustomerMyPageEdit from "../pages/customer/CustomerMyPageEdit";
+import SignUpPage from "../pages/auth/SignUpPage";
+import LoginPage from "../pages/auth/LoginPage";
+import EmailVerificationPage from "../pages/auth/EmailVerificationPage";
+import StoreMyPage from "../pages/store/StoreMyPage";
+import CustomerMyPage from "../pages/customer/CustomerMyPage";
 
 const homeRouter = [
-  {
-    index: true,
-    element: <div>hi</div>,
-  },
-  {
-    path: '/sign-in',
-    element: <div>sign-in page</div>
-  }
+    {
+        index: true,
+        element: <div>hi</div>,
+    },
+    {
+        path: '/sign-up',
+        element: <SignUpPage/>
+    },
+    {
+        path: '/login',
+        element: <LoginPage/>
+    },
+    {
+        path: 'email-verification',
+        element: <EmailVerificationPage/>
+    },
+];
+
+const customerMyPageRouter = [
+    {
+        path: 'mypage',
+        element: <CustomerMyPage/>
+    },
+    {
+        path: 'edit',
+        element: <div>Customer MyPage Edit Page</div>
+    }
 ];
 
 const storeRouter = [
-  {
-    index: true,
-    element: <div>storemypage~</div>
-  },
-  {
-    path: 'edit',
-    element: <StoreMyPageEdit/>
-  }
-];
-
-const customerRouter = [
-  {
-    path: 'edit',
-    element: <CustomerMyPageEdit />
-  }
+    {
+        index: true,
+        element: <StoreMyPage />,
+    },
+    {
+        path: 'edit',
+        element: <StoreMyPageEdit/>
+    }
 ]
 
 export const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <RootLayout />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        index: '/',
-        element: <Home />,
-        children: homeRouter,
-      },
-      {
-        path: '/store',
-        element: <StoreMyPageOutlet />,
-        children: storeRouter
-      },
-      {
-        path: '/customer',
-        element: <CustomerMyPageOutlet />,
-        children: customerRouter
-      }
-    ]
-  },
+    {
+        path: '/',
+        element: <RootLayout/>,
+        errorElement: <ErrorPage/>,
+        children: [
+            {
+                index: '/',
+                element: <Home/>,
+                children: homeRouter,
+            },
+            {
+                path: '/store',
+                element: <StoreMyPageOutlet/>,
+                children: storeRouter
+            },
+            {
+                path: '/customer',
+                children: customerMyPageRouter
+            },
+        ]
+    },
 ]);

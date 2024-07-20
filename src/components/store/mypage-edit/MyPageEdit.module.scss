@@ -4,4 +4,13 @@
   border: 1px solid #ccc;
   border-radius: 15px;
   display: flex;
+  margin-top: 20px;
+}
+
+@media (max-width: 400px) {
+  .container {
+    width: 100%;
+    border: none;
+    margin-top: 0;
+  }
 }

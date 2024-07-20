@@ -1,3 +1,11 @@
+.image-wrapper {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
 .avatar {
   width: 100px;
   height: 100px;
@@ -27,4 +35,11 @@
   box-shadow: rgba(38, 37, 37, 0.58) 2px 5px 10px 18px;
   border-radius: 50%;
   font-size: 30px;
+}
+
+@media (max-width: 400px) {
+  .image-wrapper {
+    padding-top: 15px;
+    padding-right: 15px;
+  }
 }
