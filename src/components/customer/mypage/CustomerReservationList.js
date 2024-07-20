@@ -205,6 +205,7 @@ const CustomerReservationList = ({ customerId, openModal }) => {
                                         <div className={styles.imgBox}>
                                             <img src={reservation.storeImg || '/assets/img/defaultImage.jpg'} alt="Store Image" />
                                             {reservation.status === 'CANCELED' && <FontAwesomeIcon icon={faCircleXmark} className={styles.canceled} />}
+                                            {reservation.status === 'NOSHOW' && <FontAwesomeIcon icon={faCircleXmark} className={styles.canceled} />}
                                             {reservation.status === 'RESERVED' && <FontAwesomeIcon icon={faSpinner} className={styles.loading}/>}
                                             {reservation.status === 'PICKEDUP' && <FontAwesomeIcon icon={faCircleCheck} className={styles.done}/>}
                                         </div>
