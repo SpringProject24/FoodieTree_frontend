@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './CustomerReservationList.module.scss';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark, faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const BASE_URL = window.location.origin;
 
@@ -196,15 +198,15 @@ const CustomerReservationList = ({ customerId, openModal }) => {
                                 key={index}
                                 className={`${styles.reservationItem} ${styles[reservation.status]}`}
                                 data-reservation-id={reservation.reservationId}
-                                onClick={() => handleReservationClick(reservation.reservationId)} // 예약 클릭 시 함수 호출
+                                onClick={() => handleReservationClick(reservation.reservationId)}
                             >
                                 <div className={styles.item}>
                                     <div className={styles.imgWrapper}>
                                         <div className={styles.imgBox}>
                                             <img src={reservation.storeImg || '/assets/img/defaultImage.jpg'} alt="Store Image" />
-                                            {reservation.status === 'CANCELED' && <i className={`fa-solid fa-circle-xmark ${styles.canceled}`}></i>}
-                                            {reservation.status === 'RESERVED' && <i className={`fa-solid fa-spinner ${styles.loading}`}></i>}
-                                            {reservation.status === 'PICKEDUP' && <i className={`fa-solid fa-circle-check ${styles.done}`}></i>}
+                                            {reservation.status === 'CANCELED' && <FontAwesomeIcon icon={faCircleXmark} className={styles.canceled} />}
+                                            {reservation.status === 'RESERVED' && <FontAwesomeIcon icon={faSpinner} className={styles.loading}/>}
+                                            {reservation.status === 'PICKEDUP' && <FontAwesomeIcon icon={faCircleCheck} className={styles.done}/>}
                                         </div>
                                         <span>{reservation.storeName}</span>
                                     </div>
