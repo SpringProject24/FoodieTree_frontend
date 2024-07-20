@@ -30,11 +30,20 @@
     text-align: center;
   }
   label {
-    display: block;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     //margin: 0 0 5px 5px;
     font-weight: 700;
     width: 75%;
     margin: 0 auto 5px;
+
+    .error {
+      color: #ff0000;
+      font-size: 0.9rem;
+      //display: inline;
+      //padding: 0 0 0 30px;
+    }
   }
   input, select {
     //border: 1px solid blueviolet;
@@ -45,6 +54,7 @@
     border-radius: 5px;
     //margin-bottom: 30px;
     font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-size: 16px;
 
     &:focus {
       border: 2px solid #2fd067;
@@ -98,6 +108,13 @@
     &:hover, &:active {
       background:linear-gradient(to right, #43e97b 0%, #38f9d7 100%);
       //border:1px solid #43e97b;
+    }
+  }
+  .disabled {
+    background: var(--color-gray-300);
+
+    &:hover {
+      background: var(--color-gray-300);
     }
   }
 }
