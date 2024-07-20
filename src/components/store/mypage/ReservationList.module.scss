@@ -82,20 +82,24 @@
   border-radius: 10px;
   border: 2px solid transparent;
 
-  &.RESERVED {
-    border-color: blue;
+  &.canceled {
+    border: solid 2px #E68a8c;
+    border-radius: 15px;
   }
 
-  &.CANCELED {
-    border-color: red;
+  &.reserved {
+    border: solid 2px #89b449;
+    border-radius: 15px;
   }
 
-  &.PICKEDUP {
-    border-color: green;
+  &.pickedup {
+    border: solid 2px #407f3e;
+    border-radius: 15px;
   }
 
-  &.NOSHOW {
-    border-color: gray;
+  &.noshow {
+    border: solid 2px gray;
+    border-radius: 15px;
   }
 
   &:hover {
