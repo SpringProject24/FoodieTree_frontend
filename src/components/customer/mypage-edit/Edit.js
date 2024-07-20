@@ -32,7 +32,6 @@ const Edit = () => {
                     <div className={styles["input-area"]}>
                         <NickName/>
                         <PhoneNumber/>
-                        <PasswordReset/>
                     </div>
                     <ProfileImgBtn/>
                 </div>
