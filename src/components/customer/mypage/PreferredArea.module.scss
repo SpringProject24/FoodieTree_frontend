@@ -49,4 +49,18 @@
   }
 }
 
+@media (max-width: 400px) {
+  .infoWrapper {
+    overflow-x: auto; /* 가로 스크롤 활성화 */
+    white-space: nowrap; /* 줄바꿈 방지 */
 
+    .infoList {
+      display: inline-flex; /* 가로 정렬 */
+      gap: 20px;
+    }
+
+    .area {
+      display: inline-block; /* 가로 정렬을 위한 인라인 블록 */
+    }
+  }
+}
