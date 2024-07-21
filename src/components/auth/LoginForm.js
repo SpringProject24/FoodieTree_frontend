@@ -25,7 +25,7 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
       const response = await fetch(`/customer/check?type=account&keyword=${email}`);
       const result = await response.json();
       if (result) {
-        console.log('입력하신 이메일은 customer 회원입니다.. ');
+        console.error('입력하신 이메일은 customer 회원입니다.. ');
           return true;
       } else {
           console.error('입력하신 이메일은 customer 회원이 아닙니다. ');
@@ -39,7 +39,7 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
 
 // store
 // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
-const checkStoreDupId = async (id) => {
+const checkStoreDupId = async (email) => {
   debugger;
     try {
       const response = await fetch(`/store/check?type=account&keyword=${email}`);
@@ -68,158 +68,117 @@ const checkDupId = async (email) => {
   }
 };
 
-
 // 인증 링크 메일 보내기 - 공용 (인증메일 보내기)
-  const sendVerificationLinkForLogin = async (id, code) => {
-    debugger;
-    try {
-      const response = await fetch(`/email/verifyCode?purpose=signup`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ email: id, code: code }) // Replace with actual email and code
-      });
-      console.log(response);
+const sendVerificationLinkForLogin = async (email) => {
+  debugger;
+  try {
+    const response = await fetch(`/email/sendVerificationCode`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email,
+            purpose: 'signup'
+        }),
+    });
+    if (response.ok) {
+      console.log('이메일이 성공적으로 전달되었습니다.');
+        return true;
+    } else {
+        console.error('Failed to send verification code');
+        return false;
+    }
+} catch (error) {
+    console.error('Error sending verification code:', error);
+    return false;
+}
+};
 
-      if (response.ok) {
-          return { ok: true, result: await response.text() };
-      } else {
-          console.error('Verification failed');
-          return { ok: false, result: '실패' };
-      }
-  } catch (error) {
-      console.error('Error verifying code:', error);
-      return { ok: false, result: '실패' };
+const handleEmailChange = (e) => {
+  const email = e.target.value;
+  setEmail(email);
+  if (checkEmailInput(email)) {
+    debouncedCheckDupId(email);
+  } else {
+    setEmailValid(false);
   }
 };
 
+const debouncedCheckDupId = _.debounce(async (email) => {
+  debugger;
+  console.log(`Checking duplication for: ${email}`);
+  const isUnique = await checkDupId(email);
+  setEmailValid(isUnique);
+}, 1000);
 
-// 이메일 링크 전송 코드
-  // const handleSendVerificationLink = async (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   const result = await sendVerificationLinkForLogin(email);
-  //   setIsLoading(false);
-  //   if (result) {
-  //     setVerificationSent(true);
-  //     onVerificationSent(); // 상태를 부모 컴포넌트에 알림
-  //   } else {
-  //     alert('잠시 후 다시 시도해주세요.');
-  //   }
-  // };
-
-
-  const handleEmailChange = (e) => {
-    const email = e.target.value;
-    setEmail(email);
-    if (checkEmailInput(email)) {
-      debouncedCheckDupId(email);
+const handleSendVerificationLink = async (e) => {
+  e.preventDefault();
+  const isUnique = await checkDupId(email);
+  if (!isUnique) {
+    alert('입력하신 이메일은 회원이 아닙니다.');
+    return;
+  }
+  if (isUnique) {
+    setIsLoading(true);
+    const result = await sendVerificationLinkForLogin(email);
+    setIsLoading(false);
+    if (result) {
+      setVerificationSent(true);
+      onVerificationSent(); // 상태를 부모 컴포넌트에 알림
     } else {
-      setEmailValid(false);
+      alert('잠시 후 다시 시도해주세요.');
     }
-  };
+  }
+};
 
-  const debouncedCheckDupId = _.debounce(async (id) => {
-    console.log(`Checking duplication for: ${id}`);
-    const isUnique = await checkDupId(id);
-    setEmailValid(isUnique);
-  },1000);
+const handleRetryLogin = () => {
+  setVerificationSent(false);
+  setEmail('');
+  setEmailValid(false);
+};
 
-
-  // customer 로그인 요청 코드
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      /*
-      const response = await fetch(`${restfulapi~}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        onLogin(result);
-        navigate(userType === 'customer' ? '/customer' : '/store');
-      } else {
-        alert('로그인에 실패했습니다. 다시 시도해주세요.');
-      }
-      */
-
-      // 로그인 성공을 가정하는 임시 코드
-      console.log('Logging in with:', { email });
-      navigate(userType === 'customer' ? '/customer' : '/store');
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('로그인에 실패했습니다. 다시 시도해주세요.');
-    }
-  };
-
-  // store 로그인 요청 코드
-
-  const handleRetryLogin = () => {
-    console.log('Before resetting state:');
-    console.log('verificationSent:', verificationSent);
-    console.log('email:', email);
-    console.log('emailValid:', emailValid);
-
-    setVerificationSent(false);
-    setEmail('');
-    setEmailValid(false);
-
-
-    console.log('After resetting state:');
-    console.log('verificationSent:', verificationSent);
-    console.log('email:', email);
-    console.log('emailValid:', emailValid);
-
-  };
-
-
-  return (
-    <div className={styles['login-form']}>
-      <section className={styles['input-area']}>
-        <form onSubmit={sendVerificationLinkForLogin}>
-          <div className={styles.container}>
-            {verificationSent ? (
-                <div className={styles['verify-link-sent']}>
-                  <h2>{userType} 로그인 인증 링크가 아래의 이메일 주소로 발송되었습니다.</h2>
-                  <p> [ {email} ] </p>
-                  <p>이메일을 확인하여 로그인을 완료해주세요.</p>
-                  <button className={styles['resend-login-email-btn']} onClick={onResendEmail}>
-                    이메일을 받지 못하셨나요? 재전송하기
-                  </button>
-                  <button className={styles['retry-sign-up']} onClick={handleRetryLogin}>
-                    다른 이메일 주소로 로그인
-                  </button>
-                </div>
-            ) : (
-                <div className={styles['id-wrapper']}>
-                  <h2>{userType} 로그인을 위한 이메일 주소를 입력해주세요!</h2>
-                  <input
-                      type="text"
-                      id="input-id"
-                      value={email}
-                      onChange={handleEmailChange}
-                      placeholder="이메일을 입력해주세요"
-                  />
-                  <button
-                      id="id-get-code-btn"
-                      className={!emailValid ? styles.disable : ''}
-                      disabled={!emailValid}
-                  >
-                    로그인 메일 발송
-                  </button>
-                </div>
-            )}
-          </div>
-        </form>
-      </section>
-    </div>
-  );
+return (
+  <div className={styles['login-form']}>
+    <section className={styles['input-area']}>
+      <form onSubmit={handleSendVerificationLink}>
+        <div className={styles.container}>
+          {verificationSent ? (
+            <div className={styles['verify-link-sent']}>
+              <h2>{userType} 로그인 인증 링크가 아래의 이메일 주소로 발송되었습니다.</h2>
+              <p> [ {email} ] </p>
+              <p>이메일을 확인하여 로그인을 완료해주세요.</p>
+              <button className={styles['resend-login-email-btn']} onClick={onResendEmail}>
+                이메일을 받지 못하셨나요? 재전송하기
+              </button>
+              <button className={styles['retry-sign-up']} onClick={handleRetryLogin}>
+                다른 이메일 주소로 로그인
+              </button>
+            </div>
+          ) : (
+            <div className={styles['id-wrapper']}>
+              <h2>{userType} 로그인을 위한 이메일 주소를 입력해주세요!</h2>
+              <input
+                type="text"
+                id="input-id"
+                value={email}
+                onChange={handleEmailChange}
+                placeholder="이메일을 입력해주세요"
+              />
+              <button
+                id="id-get-code-btn"
+                className={!emailValid ? styles.disable : ''}
+                disabled={!emailValid}
+              >
+                로그인 메일 발송
+              </button>
+            </div>
+          )}
+        </div>
+      </form>
+    </section>
+  </div>
+);
 };
 
 export default LoginForm;
