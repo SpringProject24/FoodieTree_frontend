@@ -16,29 +16,11 @@ const useFormValidation = (initialValues, validate) => {
         [validate]
     );
 
-    // useEffect(() => {
-    //     Object.keys(values).forEach(name => {
-    //         debouncedValidate(name, values[name]);
-    //     });
-    // }, [values, debouncedValidate]);
-
     useEffect(() => {
         const allValid = Object.values(errors).every(error => error === null);
         setIsFormValid(allValid && Object.values(values).every(value => value !== ''));
     }, [errors, values]);
 
-    // useEffect(() => {
-    //     const allValid = Object.values(errors).every(error => error === null);
-    //     setIsFormValid(allValid);
-    // }, [errors]);
-
-    // const changeHandler = (e) => {
-    //     const { name, value } = e.target;
-    //     setValues(prevValues => ({
-    //         ...prevValues,
-    //         [name]: value
-    //     }));
-    // };
     const changeHandler = (e) => {
       e.preventDefault();
       const { name, value } = e.target;
