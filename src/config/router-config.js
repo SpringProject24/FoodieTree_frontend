@@ -5,12 +5,14 @@ import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
 import StoreMyPageEdit from "../pages/store/StoreMyPageEdit";
 import StoreMyPageOutlet from "../pages/store/StoreMyPageOutlet";
+import MainPage from "../pages/userMain/MainPage";
 import SignUpPage from "../pages/auth/SignUpPage";
 import LoginPage from "../pages/auth/LoginPage";
 import EmailVerificationPage from "../pages/auth/EmailVerificationPage";
 import StoreMyPage from "../pages/store/StoreMyPage";
 import CustomerMyPage from "../pages/customer/CustomerMyPage";
 import CustomerMyPageEdit from "../pages/customer/CustomerMyPageEdit";
+
 
 const homeRouter = [
     {
@@ -29,6 +31,10 @@ const homeRouter = [
         path: 'email-verification',
         element: <EmailVerificationPage/>
     },
+    {
+        path: '/main',
+        element: <MainPage />
+    }
 ];
 
 const customerMyPageRouter = [
