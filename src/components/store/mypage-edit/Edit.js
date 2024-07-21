@@ -36,7 +36,6 @@ const Edit = () => {
                         <ProductCount/>
                         <PhoneNumber/>
                         <ProductPrice />
-                        <PasswordReset />
                     </div>
                     <ProfileImgBtn/>
                 </div>

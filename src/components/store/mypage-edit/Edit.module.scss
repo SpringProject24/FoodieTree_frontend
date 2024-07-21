@@ -64,5 +64,9 @@
 @media (max-width: 400px) {
   .edit {
     width: 100%;
+    .edit-wrapper {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
   }
 }
