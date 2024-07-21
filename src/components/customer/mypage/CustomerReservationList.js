@@ -183,6 +183,20 @@ const CustomerReservationList = ({ customerId, openModal }) => {
         }
     };
 
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 400);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth <= 400);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return (
         <div className={styles.reservationListForm}>
             <div className={styles.title}>
@@ -206,8 +220,8 @@ const CustomerReservationList = ({ customerId, openModal }) => {
                                             <img src={reservation.storeImg || '/assets/img/defaultImage.jpg'} alt="Store Image" />
                                             {reservation.status === 'CANCELED' && <FontAwesomeIcon icon={faCircleXmark} className={styles.canceled} />}
                                             {reservation.status === 'NOSHOW' && <FontAwesomeIcon icon={faCircleXmark} className={styles.canceled} />}
-                                            {reservation.status === 'RESERVED' && <FontAwesomeIcon icon={faSpinner} className={styles.loading}/>}
-                                            {reservation.status === 'PICKEDUP' && <FontAwesomeIcon icon={faCircleCheck} className={styles.done}/>}
+                                            {reservation.status === 'RESERVED' && <FontAwesomeIcon icon={faSpinner} className={styles.loading} />}
+                                            {reservation.status === 'PICKEDUP' && <FontAwesomeIcon icon={faCircleCheck} className={styles.done} />}
                                         </div>
                                         <span>{reservation.storeName}</span>
                                     </div>
@@ -236,7 +250,7 @@ const CustomerReservationList = ({ customerId, openModal }) => {
                                                     handleCancelReservationClick(reservation.reservationId); // 예약 취소 클릭 핸들러 호출
                                                 }}
                                             >
-                                                예약 취소하기
+                                                {isMobileView ? '예약 취소' : '예약 취소하기'}
                                             </button>
                                         </>
                                     )}

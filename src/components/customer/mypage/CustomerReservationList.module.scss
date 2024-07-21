@@ -238,6 +238,18 @@
       width: 100%;
       flex-direction: column;
       align-items: flex-start;
+      position: relative;
+
+      .reservationCancelBtn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        white-space: pre-line;
+
+        &::after {
+          //content: '예약\n취소';
+        }
+      }
     }
   }
 }
