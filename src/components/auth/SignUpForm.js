@@ -7,29 +7,35 @@ import _ from 'lodash';
 
 
 const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) => {
-  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [emailValid, setEmailValid] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
 
-  const checkEmailInput = (email) => {
+  const checkEmailInput = (id) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(id);
   };
 
-  const checkDupId = async (email) => {
+  const checkDupId = async (id) => {
+    debugger;
     try {
-      //fetch
-      const result = false; // 더미 값: 이메일이 유효하다고 가정
-      return !result;
-    } catch (error) {
+      const response = await fetch(`/store/check?type=account&keyword=${id}`);
+      const result = await response.json();
+      if (!result) {
+          return true;
+      } else {
+          console.error('이미 가입된 아이디');
+          return false;
+      }
+  } catch (error) {
       console.error('Error:', error);
       return false;
-    }
-  };
+  }
+}
 
-  const sendVerificationLinkForSignUp = async (email) => {
+  const sendVerificationLinkForSignUp = async (id) => {
     try {
       //fetch
       const response = { ok: true }; // 더미 값: 요청이 성공했다고 가정
@@ -41,25 +47,25 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
   };
 
   const handleEmailChange = (e) => {
-    const email = e.target.value;
-    setEmail(email);
-    if (checkEmailInput(email)) {
-      debouncedCheckDupId(email);
+    const id = e.target.value;
+    setId(id);
+    if (checkEmailInput(id)) {
+      debouncedCheckDupId(id);
     } else {
       setEmailValid(false);
     }
   };
 
-  const debouncedCheckDupId = _.debounce(async (email) => {
-    console.log(`Checking duplication for: ${email}`);
-    const isUnique = await checkDupId(email);
+  const debouncedCheckDupId = _.debounce(async (id) => {
+    console.log(`Checking duplication for: ${id}`);
+    const isUnique = await checkDupId(id);
     setEmailValid(isUnique);
   }, 1000);
 
   const handleSendVerificationLink = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const result = await sendVerificationLinkForSignUp(email);
+    const result = await sendVerificationLinkForSignUp(id);
     setIsLoading(false);
     if (result) {
       setVerificationSent(true);
@@ -72,17 +78,17 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
   const handleRetrySignUp = () => {
     console.log('Before resetting state:');
     console.log('verificationSent:', verificationSent);
-    console.log('email:', email);
+    console.log('email:', id);
     console.log('emailValid:', emailValid);
 
     setVerificationSent(false);
-    setEmail('');
+    setId('');
     setEmailValid(false);
 
 
     console.log('After resetting state:');
     console.log('verificationSent:', verificationSent);
-    console.log('email:', email);
+    console.log('email:', id);
     console.log('emailValid:', emailValid);
 
   };
@@ -95,7 +101,7 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
               {verificationSent ? (
                   <div className={styles['verify-link-sent']}>
                     <h2>{userType} 회원 등록을 위한 인증 링크가 이메일로 발송되었습니다.</h2>
-                    <p> [ {email} ] </p>
+                    <p> [ {id} ] </p>
                     <p>이메일을 확인하여 인증을 완료해주세요.</p>
                     <button className={styles['resend-signup-email-btn']} onClick={onResendEmail}>
                       이메일을 받지 못하셨나요? 재전송하기
@@ -110,7 +116,7 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
                     <input
                         type="text"
                         id="input-id"
-                        value={email}
+                        value={id}
                         onChange={handleEmailChange}
                         placeholder="이메일을 입력해주세요"
                     />

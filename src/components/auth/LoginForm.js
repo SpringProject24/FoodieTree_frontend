@@ -12,45 +12,103 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-  // const BASE_URL = window.location.origin;
-
   const checkEmailInput = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
+  //customer
   // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
-  const checkDupId = async (email) => {
+  const checkCustomerDupId = async (email) => {
+    debugger;
     try {
-      // const response = await fetch(`${BASE_URL}/store/check?type=account&keyword=${email}`);
-      // const result = await response.json();
-      const result = false; // 더미 값: 이메일이 유효하다고 가정
-      return !result;
-    } catch (error) {
+      const response = await fetch(`/customer/check?type=account&keyword=${email}`);
+      const result = await response.json();
+      if (result) {
+        console.log('입력하신 이메일은 customer 회원입니다.. ');
+          return true;
+      } else {
+          console.error('입력하신 이메일은 customer 회원이 아닙니다. ');
+          return false;
+      }
+  } catch (error) {
       console.error('Error:', error);
       return false;
-    }
-  };
+  }
+}
 
-  const sendVerificationLinkForLogin = async (email) => {
+// store
+// 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
+const checkStoreDupId = async (id) => {
+  debugger;
     try {
-      // const response = await fetch(`${restfulapi~}/email/sendVerificationLink`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     email,
-      //     purpose: 'signup',
-      //   }),
-      // });
-      const response = { ok: true }; // 더미 값: 요청이 성공했다고 가정
-      return response.ok;
-    } catch (error) {
-      console.error('Error sending verification link:', error);
+      const response = await fetch(`/store/check?type=account&keyword=${email}`);
+      const result = await response.json();
+      if (result) {
+        console.log('입력하신 이메일은 store 회원입니다.. ');
+          return true;
+      } else {
+          console.error('입력하신 이메일은 store 회원이 아닙니다. ');
+          return false;
+      }
+  } catch (error) {
+      console.error('Error:', error);
       return false;
-    }
-  };
+  }
+}
+
+const checkDupId = async (email) => {
+  switch (userType) {
+    case 'customer':
+      return await checkCustomerDupId(email);
+    case 'store':
+      return await checkStoreDupId(email);
+    default:
+      return false;
+  }
+};
+
+
+// 인증 링크 메일 보내기 - 공용 (인증메일 보내기)
+  const sendVerificationLinkForLogin = async (id, code) => {
+    debugger;
+    try {
+      const response = await fetch(`/email/verifyCode?purpose=signup`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: id, code: code }) // Replace with actual email and code
+      });
+      console.log(response);
+
+      if (response.ok) {
+          return { ok: true, result: await response.text() };
+      } else {
+          console.error('Verification failed');
+          return { ok: false, result: '실패' };
+      }
+  } catch (error) {
+      console.error('Error verifying code:', error);
+      return { ok: false, result: '실패' };
+  }
+};
+
+
+// 이메일 링크 전송 코드
+  // const handleSendVerificationLink = async (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   const result = await sendVerificationLinkForLogin(email);
+  //   setIsLoading(false);
+  //   if (result) {
+  //     setVerificationSent(true);
+  //     onVerificationSent(); // 상태를 부모 컴포넌트에 알림
+  //   } else {
+  //     alert('잠시 후 다시 시도해주세요.');
+  //   }
+  // };
+
 
   const handleEmailChange = (e) => {
     const email = e.target.value;
@@ -62,31 +120,17 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
     }
   };
 
-  const debouncedCheckDupId = _.debounce(async (email) => {
-    console.log(`Checking duplication for: ${email}`);
-    const isUnique = await checkDupId(email);
+  const debouncedCheckDupId = _.debounce(async (id) => {
+    console.log(`Checking duplication for: ${id}`);
+    const isUnique = await checkDupId(id);
     setEmailValid(isUnique);
-  }, 1000);
+  },1000);
 
 
-  const handleSendVerificationLink = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    const result = await sendVerificationLinkForLogin(email);
-    setIsLoading(false);
-    if (result) {
-      setVerificationSent(true);
-      onVerificationSent(); // 상태를 부모 컴포넌트에 알림
-    } else {
-      alert('잠시 후 다시 시도해주세요.');
-    }
-  };
-
-
+  // customer 로그인 요청 코드
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      //실제 로그인 요청 코드
       /*
       const response = await fetch(`${restfulapi~}/auth/login`, {
         method: 'POST',
@@ -114,6 +158,8 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
     }
   };
 
+  // store 로그인 요청 코드
+
   const handleRetryLogin = () => {
     console.log('Before resetting state:');
     console.log('verificationSent:', verificationSent);
@@ -136,7 +182,7 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
   return (
     <div className={styles['login-form']}>
       <section className={styles['input-area']}>
-        <form onSubmit={handleSendVerificationLink}>
+        <form onSubmit={sendVerificationLinkForLogin}>
           <div className={styles.container}>
             {verificationSent ? (
                 <div className={styles['verify-link-sent']}>
