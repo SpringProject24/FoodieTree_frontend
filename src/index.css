@@ -7,20 +7,15 @@
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  --color-gray-100: #f1f5f3;
+  --color-gray-100: #f4f3f1;
   --color-gray-200: #dddbd8;
-  --color-gray-300: #f1f5f3;
+  --color-gray-300: #ccc9c6;
   --color-gray-400: #aeaba7;
   --color-gray-500: #8a8784;
   --color-gray-600: #656360;
@@ -41,6 +36,7 @@
 
 body {
   margin: 0;
+  background: white;
 }
 
 ul {

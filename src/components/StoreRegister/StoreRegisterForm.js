@@ -62,30 +62,11 @@ const initialValues = {
   };
 
 const StoreRegisterForm = () => {
-  console.log('가게-등록-폼 실행!');
+  // console.log('가게-등록-폼 실행!');
 
   const { values, errors, isFormValid, changeHandler, setValues }
       = useFormValidation(initialValues, validate);
 
-  // input 검증 결과 및 메세지 상태
-  // const [errors, setErrors] = useState({});
-  // 모든 입력 필드 검증결과에 따라 폼의 제출 버튼을 활성화/비활성화
-  // const [isFormValid, setIsFormValid] = useState(false);
-
-
-  // const changeHandler = (e) => {
-  //   e.preventDefault();
-  //   const { name, value } = e.target;
-  //
-  //   setValues(prevValues => {
-  //     return {
-  //       ...prevValues,
-  //       [name]: value
-  //     };
-  //   })
-  //   // 디바운스된 검증 함수 호출
-  //   debouncedValidate(name, value);
-  // };
 
   return (
     <Form

@@ -6,10 +6,10 @@ const PriceRadioBox = ({options, onPrice}) => {
   // 상품 가격 상태관리
   const [pickedPriceIndex, setPickedPriceIndex] = useState(null);
 
-  // 가격 클릭 시 상태 업데이트 및 ProductRegisterForm에 전달
+  // 가격 클릭 시 이벤트 핸들러
   const clickHandler = (index, value) => {
-    setPickedPriceIndex(index);
-    onPrice(value);
+    setPickedPriceIndex(index); // 선택한 가격 상태 업데이트
+    onPrice(value); // ProductRegisterForm 으로 전달
   }
 
   return (

@@ -23,7 +23,7 @@ const homeRouter = [
 const storeRouter = [
   {
     path: 'edit',
-    // element: <StoreMyPageEdit />
+    element: <StoreMyPageEdit />
   },
   {
     path: 'approval',
