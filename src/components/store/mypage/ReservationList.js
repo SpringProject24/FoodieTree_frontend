@@ -22,7 +22,7 @@ const ReservationList = ({ reservations, openModal }) => {
     }, []);
 
     const handleReservationClick = (reservation) => {
-        openModal('storeReservationDetail', { reservation });
+        openModal('storeReservationDetail', { reservationInfo: reservation });
     };
 
     return (
