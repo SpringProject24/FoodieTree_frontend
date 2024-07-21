@@ -24,6 +24,7 @@ const Modal = () => {
 
 
     let ModalComponent;
+    let customStyle = {};
 
     switch (type) {
         case 'emailVerification': // 이메일 인증
@@ -34,6 +35,7 @@ const Modal = () => {
             break;
         case 'productDetail': // 상품 메인페이지 상품 상세조회
             ModalComponent = ProductDetailModal;
+            customStyle = { width: '80%', margin: '140px auto'}; // 원하는 스타일 지정
             break;
         case 'customerReservationDetail': // 소비자페에지 예약 상세조회
             ModalComponent = CustomerReservationDetailModal;
@@ -62,8 +64,10 @@ const Modal = () => {
 
     return ReactDOM.createPortal (
             <div className={styles.modal} onClick={handleClose}>
-                <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                    <span className={styles.close} onClick={closeModal}><FontAwesomeIcon icon={faTimes}/></span>
+                <div className={styles.modalContent} style={customStyle} onClick={(e) => e.stopPropagation()}>
+                    <div className={styles.close} onClick={closeModal}>
+                        <span><FontAwesomeIcon icon={faTimes}/></span>
+                    </div>
                     <div className={styles.modalInnerContent}>
                         {ModalComponent && (
                             <Suspense fallback={<div>Loading...</div>}>
@@ -71,6 +75,7 @@ const Modal = () => {
                             </Suspense>
                         )}
                     </div>
+                    <div className={styles.modalFooter}>footer</div>
                 </div>
             </div>
         ,
