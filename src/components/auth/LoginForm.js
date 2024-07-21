@@ -25,7 +25,7 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
       const response = await fetch(`/customer/check?type=account&keyword=${email}`);
       const result = await response.json();
       if (result) {
-        console.error('입력하신 이메일은 customer 회원입니다.. ');
+        console.log('입력하신 이메일은 customer 회원입니다.. ');
           return true;
       } else {
           console.error('입력하신 이메일은 customer 회원이 아닙니다. ');
@@ -57,6 +57,7 @@ const checkStoreDupId = async (email) => {
   }
 }
 
+//usertype에 따른 중복검사 진행
 const checkDupId = async (email) => {
   switch (userType) {
     case 'customer':
@@ -132,6 +133,7 @@ const handleSendVerificationLink = async (e) => {
   }
 };
 
+// 다른 이메일로 로그인 재시도
 const handleRetryLogin = () => {
   setVerificationSent(false);
   setEmail('');
