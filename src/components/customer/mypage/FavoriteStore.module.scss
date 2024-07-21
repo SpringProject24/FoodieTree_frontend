@@ -80,6 +80,10 @@
     overflow-x: auto;
     white-space: nowrap;
 
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
     .store {
       display: inline-flex;
       gap: 20px;

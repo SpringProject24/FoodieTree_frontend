@@ -81,6 +81,10 @@
     overflow-x: auto;
     white-space: nowrap;
 
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
     .food {
       display: inline-flex;
       gap: 20px;
