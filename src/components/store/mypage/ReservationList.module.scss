@@ -44,18 +44,15 @@
   .infoWrapper::-webkit-scrollbar {
     width: 12px;
   }
-
   .infoWrapper::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
   }
-
   .infoWrapper::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 10px;
     border: 3px solid #f1f1f1;
   }
-
   .infoWrapper::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
@@ -168,6 +165,85 @@
       font-size: 13px;
       position: relative;
       left: -7px;
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 400px) {
+  .reservationListForm {
+    padding: 20px 0px 10px 0px;
+
+    .title {
+      height: 50px;
+      font-size: 16px;
+      padding: 5px 10px;
+
+      .titleText {
+        margin-top: 5px;
+      }
+    }
+
+    .infoWrapper {
+      padding: 5px;
+      height: calc(100% - 60px);
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  .reservationList {
+    gap: 5px;
+    margin: 0 5px 5px 5px;
+  }
+
+  .reservationItem {
+    gap: 10px;
+    padding: 5px;
+    margin: 5px 0;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .item {
+      flex-direction: row;
+      align-items: center;
+
+      .imgWrapper {
+        .imgBox {
+          img {
+            border-radius: 50%;
+          }
+
+          .canceled,
+          .done,
+          .loading {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+
+    .reservationStatus {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-left: 0;
+
+      span {
+        display: block;
+      }
     }
   }
 }

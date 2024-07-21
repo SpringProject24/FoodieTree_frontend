@@ -46,7 +46,7 @@ const ReservationList = ({ reservations, openModal }) => {
                                         {reservation.status === 'PICKEDUP' && <FontAwesomeIcon icon={faCircleCheck} className={`${styles.done} ${styles.icon}`} />}
                                     </div>
                                 </div>
-                                <span className={styles.reservationNickname} style={{ fontSize: '18px' }}>
+                                <span className={styles.reservationNickname}>
                                     {reservation.nickname}님께서
                                 </span>
                             </div>
