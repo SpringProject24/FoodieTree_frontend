@@ -25,16 +25,6 @@ const FoodNav = ({categories, stores}) => {
 
   return (
     <>
-      {/* <header className={styles["App-header"]}>
-        <div className={styles.banner}>
-          <img src={bannerImg} alt="banner Image 나중에 바꿀 예정🚩" />
-        </div>
-        <div className={styles.title}>
-          <h1>환경을 생각하는 착한 소비</h1>
-          <p>원하는 음식을 선택하세요!</p>
-        </div>
-      </header> */}
-
 
       {/* 내가 찜한 가게 리스트 */}
       <div className={styles.list1}>

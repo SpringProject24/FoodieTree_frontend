@@ -22,6 +22,8 @@ const MainPage = () => {
     { name: 'Store 4', category: '양식', image: img1, price: 3900  },
     { name: 'Store 5', category: '중식', image: img2, price: 3900  },
     { name: 'Store 6', category: '일식', image: img3, price: 3900  },
+    { name: 'Store 7', category: '양식', image: img3, price: 6900  },
+
   ];
 
   return (

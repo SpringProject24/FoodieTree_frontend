@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'HS-Regular';
+    src: url('https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/HS-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 .header{
     position: relative;
     margin: 0 auto;
@@ -25,11 +33,4 @@
 }
 .header .btnImg img{
     width:25%;
-}
-
-@font-face {
-    font-family: 'HS-Regular';
-    src: url('https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/HS-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
 }
