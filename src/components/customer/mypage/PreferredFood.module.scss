@@ -77,6 +77,9 @@
 }
 
 @media (max-width: 400px) {
+  .preferredFoodForm {
+    padding: 0;
+  }
   .infoWrapper {
     overflow-x: auto;
     white-space: nowrap;
