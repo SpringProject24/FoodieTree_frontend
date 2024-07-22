@@ -115,5 +115,22 @@
     &.on {
       left: 0;
     }
+
+    .profile {
+      .imgBox {
+        margin-top: 20px;
+      }
+
+      h2 {
+        margin-top: 10px;
+      }
+
+      .stats {
+        .statsBox {
+          margin: 0;
+          padding: 10px;
+        }
+      }
+    }
   }
 }

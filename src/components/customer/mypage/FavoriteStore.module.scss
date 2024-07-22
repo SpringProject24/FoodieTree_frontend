@@ -76,6 +76,10 @@
 }
 
 @media (max-width: 400px) {
+  .favoriteStoreForm {
+    padding: 0;
+  }
+
   .infoWrapper {
     overflow-x: auto;
     white-space: nowrap;
