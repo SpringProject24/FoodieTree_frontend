@@ -27,7 +27,7 @@ const Calendar = ({ openModal }) => {
 
     const fetchHolidays = async (year, month) => {
         try {
-            const response = await fetch(`/store/mypage/main/calendar/check/holiday`, {
+            const response = await fetch(`/store/mypage/main/calendar/getHoliday`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -97,7 +97,10 @@ const Calendar = ({ openModal }) => {
         // 실제 API 호출 부분 (주석 처리)
         // const dayData = await fetchDayData(selectedDate);
         // if (dayData) {
-        //     openModal('scheduleDetail', { date: selectedDate, ...dayData });
+        //     openModal('scheduleDetail', { 
+        //     date: selectedDate,
+        //     ...dayData, 
+        //     holidayOption: !isPast });
         // } else {
         //     alert('Failed to fetch day data');
         // }
@@ -109,7 +112,8 @@ const Calendar = ({ openModal }) => {
                 openTime: "09:00",
                 closeTime: "18:00",
                 totalProducts: 50,
-                soldProducts: 30
+                soldProducts: 30,
+                holidayOption: false // 과거 시점 > 휴무일 옵션 제공하지 않음
             });
         } else {
             openModal('scheduleDetail', {
@@ -117,8 +121,7 @@ const Calendar = ({ openModal }) => {
                 openTime: "09:00",
                 closeTime: "18:00",
                 totalProducts: 50,
-                holidayOption: true,
-                // onHolidaySet: () => handleSetHoliday(selectedDate) // 휴무일 설정 함수 추가
+                holidayOption: true // 미래 시점 > 휴무일 옵션 제공
             });
         }
     };
@@ -126,7 +129,7 @@ const Calendar = ({ openModal }) => {
     // 휴무일을 설정하는 함수 (더미 데이터를 사용하므로 주석 처리)
     // const handleSetHoliday = async (date) => {
     //     try {
-    //         const response = await fetch(`/store/mypage/main/calendar/set/holiday`, {
+    //         const response = await fetch(`/store/mypage/main/calendar/setHoliday`, {
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json'
