@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import RootLayout from '../layout/RootLayout';
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
@@ -7,6 +7,7 @@ import LoginPage from "../pages/auth/LoginPage";
 import EmailVerificationPage from "../pages/auth/EmailVerificationPage";
 import StoreMyPage from "../pages/store/StoreMyPage";
 import CustomerMyPage from "../pages/customer/CustomerMyPage";
+import VerifyToken from "../components/auth/VerifyToken";
 
 const homeRouter = [
   {
@@ -54,8 +55,12 @@ export const router = createBrowserRouter([
           element: <LoginPage />
         },
         {
-          path: 'email-verification',
+          path: '/email-verification',
           element: <EmailVerificationPage />
+        },
+        {
+          path: '/verifyEmail',
+          element: <VerifyToken />
         },
       ]
     },

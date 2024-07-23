@@ -25,10 +25,10 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
       const response = await fetch(`/customer/check?type=account&keyword=${email}`);
       const result = await response.json();
       if (result) {
-        console.log('입력하신 이메일은 customer 회원입니다.. ');
+        console.log(`입력하신 이메일 [ ${email} ] 은 customer 회원입니다.`);
           return true;
       } else {
-          console.error('입력하신 이메일은 customer 회원이 아닙니다. ');
+          console.error(`입력하신 이메일 [ ${email} ] 은 customer 회원이 아닙니다.`);
           return false;
       }
   } catch (error) {
@@ -45,10 +45,10 @@ const checkStoreDupId = async (email) => {
       const response = await fetch(`/store/check?type=account&keyword=${email}`);
       const result = await response.json();
       if (result) {
-        console.log('입력하신 이메일은 store 회원입니다.. ');
+        console.log(`입력하신 이메일[ ${email} ]은 store 회원입니다... `);
           return true;
       } else {
-          console.error('입력하신 이메일은 store 회원이 아닙니다. ');
+          console.error(`입력하신 이메일[ ${email} ]은 store 회원이 아닙니다. `);
           return false;
       }
   } catch (error) {
@@ -128,7 +128,7 @@ const handleSendVerificationLink = async (e) => {
       setVerificationSent(true);
       onVerificationSent(); // 상태를 부모 컴포넌트에 알림
     } else {
-      alert('잠시 후 다시 시도해주세요.');
+      alert('이메일 전송에 실패했거나 관련된 문제입니다.');
     }
   }
 };

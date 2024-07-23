@@ -21,15 +21,14 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
   //customer
   // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
   const checkCustomerDupId = async (email) => {
-    debugger;
     try {
       const response = await fetch(`/customer/check?type=account&keyword=${email}`);
       const result = await response.json();
       if (!result) {
-        console.log('입력하신 이메일은 customer 회원이 아닙니다. ');
+        console.log(`입력하신 이메일 [ ${email} ] 은 customer 회원이 아닙니다.`);
           return true;
       } else {
-        console.error('입력하신 이메일은 customer 회원입니다.. ');
+        console.error(`입력하신 이메일 [ ${email} ] 은 customer 회원입니다.`);
           return false;
       }
   } catch (error) {
@@ -41,7 +40,6 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
 // store
 // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
 const checkStoreDupId = async (email) => {
-  debugger;
     try {
       const response = await fetch(`/store/check?type=account&keyword=${email}`);
       const result = await response.json();
@@ -70,33 +68,31 @@ const checkDupId = async (email) => {
   }
 };
 
-
-
-  const sendVerificationLinkForSignUp = async (email) => {
-    debugger;
+// 인증 메일 리다이렉션 주소 보내기
+const sendVerificationLinkForSignUp = async (email) => {
   try {
-    const response = await fetch(`/email/sendVerificationCode`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            email,
-            purpose: 'signup'
-        }),
-    });
-    if (response.ok) {
-      console.log('이메일이 성공적으로 전달되었습니다.', email);
-        return true;
-    } else {
-        console.error('Failed to send verification code');
-        return false;
-    }
-} catch (error) {
-    console.error('Error sending verification code:', error);
-    return false;
-    }
-  };
+      const response = await fetch(`/email/sendVerificationLink`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              email,
+              purpose: 'signup'
+          }),
+      });
+      if (response.ok) {
+          console.log('이메일이 성공적으로 전달되었습니다.', email);
+          return true;
+      } else {
+          console.error('Failed to send verification link');
+          return false;
+      }
+  } catch (error) {
+      console.error('Error sending verification link:', error);
+      return false;
+  }
+};
 
   const handleEmailChange = (e) => {
     const email = e.target.value;
@@ -129,7 +125,7 @@ const checkDupId = async (email) => {
         setVerificationSent(true);
         onVerificationSent(); 
       } else {
-        alert('잠시 후 다시 시도해주세요.');
+        alert('이메일 전송에 실패했거나 관련된 문제입니다.');
       }
     }
   };
