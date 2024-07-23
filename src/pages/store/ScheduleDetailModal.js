@@ -56,14 +56,19 @@ const ScheduleDetailModal = ({ clickedDateInfo }) => {
                 <h2>{clickedDate}</h2>
             </div>
             <div className={styles.modalBody}>
-                <div className={styles.holidayInfo}>
-                    {isHoliday ? (
-                        <div>휴무일로 지정된 날짜입니다.</div>
-                    ) : (
-                        <div>정상 운영 날짜입니다.</div>
-                    )}
-                </div>
+                {
+
+                    <div className={styles.holidayInfo}>
+                        {isHoliday ? (
+                            <div>휴무일로 지정된 날짜입니다.</div>
+                        ) : (
+                            <div>정상 운영 날짜입니다.</div>
+                        )}
+                    </div>
+
+                }
                 <div className={styles.storeInfo}>
+
                     <h3>가게 정보</h3>
                     {/* storeInfo에 관련된 정보 표시 */}
                 </div>
