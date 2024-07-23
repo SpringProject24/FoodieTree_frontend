@@ -25,7 +25,6 @@ const FoodNav = ({categories, stores}) => {
 
   return (
     <>
-
       {/* 내가 찜한 가게 리스트 */}
       <div className={styles.list1}>
         <h2 className={styles.title1}>내가 찜한 가게</h2>
