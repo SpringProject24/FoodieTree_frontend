@@ -111,9 +111,7 @@ const Modal = () => {
                     )}
                 </div>
                 <div className={styles.modalFooter}>
-                    <div className={styles.bottomPlaceOrder}>
                         {type === 'productDetail' && isMobile && <BottomPlaceOrder/>}
-                    </div>
                 </div>
             </div>
         </div>

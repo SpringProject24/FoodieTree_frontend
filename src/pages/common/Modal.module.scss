@@ -49,14 +49,14 @@
     }
 
     .modalInnerContent {
-      padding: 0 20px;
+      padding: 0 20px 30px;
       overflow-y: auto; // 세로 스크롤 활성화
       max-height: calc(70vh - 40px); // 닫기 버튼 높이 제외한 최대 높이 설정
       text-align: center;
     }
 
     .modalFooter{
-
+      padding-top: 10px;
     }
   }
 }
