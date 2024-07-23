@@ -77,52 +77,6 @@
 
       }
     }
-
-    .bottomPlaceOrder {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 10%;
-
-      .productAmtAdjustBtn {
-        display: flex;
-        justify-content: space-evenly;
-        width: 25%;
-
-        .adjustBtn {
-          border-radius: 35px;
-          border: none;
-          width: 40px;
-          height: 40px;
-          margin: auto 0;
-        }
-
-        .initialCnt {
-          font-size: 25px;
-          font-weight: 700;
-        }
-      }
-
-      .placeOrderBtn {
-        border: 1px solid rgb(231, 231, 231);
-        border-radius: 8px;
-        padding: 16px;
-        margin: 8px 0px;
-        background-color: rgba(87, 173, 88, 0.98);
-        box-shadow: transparent 0px 0px 0px 1px inset;
-        color: #fff;
-        font-weight: 700;
-        font-size: 28px;
-        height: 100%;
-        width: 70%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-
-      }
-    }
-
   }
 
   .paymentBox {
@@ -207,4 +161,12 @@
   margin: 0px;
   border: none;
   background: rgb(231, 231, 231);
+}
+
+@media (max-width: 1200px) {
+  .productDetailModal{
+    .infoBox{
+        width: 100%;
+    }
+  }
 }
