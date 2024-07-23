@@ -118,7 +118,7 @@ const Calendar = ({ openModal }) => {
                 closeTime: "18:00",
                 totalProducts: 50,
                 holidayOption: true,
-                onHolidaySet: () => handleSetHoliday(selectedDate) // 휴무일 설정 함수 추가
+                // onHolidaySet: () => handleSetHoliday(selectedDate) // 휴무일 설정 함수 추가
             });
         }
     };
