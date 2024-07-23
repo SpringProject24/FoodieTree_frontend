@@ -93,13 +93,14 @@ const Calendar = ({ openModal }) => {
         if (!day) return;
         const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const isPast = selectedDate < new Date(new Date().setHours(0, 0, 0, 0));
+        const holidayOption = !isPast && !isHoliday(day); // 과거시점이 아니고, 이미 휴무일로 지정된 날이 아닌 경우 true 아니면 false
 
         // 실제 API 호출 부분 (주석 처리)
         // const dayData = await fetchDayData(selectedDate);
         // if (dayData) {
-        //     openModal('scheduleDetail', { 
+        //     openModal('scheduleDetail', {
         //     date: selectedDate,
-        //     ...dayData, 
+        //     ...dayData,
         //     holidayOption: !isPast });
         // } else {
         //     alert('Failed to fetch day data');
@@ -121,7 +122,7 @@ const Calendar = ({ openModal }) => {
                 openTime: "09:00",
                 closeTime: "18:00",
                 totalProducts: 50,
-                holidayOption: true // 미래 시점 > 휴무일 옵션 제공
+                holidayOption // 미래 시점 & 휴무일로 지정되지 않은 경우 > 휴무일 옵션 제공
             });
         }
     };
