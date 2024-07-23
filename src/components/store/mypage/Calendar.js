@@ -53,6 +53,29 @@ const Calendar = ({ openModal }) => {
         }
     };
 
+    // 선택된 날짜의 데이터를 가져오는 함수 (더미 데이터를 사용하므로 주석 처리)
+    // const fetchDayData = async (date) => {
+    //     try {
+    //         const response = await fetch(`/api/mypage/daydata`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ date })
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch day data');
+    //         }
+
+    //         const data = await response.json();
+    //         return data;
+    //     } catch (error) {
+    //         console.error('Error fetching day data:', error);
+    //         return null;
+    //     }
+    // };
+
     const handlePrevMonth = () => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
     };
@@ -66,11 +89,62 @@ const Calendar = ({ openModal }) => {
         return holidays.includes(dateString);
     };
 
-    const handleDayClick = (day) => {
+    const handleDayClick = async (day) => {
         if (!day) return;
         const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-        openModal('scheduleDetail', { date: selectedDate });
+        const isPast = selectedDate < new Date(new Date().setHours(0, 0, 0, 0));
+
+        // 실제 API 호출 부분 (주석 처리)
+        // const dayData = await fetchDayData(selectedDate);
+        // if (dayData) {
+        //     openModal('scheduleDetail', { date: selectedDate, ...dayData });
+        // } else {
+        //     alert('Failed to fetch day data');
+        // }
+
+        // 더미 데이터용 로직
+        if (isPast) {
+            openModal('scheduleDetail', {
+                date: selectedDate,
+                openTime: "09:00",
+                closeTime: "18:00",
+                totalProducts: 50,
+                soldProducts: 30
+            });
+        } else {
+            openModal('scheduleDetail', {
+                date: selectedDate,
+                openTime: "09:00",
+                closeTime: "18:00",
+                totalProducts: 50,
+                holidayOption: true,
+                onHolidaySet: () => handleSetHoliday(selectedDate) // 휴무일 설정 함수 추가
+            });
+        }
     };
+
+    // 휴무일을 설정하는 함수 (더미 데이터를 사용하므로 주석 처리)
+    // const handleSetHoliday = async (date) => {
+    //     try {
+    //         const response = await fetch(`/store/mypage/main/calendar/set/holiday`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ date })
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('Failed to set holiday');
+    //         }
+
+    //         // 휴무일 설정 성공 시, 휴무일 목록 갱신
+    //         const updatedHolidays = await fetchHolidays(date.getFullYear(), date.getMonth());
+    //         setHolidays(updatedHolidays);
+    //     } catch (error) {
+    //         console.error('Error setting holiday:', error);
+    //     }
+    // };
 
     return (
         <div className={styles.calendarContainer}>
@@ -89,8 +163,8 @@ const Calendar = ({ openModal }) => {
                                 이전 달
                             </button>
                             <span className={styles.currentMonth}>
-                            {currentDate.toLocaleDateString('default', {year: 'numeric', month: 'long'})}
-                        </span>
+                                {currentDate.toLocaleDateString('default', {year: 'numeric', month: 'long'})}
+                            </span>
                             <button className={styles.calendarButton} onClick={handleNextMonth}>
                                 다음 달
                             </button>
