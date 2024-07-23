@@ -45,7 +45,7 @@ const Modal = () => {
         };
     }, [type]);
 
-    //백드ㅂ 드롭 스크롤 방지
+    //백드롭 스크롤 방지
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
