@@ -34,7 +34,7 @@ const Modal = () => {
             } else {
                 setCustomStyle({});
             }
-            setIsMobile(window.innerWidth <= 400); // 추가
+            setIsMobile(window.innerWidth <= 390); // 추가
         };
 
         handleResize();
@@ -44,8 +44,21 @@ const Modal = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, [type]);
-    if (!isOpen)return null;
 
+    //백드ㅂ 드롭 스크롤 방지
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
+    if (!isOpen)return null;
 
     let ModalComponent;
 
