@@ -26,7 +26,7 @@ const Modal = () => {
     useEffect(() => {
         const handleResize = () => {
             if (type === 'productDetail') {
-                if (window.innerWidth <= 390) {
+                if (window.innerWidth <= 400) {
                     setCustomStyle({ width: '100%'});
                 } else {
                     setCustomStyle({ width: '80%', height: '80%', margin: '140px auto' });
@@ -34,7 +34,7 @@ const Modal = () => {
             } else {
                 setCustomStyle({});
             }
-            setIsMobile(window.innerWidth <= 390); // 추가
+            setIsMobile(window.innerWidth <= 400); // 추가
         };
 
         handleResize();
