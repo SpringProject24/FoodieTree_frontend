@@ -37,6 +37,10 @@ const homeRouter = [
     path: 'email-verification',
     element: <EmailVerificationPage/>
   },
+    {
+        path: '/verifyEmail',
+        element: <VerifyToken />
+    },
   {
     path: '/main',
     element: <MainPage />
@@ -98,22 +102,6 @@ export const router = createBrowserRouter([
             {
                 path: '/customer',
                 children: customerMyPageRouter
-            },
-            {
-                path: '/sign-up',
-                element: <SignUpPage />
-            },
-            {
-                path: '/login',
-                element: <LoginPage />
-            },
-            {
-                path: '/email-verification',
-                element: <EmailVerificationPage />
-            },
-            {
-                path: '/verifyEmail',
-                element: <VerifyToken />
             },
         ]
     },
