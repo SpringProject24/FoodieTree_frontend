@@ -40,16 +40,16 @@ const ProductDetailModal = ({ productDetail }) => {
 
     return (
         <section className={styles.productDetailModal}>
-            <section className={styles.infoBox}>
-                <StoreInfo />
-                <ProductDetail />
-                {isMobile? (<></>) : (<BottomPlaceOrder/>)}
-            </section>
-            {isMobile ? (
-                <></>
-            ) : (
-                <PaymentBox />
-            )}
+            {/*<section className={styles.infoBox}>*/}
+            {/*    <StoreInfo store={store}/>*/}
+            {/*    <ProductDetail product={product}/>*/}
+            {/*    {isMobile? (<></>) : (<BottomPlaceOrder reservation={reservation}/>)}*/}
+            {/*</section>*/}
+            {/*{isMobile ? (*/}
+            {/*    <></>*/}
+            {/*) : (*/}
+            {/*    <PaymentBox reservation={reservation} store={store} product={product}/>*/}
+            {/*)}*/}
         </section>
     );
 };
