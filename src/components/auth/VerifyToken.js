@@ -7,6 +7,12 @@ function VerifyToken() {
   const token = query.get('token');
 
   useEffect(() => {
+    const redirectToAbsoluteURL = () => {
+      const relativePath = `/verifyEmail?token=${token}`;
+      const absoluteURL = window.location.origin + relativePath;
+      window.location.href = absoluteURL;
+    };
+
     const verifyToken = async () => {
       if (token) {
         console.log('token : ', token);
@@ -32,6 +38,8 @@ function VerifyToken() {
         } catch (error) {
           console.error('Error:', error);
         }
+      } else {
+        redirectToAbsoluteURL();
       }
     };
 
@@ -39,9 +47,9 @@ function VerifyToken() {
   }, [token]);
 
   return (
-    <div>
-      Verifying your email...
-    </div>
+      <div>
+        Verifying your email...
+      </div>
   );
 }
 
