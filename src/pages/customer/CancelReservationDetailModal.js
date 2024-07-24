@@ -1,4 +1,6 @@
 import React from 'react';
+import {useModal} from "../common/ModalProvider";
+
 /**
  * 소비자 마이페이지 창에서 예약 취소 버튼 누를 시 뜨는 모달
  * @param cancelInfo - storeName, price, cancellationFee
@@ -7,7 +9,20 @@ import React from 'react';
  * @returns {Element}
  * @constructor
  */
-const CancelReservationDetailModal = ({cancelInfo, isCancelAllowed, onConfirmCancel}) => {
+const CancelReservationDetailModal = ({reservationDetail, isCancelAllowed, onConfirmCancel}) => {
+    const {closeModal} = useModal();
+
+    const cancelInfo = {
+        reservationId: reservationDetail.reservationId,
+        storeName: reservationDetail.storeName,
+        price: reservationDetail.price,
+    }
+
+    const handleReservationCancel = (reservationId) => {
+        // onConfirmCancel(reservationId);
+        alert('예약이 취소되었습니다.');
+        closeModal();
+    }
 
     return (
         <>
@@ -22,18 +37,18 @@ const CancelReservationDetailModal = ({cancelInfo, isCancelAllowed, onConfirmCan
                 </div>
             ) : (
                 <div>
-                    <p style={{ textAlign: 'center' }}>
-                        픽업시간 기준 1시간 이내로 예약 취소시 <br />
-                        취소 수수료 50%가 부과됩니다. <br />
+                    <p>
+                        픽업시간 기준 1시간 이내로 예약 취소시 <br/>
+                        취소 수수료 50%가 부과됩니다. <br/>
                         정말 취소하시겠습니까?
                     </p>
-                    <p style={{ fontFamily: 'jua', fontSize: '23px' }}>
-                        취소수수료 : 0
+                    <p>
+                        취소수수료 : {cancelInfo.price * 0.5}원
                     </p>
                     <p>취소 수수료는 결제 금액에서 자동 차감됩니다.</p>
                 </div>
             )}
-            <button className="calendar-button" onClick={onConfirmCancel}>확인</button>
+            <button className="calendar-button" onClick={handleReservationCancel}>확인</button>
         </>
     );
 };
