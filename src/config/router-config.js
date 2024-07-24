@@ -15,8 +15,8 @@ import StoreMyPage from "../pages/store/StoreMyPage";
 import CustomerMyPage from "../pages/customer/CustomerMyPage";
 import CustomerMyPageEdit from "../pages/customer/CustomerMyPageEdit";
 import StoreRegisterPage from "../pages/store/StoreRegisterPage";
-import {storeRegisterAction} from "../components/StoreRegister/StoreRegisterForm";
-import ProductRegisterForm, {productRegisterAction} from "../components/StoreRegister/ProductRegisterForm";
+import {storeRegisterAction} from "../components/storeRegister/StoreRegisterForm";
+import ProductRegisterForm, {productRegisterAction} from "../components/storeRegister/ProductRegisterForm";
 
 const homeRouter = [
   {
