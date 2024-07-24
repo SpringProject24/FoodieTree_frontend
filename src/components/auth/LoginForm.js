@@ -20,7 +20,7 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
   //customer
   // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
   const checkCustomerDupId = async (email) => {
-    debugger;
+    // debugger;
     try {
       const response = await fetch(`/customer/check?type=account&keyword=${email}`);
       const result = await response.json();
@@ -40,7 +40,7 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
 // store
 // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
 const checkStoreDupId = async (email) => {
-  debugger;
+  // debugger;
     try {
       const response = await fetch(`/store/check?type=account&keyword=${email}`);
       const result = await response.json();
@@ -71,9 +71,9 @@ const checkDupId = async (email) => {
 
 // 인증 링크 메일 보내기 - 공용 (인증메일 보내기)
 const sendVerificationLinkForLogin = async (email) => {
-  debugger;
+  // debugger;
   try {
-    const response = await fetch(`/email/sendVerificationCode`, {
+    const response = await fetch(`/email/sendVerificationLink`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -87,11 +87,11 @@ const sendVerificationLinkForLogin = async (email) => {
       console.log('이메일이 성공적으로 전달되었습니다.');
         return true;
     } else {
-        console.error('Failed to send verification code');
+        console.error('Failed to send verification link');
         return false;
     }
 } catch (error) {
-    console.error('Error sending verification code:', error);
+    console.error('Error sending verification Link:', error);
     return false;
 }
 };
@@ -107,7 +107,7 @@ const handleEmailChange = (e) => {
 };
 
 const debouncedCheckDupId = _.debounce(async (email) => {
-  debugger;
+  // debugger;
   console.log(`Checking duplication for: ${email}`);
   const isUnique = await checkDupId(email);
   setEmailValid(isUnique);
