@@ -1,11 +1,16 @@
 import React from 'react';
 import styles from "./CustomerReservationDetailModal.module.scss";
+import {useModal} from "../common/ModalProvider";
 
-const CustomerReservationDetailModal = ({reservationDetail}) => {
+const CustomerReservationDetailModal = ({reservationDetail, confirmPickUp}) => {
+    const {closeModal} = useModal();
 
-    const confirmPickUp = async () => {
+    const handleConfirmPickUp = (å) => {
         // const response = await fetch(`${BASE_URL}`)
-        alert('픽업 확인 후 특정 사유 없이 환불 불가 합니다.');
+        confirmPickUp(reservationDetail.id); // props로 받아온 함수 실행
+        alert('픽업이 확인되었습니다. 감사합니다.');
+        closeModal();
+        // 추후 리뷰 기능 추가 가능
     };
 
     let tag = '';
@@ -24,7 +29,7 @@ const CustomerReservationDetailModal = ({reservationDetail}) => {
                 <>
                     <img src="/assets/img/mypage-omw.png" alt="픽업 이미지"/>
                     <p className={styles.pickupTimeF}>픽업 마감 시간: <span>{reservationDetail.pickupTimeF}</span></p>
-                    <button onClick={confirmPickUp}>픽업 확인</button>
+                    <button onClick={handleConfirmPickUp}>픽업 확인</button>
                 </>
             );
             break;
@@ -57,7 +62,7 @@ const CustomerReservationDetailModal = ({reservationDetail}) => {
             <div className={styles.reservationDetailItem} data-reservation-id={reservationDetail.id}>
                 <div className={styles.imgSection}>
                     <div>
-                    <img className={styles.reservedProductImg} src={""} alt="상품 이미지"/>
+                        <img className={styles.reservedProductImg} src={""} alt="상품 이미지"/>
                     </div>
                     <img className={styles.reservedStoreImg} src={reservationDetail.storeImg} alt="가게 이미지"/>
                 </div>
