@@ -5,7 +5,6 @@ import commonStyles from '../../common.module.scss';
 import _ from 'lodash';
 
 
-
 const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) => {
   const [email, setEmail] = useState('');
   const [emailValid, setEmailValid] = useState(false);

@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function VerifyToken() {
   const location = useLocation();
+  const navigate = useNavigate();
   const query = new URLSearchParams(location.search);
   const token = query.get('token');
+  const [email, setEmail] = useState(null);
+  const [verificationFailed, setVerificationFailed] = useState(false);
 
   useEffect(() => {
     const redirectToAbsoluteURL = () => {
@@ -31,12 +34,13 @@ function VerifyToken() {
 
           const data = await response.json();
           if (data.success) {
-            alert('Email verified successfully!');
+            setEmail(data.email); // Assuming the server returns the email on success
           } else {
-            alert('Email verification failed: ' + data.message);
+            setVerificationFailed(true);
           }
         } catch (error) {
           console.error('Error:', error);
+          setVerificationFailed(true);
         }
       } else {
         redirectToAbsoluteURL();
@@ -46,9 +50,22 @@ function VerifyToken() {
     verifyToken();
   }, [token]);
 
+  useEffect(() => {
+    if (verificationFailed) {
+      navigate('/login');
+    }
+  }, [verificationFailed, navigate]);
+
   return (
       <div>
-        Verifying your email...
+        {email ? (
+            <div>
+              <p>Email verified successfully!</p>
+              <p>Welcome, {email}!</p>
+            </div>
+        ) : (
+            <p>Verifying your email...</p>
+        )}
       </div>
   );
 }
