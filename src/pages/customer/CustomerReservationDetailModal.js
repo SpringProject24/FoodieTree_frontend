@@ -1,13 +1,13 @@
 import React from 'react';
 import styles from "./CustomerReservationDetailModal.module.scss";
 import {useModal} from "../common/ModalProvider";
+import {Link} from "react-router-dom";
 
 const CustomerReservationDetailModal = ({reservationDetail, confirmPickUp}) => {
     const {closeModal} = useModal();
 
-    const handleConfirmPickUp = (å) => {
-        // const response = await fetch(`${BASE_URL}`)
-        confirmPickUp(reservationDetail.id); // props로 받아온 함수 실행
+    const handleConfirmPickUp = () => {
+        // confirmPickUp(reservationDetail.id); // props로 받아온 함수 실행
         alert('픽업이 확인되었습니다. 감사합니다.');
         closeModal();
         // 추후 리뷰 기능 추가 가능
@@ -18,7 +18,6 @@ const CustomerReservationDetailModal = ({reservationDetail, confirmPickUp}) => {
         case 'CANCELED':
             tag = (
                 <>
-                    <img src="/assets/img/cancel-stress.png" alt="취소 이미지"/>
                     <p>예약이 취소되었습니다.</p>
                     <p>취소 시간: {reservationDetail.cancelReservationAtF}</p>
                 </>
@@ -27,7 +26,6 @@ const CustomerReservationDetailModal = ({reservationDetail, confirmPickUp}) => {
         case 'RESERVED':
             tag = (
                 <>
-                    <img src="/assets/img/mypage-omw.png" alt="픽업 이미지"/>
                     <p className={styles.pickupTimeF}>픽업 마감 시간: <span>{reservationDetail.pickupTimeF}</span></p>
                     <button onClick={handleConfirmPickUp}>픽업 확인</button>
                 </>
@@ -36,7 +34,6 @@ const CustomerReservationDetailModal = ({reservationDetail, confirmPickUp}) => {
         case 'PICKEDUP':
             tag = (
                 <>
-                    <img src="/assets/img/pickedup-happy.png" alt="체크 이미지"/>
                     <p>픽업이 완료되었습니다.</p>
                     <p>픽업 시간: {reservationDetail.pickedUpAtF}</p>
                 </>
@@ -45,7 +42,6 @@ const CustomerReservationDetailModal = ({reservationDetail, confirmPickUp}) => {
         case 'NOSHOW':
             tag = (
                 <>
-                    <img src="/assets/img/noshow-sad.png" alt="노쇼 이미지"/>
                     <p>픽업 마감 시간까지 픽업되지 않았습니다.</p>
                     <p>픽업 마감 시간: {reservationDetail.pickupTimeF}</p>
                 </>
@@ -67,8 +63,8 @@ const CustomerReservationDetailModal = ({reservationDetail, confirmPickUp}) => {
                     <img className={styles.reservedStoreImg} src={reservationDetail.storeImg} alt="가게 이미지"/>
                 </div>
                 <div>가게명: {reservationDetail.storeName}</div>
-                <div>가게 주소:</div>
-                <div>예약시간: {reservationDetail.reservationTime}</div>
+                <div>가게 주소: {reservationDetail.storeAddress}</div> {/* 추후 지도 API로 변경 가능 클릭 시 해당 주소 네이버 지도로 이동*/}
+                <div>예약한 시간: {reservationDetail.reservationTimeF}</div>
                 {tag}
                 <div>도움이 필요하신가요?</div>
                 {/* 추후 추가될 기능 문의하기 버튼 */}
