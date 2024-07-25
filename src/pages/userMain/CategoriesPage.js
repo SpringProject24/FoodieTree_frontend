@@ -4,6 +4,7 @@ import CategoryBtn from '../../components/mainPage/CategoryBtn';
 import CategoryList from '../../components/mainPage/CategoryList';
 import BestStoreList from '../../components/mainPage/BestStoreList';
 import styles from './CategoriesPage.module.scss';
+import { STORELISTS_URL } from '../../config/host-config';
 
 import kFood from "../../assets/images/userMain/kFood.png";
 import cFood from "../../assets/images/userMain/cFood.png";
@@ -30,20 +31,18 @@ const CategoriesPage = () => {
   const { categoryName } = useParams();
   const [stores, setStores] = useState([]);
 
-    // 카테고리 정보
-    const category = categoriesInfo[categoryName];
+  // 카테고리 정보
+  const category = categoriesInfo[categoryName];
 
-
-useEffect(() => {
-  fetch('http://localhost:8083/storeLists')
-    .then(response => response.json())
-    .then(data => {
-      const filteredStores = data.filter(store => store.category === category.name);
-      setStores(filteredStores);
-  })
-    .catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
-}, [categoryName, category.name]);
-
+  useEffect(() => {
+    fetch(STORELISTS_URL) 
+      .then(response => response.json())
+      .then(data => {
+        const filteredStores = data.filter(store => store.category === category.name);
+        setStores(filteredStores);
+      })
+      .catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
+  }, [categoryName, category.name]);
 
   return (
     <>
@@ -56,10 +55,10 @@ useEffect(() => {
       </div>
       
       {/* 카테고리 버튼 */}
-      <CategoryBtn categories={categories} onCategoryClick={()=>{}}/>
+      <CategoryBtn categories={categories} onCategoryClick={() => {}} />
 
       {/* 내가 찜한 가게 */}
-      <BestStoreList stores={stores}/>
+      <BestStoreList stores={stores} />
 
       {/* 전체 가게 리스트 */}
       <CategoryList stores={stores} />
