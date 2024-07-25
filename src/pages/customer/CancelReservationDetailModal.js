@@ -12,43 +12,46 @@ import {useModal} from "../common/ModalProvider";
 const CancelReservationDetailModal = ({reservationDetail, cancelReservation}) => {
     const {closeModal} = useModal();
 
+    let remainingTime = '';
+
     const handleReservationCancel = () => {
         // cancelReservation(reservationDetail.reservationId);
         alert('예약이 취소되었습니다.');
         closeModal();
     }
 
-    const chargeCancelFee = (pickupTimeF) => {
+
+    const chargeCancelFee = (pickupTime) => {
         // 현재 시간을 가져옴
         const now = new Date();
 
-        // pickupTimeF를 파싱하여 Date 객체로 변환
-        const [datePart, timePart] = pickupTimeF.split(' ');
-        const [month, day] = datePart.replace('월', '').split(' ').map(Number);
-        const [hours, minutes] = timePart.split('시').map(time => parseInt(time, 10));
+        // 픽업 시간을 Date 객체로 변환
+        const pickupDate = new Date(pickupTime);
 
-        // 현재 년도를 사용하여 픽업 시간 생성
-        const pickupDate = new Date(now.getFullYear(), month - 1, day, hours, minutes);
+        // 1시간 차이를 밀리초로 변환 (1시간 = 60 * 60 * 1000 ms)
+        const ONE_HOUR = 60 * 60 * 1000;
 
-        // 30분 차이를 밀리초로 변환 (30분 = 30 * 60 * 1000 ms)
-        const AN_HOUR = 60 * 60 * 1000;
+        // 픽업 시간과 현재 시간의 차이를 밀리초로 계산
+        const timeDifferenceMs = pickupDate - now;
 
-        console.log(AN_HOUR);
-        console.log(pickupDate);
-        console.log(now);
+        const timeDifferenceMinutes = Math.floor((timeDifferenceMs % ONE_HOUR) / (60 * 1000));
 
-        // 픽업 시간이 현재 시간으로부터 30분 이상 남았는지 확인
-        return (pickupDate - now) > AN_HOUR;
+        remainingTime = `${timeDifferenceMinutes}분 남음`;
+
+        console.log("픽업 시간:", pickupDate);
+        console.log("현재 시간:", now);
+        console.log("남은 시간:", remainingTime);
+
+        // 픽업 시간이 현재 시간으로부터 1시간 이상 남았는지 확인
+        return timeDifferenceMs > ONE_HOUR;
     };
 
-    const isCancelAllowed = chargeCancelFee(reservationDetail.pickupTimeF);
-    console.log(isCancelAllowed); // true 또는 false 출력
+    const isCancelAllowed = chargeCancelFee(reservationDetail.pickupTime);
+
+    console.log("취소 가능 여부:", isCancelAllowed);
 
     return (
         <>
-            <div>
-                예약 취소 모달
-            </div>
             {isCancelAllowed ? (
                 <div>
                     <p>정말 취소하시겠습니까?</p>
@@ -57,6 +60,7 @@ const CancelReservationDetailModal = ({reservationDetail, cancelReservation}) =>
                 </div>
             ) : (
                 <div>
+                    <p>픽업시간까지 남은 시간: {remainingTime}</p>
                     <p>
                         픽업시간 기준 1시간 이내로 예약 취소시 <br/>
                         취소 수수료 50%가 부과됩니다. <br/>
@@ -65,7 +69,7 @@ const CancelReservationDetailModal = ({reservationDetail, cancelReservation}) =>
                     <p>
                         취소수수료 : {reservationDetail.price * 0.5}원
                     </p>
-                    <p>취소 수수료는 결제 금액에서 자동 차감됩니다.</p>
+                    <p>취소 수수료는 환불 금액에서 자동 차감됩니다.</p>
                 </div>
             )}
             <button className="calendar-button" onClick={handleReservationCancel}>확인</button>
