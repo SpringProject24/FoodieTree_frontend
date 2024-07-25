@@ -77,11 +77,12 @@ const sendVerificationLinkForSignUp = async (email) => {
           },
           body: JSON.stringify({
               email,
+              userType,
               purpose: 'signup'
           }),
       });
       if (response.ok) {
-          console.log('이메일이 성공적으로 전달되었습니다.', email);
+          console.log('이메일이 성공적으로 전달되었습니다.',userType,email);
           return true;
       } else {
           console.error('Failed to send verification link');
