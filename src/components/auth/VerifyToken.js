@@ -52,7 +52,7 @@ function VerifyToken() {
 
   useEffect(() => {
     if (verificationFailed) {
-      navigate('/login');
+      navigate('/sign-in');
     }
   }, [verificationFailed, navigate]);
 
