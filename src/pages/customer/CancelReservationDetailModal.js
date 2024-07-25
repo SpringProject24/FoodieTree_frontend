@@ -9,20 +9,40 @@ import {useModal} from "../common/ModalProvider";
  * @returns {Element}
  * @constructor
  */
-const CancelReservationDetailModal = ({reservationDetail, isCancelAllowed, onConfirmCancel}) => {
+const CancelReservationDetailModal = ({reservationDetail, cancelReservation}) => {
     const {closeModal} = useModal();
 
-    const cancelInfo = {
-        reservationId: reservationDetail.reservationId,
-        storeName: reservationDetail.storeName,
-        price: reservationDetail.price,
-    }
-
-    const handleReservationCancel = (reservationId) => {
-        // onConfirmCancel(reservationId);
+    const handleReservationCancel = () => {
+        // cancelReservation(reservationDetail.reservationId);
         alert('예약이 취소되었습니다.');
         closeModal();
     }
+
+    const chargeCancelFee = (pickupTimeF) => {
+        // 현재 시간을 가져옴
+        const now = new Date();
+
+        // pickupTimeF를 파싱하여 Date 객체로 변환
+        const [datePart, timePart] = pickupTimeF.split(' ');
+        const [month, day] = datePart.replace('월', '').split(' ').map(Number);
+        const [hours, minutes] = timePart.split('시').map(time => parseInt(time, 10));
+
+        // 현재 년도를 사용하여 픽업 시간 생성
+        const pickupDate = new Date(now.getFullYear(), month - 1, day, hours, minutes);
+
+        // 30분 차이를 밀리초로 변환 (30분 = 30 * 60 * 1000 ms)
+        const AN_HOUR = 60 * 60 * 1000;
+
+        console.log(AN_HOUR);
+        console.log(pickupDate);
+        console.log(now);
+
+        // 픽업 시간이 현재 시간으로부터 30분 이상 남았는지 확인
+        return (pickupDate - now) > AN_HOUR;
+    };
+
+    const isCancelAllowed = chargeCancelFee(reservationDetail.pickupTimeF);
+    console.log(isCancelAllowed); // true 또는 false 출력
 
     return (
         <>
@@ -32,8 +52,8 @@ const CancelReservationDetailModal = ({reservationDetail, isCancelAllowed, onCon
             {isCancelAllowed ? (
                 <div>
                     <p>정말 취소하시겠습니까?</p>
-                    <p>{cancelInfo.storeName} 상품이 맞습니까?</p>
-                    <p>{cancelInfo.price}는 자동 환불됩니다.</p>
+                    <p>{reservationDetail.storeName} 상품이 맞습니까?</p>
+                    <p>{reservationDetail.price}는 자동 환불됩니다.</p>
                 </div>
             ) : (
                 <div>
@@ -43,7 +63,7 @@ const CancelReservationDetailModal = ({reservationDetail, isCancelAllowed, onCon
                         정말 취소하시겠습니까?
                     </p>
                     <p>
-                        취소수수료 : {cancelInfo.price * 0.5}원
+                        취소수수료 : {reservationDetail.price * 0.5}원
                     </p>
                     <p>취소 수수료는 결제 금액에서 자동 차감됩니다.</p>
                 </div>

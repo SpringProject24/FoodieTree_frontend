@@ -16,6 +16,19 @@ const ScheduleDetailModal = ({ scheduleDetail }) => {
         day: 'numeric'
     });
 
+    const handleSetHoliday = () => {
+        // scheduleDetail.handleSetHoliday();
+        alert('휴무일로 지정되었습니다.');
+        closeModal();
+    }
+
+    const handleUndoHoliday = () => {
+        // scheduleDetail.handleUndoHoliday();
+        alert('정상영업일로 변경되었습니다.');
+        closeModal();
+    }
+
+
     const today = scheduleDetail.date.toDateString() === new Date().toDateString();
 
     return (
@@ -47,10 +60,10 @@ const ScheduleDetailModal = ({ scheduleDetail }) => {
             </div>
             <div className={styles.modalFooter}>
                 {!scheduleDetail.isHoliday && !scheduleDetail.isPast && (
-                    <button className={styles.holidaySetBtn} onClick={scheduleDetail.handleSetHoliday}>휴무일로 지정하기</button>
+                    <button className={styles.holidaySetBtn} onClick={handleSetHoliday}>휴무일로 지정하기</button>
                 )}
                 {scheduleDetail.isHoliday && !scheduleDetail.isPast && (
-                    <button className={styles.holidayUndoBtn} onClick={scheduleDetail.handleUndoHoliday}>휴무일 지정 취소</button>
+                    <button className={styles.holidayUndoBtn} onClick={handleUndoHoliday}>휴무일 지정 취소</button>
                 )}
                 {/* <button className="action-button" onClick={handleSetPickupTime}>픽업 시간 수정 하기</button> */}
             </div>
