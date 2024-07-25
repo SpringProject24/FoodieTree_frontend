@@ -21,6 +21,10 @@ const PaymentBox = ({makeReservation, productDetail}) => {
         makeReservation(initialCount);
     }
 
+    const howMuchSaved = Math.floor(((productDetail.storeInfo.price/0.3)-productDetail.storeInfo.price)*initialCount);
+    const totalPrice = productDetail.storeInfo.price*initialCount;
+    const originalPrice = Math.floor(productDetail.storeInfo.price/0.3)*initialCount;
+
     return (
         <section className={styles.paymentBox}>
             <div>
@@ -39,11 +43,11 @@ const PaymentBox = ({makeReservation, productDetail}) => {
             <div className={styles.pay}>
                 <p className={styles.saving}>
                     <FontAwesomeIcon icon={faStar} />
-                    {((productDetail.storeInfo.price/0.3)-productDetail.storeInfo.price)*initialCount}원을 아끼고 있어요!
+                    {howMuchSaved}원을 아끼고 있어요!
                 </p>
                 <div className={styles.reservationBtn} onClick={handleMakeReservation}>
                     <p>Place Order</p>
-                    <p>{(productDetail.storeInfo.price)*initialCount}원</p>
+                    <p>{totalPrice}원</p>
                 </div>
             </div>
             <div className={styles.orderSum}>
@@ -60,16 +64,16 @@ const PaymentBox = ({makeReservation, productDetail}) => {
             <div className={styles.billSection}>
                 <div className={styles.originPrice}>
                     <p>실제 판매 가격</p>
-                    <p>{(productDetail.storeInfo.price/0.3)*initialCount}원</p>
+                    <p>{originalPrice}원</p>
                 </div>
                 <div className={styles.discount}>
                     <p>얼만큼 할인 되었는지</p>
-                    <p>{((productDetail.storeInfo.price/0.3)-productDetail.storeInfo.price)*initialCount}원</p>
+                    <p>{howMuchSaved}원</p>
                 </div>
                 <div className={styles.sectionLine}></div>
                 <div className={styles.totalBill}>
                     <p className={styles.totalPrice}>총액 </p>
-                    <p className={styles.totalAmount}>{productDetail.storeInfo.price*initialCount}원</p>
+                    <p className={styles.totalAmount}>{totalPrice}원</p>
                 </div>
             </div>
         </section>
