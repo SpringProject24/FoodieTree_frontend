@@ -35,7 +35,7 @@ function VerifyToken() {
           const data = await response.json();
           console.log("json 파싱한 데이터 :", data);
           if (data.success) {
-            setEmail(data.userId); // 서버에서 반환된 이메일을 설정
+            setEmail(data.email); // 서버에서 반환된 이메일을 설정
             setUserType(data.role); // 서버에서 반환된 userType을 설정
           } else {
             setVerificationFailed(true);
@@ -60,7 +60,7 @@ function VerifyToken() {
 
   return (
       <div>
-        {email ? (
+        {token ? (
             <div>
               <p>Congratulations on completing your registration!</p>
               <p>Email verified successfully!</p>
