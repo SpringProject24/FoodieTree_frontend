@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Form, redirect} from "react-router-dom";
+import {Form, redirect, useNavigate} from "react-router-dom";
 import UploadInput from "./UploadInput";
 import formStyle from './StoreRegisterForm.module.scss';
 import PriceRadioBox from "./PriceRadioBox";
@@ -7,19 +7,19 @@ import {STORE_URL} from "../../config/host-config";
 import useFormValidation from "./useFormValidation";
 import ErrorSpan from "./ErrorSpan";
 
-
+// 상품 가격 옵션 배열
 const PRICE_OPTIONS = [
   { name: '3,900원', value: 3900 },
   { name: '5,900원', value: 5900 },
   { name: '7,900원', value: 7900 },
 ];
-
+// 상품 등록 초기값 객체
 const initialValues = {
   productImage: '',
   productCnt: '',
   price: '',
 };
-
+// 상품 등록 검증
 const validate = (name, value) => {
   switch (name) {
     case 'productImage':
@@ -39,6 +39,7 @@ const ProductRegisterForm = () => {
 
   const { values, errors, isFormValid, changeHandler, setValues }
       = useFormValidation(initialValues, validate);
+  const navigate = useNavigate();
 
   // 업로드된 파일 props drilling
   const onAdd = (file) => {
@@ -79,9 +80,12 @@ const ProductRegisterForm = () => {
       body: payload
     });
     // 200 외 상태코드 처리
-
-    return redirect('/store')
-
+    if(!response.ok) {
+      const errorMessage = await response.text();
+      alert(errorMessage);
+    }
+    alert(`입력하신 내용을 관리자가 확인 후 승인합니다.`);
+    return navigate('/store');
   }
 
   useEffect(() => {
@@ -135,28 +139,3 @@ const ProductRegisterForm = () => {
 };
 
 export default ProductRegisterForm;
-
-export const productRegisterAction = async ({request}) => {
-
-  const formData = await request.formData();
-  const payload = new FormData();
-  payload.append('productCnt', formData.get('productCnt'));
-  payload.append('price', formData.get('price'));
-  payload.append('productImage', formData.get('productImage'));
-
-  console.log('payload 가격 확인: ', payload.get('price'))
-  console.log('payload 수량 확인: ', payload.get('productCnt'))
-  console.log('payload 이미지 확인: ', payload.get('productImage'))
-
-  const response = await fetch(`${STORE_URL}/approval/p`, {
-    method: 'POST',
-    headers: {
-      // 'Content-Type': 'multipart/form-data', FormData 생략 가능
-      // 'Authorization': 'Bearer' + token,
-    },
-    body: payload
-  });
-  // 200 외 상태코드 처리
-
-  return redirect('/store')
-}
