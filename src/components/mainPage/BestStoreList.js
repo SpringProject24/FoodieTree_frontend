@@ -46,7 +46,7 @@ const BestStoreList = ({ categories = [], stores = [] }) => {
                 </div>
               </SwiperSlide>
             ))
-          )}
+          )} 
         </Swiper>
       </div>
     </>

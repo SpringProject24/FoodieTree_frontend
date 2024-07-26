@@ -63,7 +63,7 @@ const CategoriesPage = () => {
       {/* 전체 가게 리스트 */}
       <CategoryList stores={stores} />
     </>
-  );
+  ); 
 };
 
 export default CategoriesPage;

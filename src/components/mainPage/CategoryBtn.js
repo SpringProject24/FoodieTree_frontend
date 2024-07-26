@@ -44,7 +44,7 @@ const CategoryBtn = ({ categories }) => {
               </div>
               <div className={styles.btnText}>{category}</div>
             </div>
-          );
+          ); 
         })}
       </div>
     </div>

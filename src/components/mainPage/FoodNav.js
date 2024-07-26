@@ -98,7 +98,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
                 <img src={store.storeImg} alt={store.storeName} className={styles.image} />
                 <span className={styles.category}>{store.category}</span>
                 <p className={styles.storeName}>{store.storeName}</p>
-                <span className={styles.storePrice}>{store.price}</span>
+                <span className={styles.storePrice}>{store.price}</span> 
                 <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>
 
               </div>

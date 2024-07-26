@@ -19,7 +19,7 @@ const MainPage = () => {
       .then(data => setStores(data))
       .catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
   }, []);
-
+ 
   return (
     <div className="main-page">
       <CategoryBtn categories={categories} onCategoryClick={handleCategoryClick} />

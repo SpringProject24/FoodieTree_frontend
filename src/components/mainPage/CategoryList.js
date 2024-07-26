@@ -15,7 +15,7 @@ const CategoryList = ({ stores }) => {
             <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>
           </div>
         ))}
-      </div>
+      </div> 
     </div>
     </>
   );
