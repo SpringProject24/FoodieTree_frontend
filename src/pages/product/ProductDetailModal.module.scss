@@ -5,23 +5,31 @@
   .infoBox {
     line-height: 3;
     width: 57%;
+    height: fit-content;
 
     .storeInfo {
       display: flex;
       justify-content: space-between;
       border: 1px solid rgb(231, 231, 231);
       border-radius: 8px;
-      padding: 16px;
+      //padding: 16px;
       margin: 8px 0px;
+      height: 10%;
+      position: relative;
 
       .storeImg {
-
+        width: 100%;
+        height: 10%;
+        border-radius: 8px;
       }
 
       .fromWhere {
+        position: absolute;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        right: 13px;
+        bottom: -10px;
       }
     }
 
@@ -56,10 +64,17 @@
           margin-bottom: 4px;
           background-color: #2e2e2f;
         }
+        .storeAddress{
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+        }
       }
 
       .pickUpTimeInfo {
-
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
       }
 
       .productInfo {
@@ -73,6 +88,10 @@
         .productDes {
           display: flex;
           justify-content: space-between;
+          .productTextDesc{
+            width: 70%;
+            text-align: justify;
+          }
         }
 
       }
