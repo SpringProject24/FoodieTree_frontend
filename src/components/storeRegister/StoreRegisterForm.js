@@ -172,6 +172,6 @@ export const storeRegisterAction = async ({request}) => {
   });
   // 200 외 상태코드 처리 필요
 
-  // return redirect('/store/mypage')
+
   return redirect('/store')
 }

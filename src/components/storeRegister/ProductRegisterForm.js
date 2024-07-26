@@ -54,13 +54,46 @@ const ProductRegisterForm = () => {
       price: value
     }));
   };
+  // 입력값 서버로 전달
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    // JSON데이터를 formData에 넣기 위한 작업
+    const jsonBlob = new Blob(
+      [ JSON.stringify({productCnt: values.productCnt, price: values.price}) ],
+      { type: 'application/json' }
+    );
+
+    const payload = new FormData();
+    payload.append('productInfo', jsonBlob);
+    payload.append('productImage', values.productImage);
+
+    console.log('payload 이미지 확인: ', payload.get('productImage'))
+
+    const response = await fetch(`${STORE_URL}/approval/p`, {
+      method: 'POST',
+      headers: {
+        // 'Content-Type': 'multipart/form-data', FormData 생략 가능
+        // 'Authorization': 'Bearer' + token,
+      },
+      body: payload
+    });
+    // 200 외 상태코드 처리
+
+    return redirect('/store')
+
+  }
 
   useEffect(() => {
   }, [values]);
 
   return (
 
-      <Form method={'post'} className={formStyle.registration}>
+      <Form
+        method={'post'}
+        className={formStyle.registration}
+        onSubmit={submitHandler}
+      >
         <h2>스페셜팩 등록</h2>
         <h3>푸디트리를 통해 새로운 로컬 고객을 만나보세요!</h3>
 
@@ -115,7 +148,7 @@ export const productRegisterAction = async ({request}) => {
   console.log('payload 수량 확인: ', payload.get('productCnt'))
   console.log('payload 이미지 확인: ', payload.get('productImage'))
 
-  const response = await fetch(`${STORE_URL}/product/approval`, {
+  const response = await fetch(`${STORE_URL}/approval/p`, {
     method: 'POST',
     headers: {
       // 'Content-Type': 'multipart/form-data', FormData 생략 가능
@@ -125,6 +158,5 @@ export const productRegisterAction = async ({request}) => {
   });
   // 200 외 상태코드 처리
 
-  // return redirect('/store/mypage')
   return redirect('/store')
 }
