@@ -60,7 +60,7 @@ function VerifyToken() {
 
   return (
       <div>
-        {token ? (
+        {email ? (
             <div>
               <p>Congratulations on completing your registration!</p>
               <p>Email verified successfully!</p>
