@@ -11,6 +11,20 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
   const [verificationSent, setVerificationSent] = useState(false);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+    const [isExistingUser, setIsExistingUser] = useState(false);
+
+    const getTokenFromLocalStorage = () => {
+        return localStorage.getItem('token');
+    };
+    const handleLoginRedirect = () => {
+        const token = getTokenFromLocalStorage();
+        if (token) {
+            navigate(`/verifyEmail?token=${encodeURIComponent(token)}`);
+        } else {
+            console.error('No token found in localStorage');
+        }
+    };
+
 
   const checkEmailInput = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -22,7 +36,7 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
   const checkCustomerDupId = async (email) => {
     // debugger;
     try {
-      const response = await fetch(`/customer/check?type=account&keyword=${email}`);
+      const response = await fetch(`/customer/check?keyword=${email}`);
       const result = await response.json();
       if (result) {
         console.log(`입력하신 이메일 [ ${email} ] 은 customer 회원입니다.`);
@@ -42,7 +56,7 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
 const checkStoreDupId = async (email) => {
   // debugger;
     try {
-      const response = await fetch(`/store/check?type=account&keyword=${email}`);
+      const response = await fetch(`/store/check?keyword=${email}`);
       const result = await response.json();
       if (result) {
         console.log(`입력하신 이메일[ ${email} ]은 store 회원입니다... `);
@@ -140,47 +154,48 @@ const handleRetryLogin = () => {
   setEmailValid(false);
 };
 
-return (
-  <div className={styles['login-form']}>
-    <section className={styles['input-area']}>
-      <form onSubmit={handleSendVerificationLink}>
-        <div className={styles.container}>
-          {verificationSent ? (
-            <div className={styles['verify-link-sent']}>
-              <h2>{userType} 로그인 인증 링크가 아래의 이메일 주소로 발송되었습니다.</h2>
-              <p> [ {email} ] </p>
-              <p>이메일을 확인하여 로그인을 완료해주세요.</p>
-              <button className={styles['resend-login-email-btn']} onClick={onResendEmail}>
-                이메일을 받지 못하셨나요? 재전송하기
-              </button>
-              <button className={styles['retry-sign-up']} onClick={handleRetryLogin}>
-                다른 이메일 주소로 로그인
-              </button>
-            </div>
-          ) : (
-            <div className={styles['id-wrapper']}>
-              <h2>{userType} 로그인을 위한 이메일 주소를 입력해주세요!</h2>
-              <input
-                type="text"
-                id="input-id"
-                value={email}
-                onChange={handleEmailChange}
-                placeholder="이메일을 입력해주세요"
-              />
-              <button
-                id="id-get-code-btn"
-                className={!emailValid ? styles.disable : ''}
-                disabled={!emailValid}
-              >
-                로그인 메일 발송
-              </button>
-            </div>
-          )}
+    return (
+        <div className={styles['login-form']}>
+            <section className={styles['input-area']}>
+                <form onSubmit={handleSendVerificationLink}>
+                    <div className={styles.container}>
+                        {verificationSent ? (
+                            <div className={styles['verify-link-sent']}>
+                                <h2>{userType} 로그인 인증 링크가 아래의 이메일 주소로 발송되었습니다.</h2>
+                                <p>[ {email} ]</p>
+                                <p>이메일을 확인하여 로그인을 완료해주세요.</p>
+                                <button className={styles['resend-login-email-btn']} onClick={onResendEmail}>
+                                    이메일을 받지 못하셨나요? 재전송하기
+                                </button>
+                                <button className={styles['retry-sign-up']} onClick={handleRetryLogin}>
+                                    다른 이메일 주소로 로그인
+                                </button>
+                            </div>
+                        ) : (
+                            <div className={styles['id-wrapper']}>
+                                <h2>{userType} 로그인을 위한 이메일 주소를 입력해주세요!</h2>
+                                <input
+                                    type="text"
+                                    id="input-id"
+                                    value={email}
+                                    onChange={handleEmailChange}
+                                    placeholder="이메일을 입력해주세요"
+                                />
+                                <button
+                                    id="id-get-code-btn"
+                                    className={!emailValid ? styles.disable : ''}
+                                    disabled={!emailValid}
+                                    onClick={isExistingUser ? handleLoginRedirect : null}
+                                >
+                                    {isExistingUser ? '로그인' : '로그인 메일 발송'}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </form>
+            </section>
         </div>
-      </form>
-    </section>
-  </div>
-);
+    );
 };
 
 export default LoginForm;

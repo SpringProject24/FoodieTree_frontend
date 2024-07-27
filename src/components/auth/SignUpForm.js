@@ -21,7 +21,7 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
   // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
   const checkCustomerDupId = async (email) => {
     try {
-      const response = await fetch(`/customer/check?type=account&keyword=${email}`);
+      const response = await fetch(`/customer/check?keyword=${email}`);
       const result = await response.json();
       if (!result) {
         console.log(`입력하신 이메일 [ ${email} ] 은 customer 회원이 아닙니다.`);
@@ -123,7 +123,7 @@ const sendVerificationLinkForSignUp = async (email) => {
       setIsLoading(false);
       if (result) {
         setVerificationSent(true);
-        onVerificationSent(); 
+        onVerificationSent();
       } else {
         alert('이메일 전송에 실패했거나 관련된 문제입니다.');
       }
