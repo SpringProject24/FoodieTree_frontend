@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './ProductDetailModal.module.scss';
 
 const ProductDetail = ({productDetail}) => (<div className={styles.productDetail}>
-    <p>2. Product Details</p>
+    <p>스페셜팩 정보</p>
     <div className={styles.map}>
         <div className={styles.mapImg}>지도 들어갈 자리</div>
         <div className={styles.storeAddress}>
