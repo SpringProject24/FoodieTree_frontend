@@ -1,6 +1,7 @@
 import React from 'react';
 import {useModal} from "../common/ModalProvider";
 import styles from "./CancelReservationDetailModal.module.scss"
+import {isNaN} from "lodash";
 
 /**
  * 소비자 마이페이지 창에서 예약 취소 버튼 누를 시 뜨는 모달
@@ -42,9 +43,14 @@ const CancelReservationDetailModal = ({reservationDetail, cancelReservation}) =>
         console.log("픽업 시간:", pickupDate);
         console.log("현재 시간:", now);
         console.log("남은 시간:", remainingTime);
+        console.log(isNaN(timeDifferenceMs))
+
+        if(isNaN(timeDifferenceMs)){
+            console.log("이미 지난 시간입니다.")
+        }
 
         // 픽업 시간이 현재 시간으로부터 1시간 이상 남았는지 확인
-        return timeDifferenceMs > ONE_HOUR;
+        return timeDifferenceMs > ONE_HOUR && !isNaN(timeDifferenceMs);
     };
 
     const isCancelAllowed = chargeCancelFee(reservationDetail.pickupTime);
@@ -69,7 +75,7 @@ const CancelReservationDetailModal = ({reservationDetail, cancelReservation}) =>
                     <p>
                         취소수수료 :
                         <span>
-                            <span style={styles.cancelFee}>{reservationDetail.price * 0.5}</span>
+                            <span className={styles.cancelFee}>{reservationDetail.price * 0.5}</span>
                             <span>원</span>
                         </span>
 
