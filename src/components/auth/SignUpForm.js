@@ -9,7 +9,7 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
   const [email, setEmail] = useState('');
   const [emailValid, setEmailValid] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+    const [isExistingUser, setIsExistingUser] = useState(false);
 
 
   const checkEmailInput = (email) => {
@@ -25,9 +25,11 @@ const SignUpForm = ({ userType, onSignUp, onResendEmail, onVerificationSent }) =
       const result = await response.json();
       if (!result) {
         console.log(`입력하신 이메일 [ ${email} ] 은 customer 회원이 아닙니다.`);
+        setIsExistingUser(false);
           return true;
       } else {
         console.error(`입력하신 이메일 [ ${email} ] 은 customer 회원입니다.`);
+          setIsExistingUser(true);
           return false;
       }
   } catch (error) {
@@ -44,9 +46,11 @@ const checkStoreDupId = async (email) => {
       const result = await response.json();
       if (!result) { //찾지 못하였으면
         console.log(`입력하신 이메일[ ${email} ]은 store 회원이 아닙니다. `);
+          setIsExistingUser(false);
           return true;
       } else {
         console.error(`입력하신 이메일[ ${email} ]은 store 회원입니다... `);
+          setIsExistingUser(true);
           return false;
       }
   } catch (error) {
@@ -118,9 +122,9 @@ const sendVerificationLinkForSignUp = async (email) => {
       return;
     }
     if (isUnique) {
-      setIsLoading(true);
+
       const result = await sendVerificationLinkForSignUp(email);
-      setIsLoading(false);
+
       if (result) {
         setVerificationSent(true);
         onVerificationSent();
@@ -156,9 +160,21 @@ const handleRetrySignUp = () => {
                   </div>
               ) : (
                   <div className={styles['id-wrapper']}>
-                    <h2>{userType} 회원 등록을 위한 이메일을 입력해주세요!</h2>
-                    <input
-                        type="text"
+                    <h2>{userType} 회원 등록을 위한 이메일을 입력해주세요!
+                        {isExistingUser ? (
+                            <>
+                                <br/><br/>
+                                이미 존재하는 이메일 계정입니다.
+                            </>
+                        ) : (
+                            <>
+                                <br /><br/>
+                                환영해요!
+                            </>
+                            )}
+                    </h2>
+                      <input
+                          type="text"
                         id="input-id"
                         value={email}
                         onChange={handleEmailChange}

@@ -62,7 +62,7 @@ function VerifyToken() {
       <div>
         {email ? (
             <div>
-              <p>Congratulations on completing your registration!</p>
+              <p>Congratulations on completing your SIGN IN!</p>
               <p>Email verified successfully!</p>
               <p>Welcome, {email}!</p>
               <p>Your role is: {userType}</p>

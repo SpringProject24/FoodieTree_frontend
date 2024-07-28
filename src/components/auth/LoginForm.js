@@ -40,9 +40,11 @@ const LoginForm = ({ userType, onResendEmail, onVerificationSent }) => {
       const result = await response.json();
       if (result) {
         console.log(`입력하신 이메일 [ ${email} ] 은 customer 회원입니다.`);
+        setIsExistingUser(true);
           return true;
       } else {
           console.error(`입력하신 이메일 [ ${email} ] 은 customer 회원이 아닙니다.`);
+          setIsExistingUser(false);
           return false;
       }
   } catch (error) {
@@ -60,9 +62,11 @@ const checkStoreDupId = async (email) => {
       const result = await response.json();
       if (result) {
         console.log(`입력하신 이메일[ ${email} ]은 store 회원입니다... `);
+          setIsExistingUser(true);
           return true;
       } else {
           console.error(`입력하신 이메일[ ${email} ]은 store 회원이 아닙니다. `);
+          setIsExistingUser(false);
           return false;
       }
   } catch (error) {
@@ -94,7 +98,8 @@ const sendVerificationLinkForLogin = async (email) => {
         },
         body: JSON.stringify({
             email,
-            purpose: 'signup'
+            userType,
+            purpose: 'signin'
         }),
     });
     if (response.ok) {
@@ -173,7 +178,19 @@ const handleRetryLogin = () => {
                             </div>
                         ) : (
                             <div className={styles['id-wrapper']}>
-                                <h2>{userType} 로그인을 위한 이메일 주소를 입력해주세요!</h2>
+                                <h2>{userType} 로그인을 위한 이메일 주소를 입력해주세요!
+                                    {isExistingUser ? (
+                                        <>
+                                            <br/><br/>
+                                            다시 오셨군요 !
+                                        </>
+                                    ) : (
+                                        <>
+                                            <br /><br/>
+                                            입력하신 이메일 주소는 없는 계정입니다.
+                                        </>
+                                    )}
+                                </h2>
                                 <input
                                     type="text"
                                     id="input-id"
