@@ -1,29 +1,15 @@
 import React from 'react';
-import styles from "./BottomPlaceOrder.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import styles from './BottomPlaceOrder.module.scss';
 
-const BottomPlaceOrder = ({ makeReservation, productDetail, initialCount, handleIncrease, handleDecrease }) => {
-
-    const handleMakeReservation = () => {
-        console.log(initialCount);
-        makeReservation(initialCount);
-    }
+const BottomPlaceOrder = ({ makeReservation, initialCount, handleIncrease, handleDecrease }) => {
+    if (!initialCount) return null;
 
     return (
         <div className={styles.bottomPlaceOrder}>
-            <div className={styles.productAmtAdjustBtn}>
-                <button className={styles.adjustBtn} onClick={handleDecrease} disabled={initialCount <= 1}>
-                    <FontAwesomeIcon icon={faMinus} />
-                </button>
-                <p className={styles.initialCnt}>{initialCount}</p>
-                <button className={styles.adjustBtn} onClick={handleIncrease} disabled={initialCount >= productDetail.storeInfo.remainProduct}>
-                    <FontAwesomeIcon icon={faPlus} />
-                </button>
-            </div>
-            <div className={styles.placeOrderBtn} onClick={handleMakeReservation}>
-                <p>구매하기</p>
-            </div>
+            <button onClick={handleDecrease}>-</button>
+            <span>{initialCount}</span>
+            <button onClick={handleIncrease}>+</button>
+            <button onClick={() => makeReservation(initialCount)}>주문하기</button>
         </div>
     );
 };
