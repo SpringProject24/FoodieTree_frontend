@@ -1,25 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './Edit.module.scss'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faUser,
-    faClock,
-    faPhone,
-    faDollarSign,
-    faKey,
-    faPenToSquare,
-    faCircleXmark
-} from "@fortawesome/free-solid-svg-icons";
-import {faSquareCheck} from "@fortawesome/free-regular-svg-icons";
 import ProfileImgBtn from "./ProfileImgBtn";
 import PhoneNumber from "./PhoneNumber";
 import NickName from "./NickName";
-import PasswordReset from "./PasswordReset";
 import FavArea from "./FavArea";
 import FavFood from "./FavFood";
 import FavStore from "./FavStore";
+import {CUSTOMER_URL} from "../../../config/host-config";
 
 const Edit = () => {
+    const [data, setData] = useState({});
+    useEffect( () => {
+        (async () => {
+            const res = await fetch(CUSTOMER_URL+'/info', {
+                headers: {
+                    // 'Authorization' : 'Bearer ' +
+                }
+            });
+            const data = await res.json();
+            console.log(data);
+            setData(data);
+        })();
+    }, []);
     return (
         <div className={styles.edit}>
             <div className={styles['edit-box']}>
@@ -30,8 +32,8 @@ const Edit = () => {
                 </div>
                 <div className={styles['edit-wrapper']}>
                     <div className={styles["input-area"]}>
-                        <NickName/>
-                        <PhoneNumber/>
+                        <NickName name={data.nickname}/>
+                        <PhoneNumber phone={data.customerPhoneNumber}/>
                     </div>
                     <ProfileImgBtn/>
                 </div>

@@ -7,7 +7,7 @@ import {CUSTOMER_URL, STORE_URL} from "../../../config/host-config";
 
 const customerId = "thdghtjd115@gmail.com";
 
-const PhoneNumber = () => {
+const PhoneNumber = ({phone}) => {
     const [err, setErr] = useState(false);
     const inputRef = useRef();
 
@@ -36,7 +36,7 @@ const PhoneNumber = () => {
             <div className={styles["input-wrapper"]}>
                 <div className={styles.icon}><FontAwesomeIcon icon={faPhone}/></div>
                 <div>
-                    <input min="1" ref={inputRef}/>
+                    <input min="1" ref={inputRef} defaultValue={phone}/>
                     <FontAwesomeIcon onClick={clickHandler} icon={faSquareCheck}/>
                 </div>
             </div>
