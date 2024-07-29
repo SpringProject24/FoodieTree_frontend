@@ -89,7 +89,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
 
             // 예약 픽업 성공 시 예약 목록 갱신
             const updatedReservations = reservations.map(reservation =>
-                reservation.reservationId === reservationId ? { ...reservation, status: 'PICKEDUP', pickedUpAtF: formatDatek(new Date().toISOString()) } : reservation
+                reservation.reservationId === reservationId ? { ...reservation, status: 'PICKEDUP', pickedUpAtF: formatDate(new Date().toISOString()) } : reservation
             );
             onUpdateReservations(updatedReservations);
         } catch (error) {
