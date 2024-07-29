@@ -13,21 +13,24 @@ const LoginForm = ({ userType, onVerificationSent }) => {
     const [isExistingUser, setIsExistingUser] = useState(false);
     const [isSending, setIsSending] = useState(false);
 
-    // local storage 에서 토큰 파싱
+    // local storage 에서 토큰 파싱 후 로그아웃을 위한 메서드, 개발중
     const getTokenFromLocalStorage = () => {
+        debugger;
         console.log(localStorage.getItem('token'))
         return localStorage.getItem('token');
     };
 
-    const handleLoginRedirect = () => {
-        const token = getTokenFromLocalStorage();
-        if (token) {
-            console.log("token");
-            navigate(`/verifyEmail?token=${encodeURIComponent(token)}`);
-        } else {
-            console.error('No token found in localStorage');
-        }
-    };
+    // access token이 아직 유효할 경우
+    // const handleLoginRedirect = () => {
+    //     debugger;
+    //     const token = getTokenFromLocalStorage();
+    //     if (token) {
+    //         console.log("token");
+    //         navigate(`/verifyEmail?token=${encodeURIComponent(token)}`);
+    //     } else {
+    //         console.error('No token found in localStorage');
+    //     }
+    // };
 
     const checkEmailInput = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,6 +40,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
     //customer
     // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
     const checkCustomerDupId = async (email) => {
+        debugger;
         try {
             const response = await fetch(`/customer/check?keyword=${email}`);
             const result = await response.json();
@@ -58,6 +62,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
     // store
     // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
     const checkStoreDupId = async (email) => {
+        debugger;
         try {
             const response = await fetch(`/store/check?keyword=${email}`);
             const result = await response.json();
@@ -78,6 +83,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
 
     //usertype에 따른 중복검사 진행
     const checkDupId = async (email) => {
+        debugger;
         switch (userType) {
             case 'customer':
                 return await checkCustomerDupId(email);
@@ -90,6 +96,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
 
     // 인증 링크 메일 보내기 - 공용 (인증메일 보내기)
     const sendVerificationLinkForLogin = async (email) => {
+        debugger;
         try {
             const response = await fetch(`/email/sendVerificationLink`, {
                 method: 'POST',
@@ -116,6 +123,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
     };
 
     const handleEmailChange = (e) => {
+        debugger;
         const email = e.target.value;
         setEmail(email);
         if (email.trim() === '') {
@@ -135,6 +143,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
     }, 500);
 
     const handleSendVerificationLink = async (e) => {
+        debugger;
         e.preventDefault();
         setIsSending(true);
         const isUnique = await checkDupId(email);
@@ -158,6 +167,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
 
     // 다른 이메일로 로그인 재시도
     const handleRetryLogin = () => {
+        debugger;
         setVerificationSent(false);
         setEmail('');
         setEmailValid(false);
@@ -212,9 +222,9 @@ const LoginForm = ({ userType, onVerificationSent }) => {
                                 <button
                                     id="id-get-code-btn"
                                     className={(!emailValid ? styles.disable : '') || (isSending ? styles.disable : '')}
-                                    onClick={isExistingUser ? handleLoginRedirect : null}
+                                    // onClick={isExistingUser ? handleLoginRedirect : null}
                                 >
-                                    {isSending ? "이메일 전송중..." : (isExistingUser ? '로그인' : '로그인 인증메일 발송')}
+                                    {isSending ? "이메일 전송중..." : (isExistingUser ? '로그인 인증메일 발송' : '로그인')}
                                 </button>
                             </div>
                         )}

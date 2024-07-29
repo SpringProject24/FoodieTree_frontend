@@ -14,21 +14,22 @@ const SignUpForm = ({ userType, onVerificationSent }) => {
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
-    // local storage 에서 토큰 파싱
+    // local storage 에서 토큰 파싱 후 로그아웃을 위한 메서드, 개발중
     const getTokenFromLocalStorage = () => {
         console.log(localStorage.getItem('token'))
         return localStorage.getItem('token');
     };
 
-    const handleSignInRedirect = () => {
-        const token = getTokenFromLocalStorage();
-        if (token) {
-            console.log("token");
-            navigate(`/verifyEmail?token=${encodeURIComponent(token)}`);
-        } else {
-            console.error('No token found in localStorage');
-        }
-    };
+    // access token이 아직 유효할 경우
+    // const handleSignInRedirect = () => {
+    //     const token = getTokenFromLocalStorage();
+    //     if (token) {
+    //         console.log("token");
+    //         navigate(`/verifyEmail?token=${encodeURIComponent(token)}`);
+    //     } else {
+    //         console.error('No token found in localStorage');
+    //     }
+    // };
 
   const checkEmailInput = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -214,9 +215,9 @@ const handleRetrySignUp = () => {
                           id="id-get-code-btn"
                           className={(!emailValid ? styles.disable : '') || (isSending ? styles.disable : '')}
                           disabled={isExistingUser||!emailValid}
-                          onClick={(!isExistingUser && !isSending) ? handleSignInRedirect : null}
+                          // onClick={(!isExistingUser && !isSending) ? handleSignInRedirect : null}
                       >
-                          {isSending ? "이메일 전송중..." : (!isExistingUser ? '회원가입' : '회원가입 인증메일 발송')}
+                          {isSending ? "이메일 전송중..." : (!isExistingUser ? '회원가입 인증메일 발송' : '회원가입')}
                       </button>
                   </div>
               )}
