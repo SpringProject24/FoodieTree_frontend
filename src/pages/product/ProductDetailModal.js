@@ -47,7 +47,6 @@ const ProductDetailModal = ({ /* productDetail, makeReservation */ }) => {
     const handleIncrease = () => {
         if (initialCount < productDetail.storeInfo.remainProduct) {
             setInitialCount(prevCount => prevCount + 1);
-        }
     };
 
     const handleDecrease = () => {
