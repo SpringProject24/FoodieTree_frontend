@@ -18,8 +18,8 @@ const Edit = () => {
                 }
             });
             const data = await res.json();
-            console.log(data);
             setData(data);
+            console.log(data);
         })();
     }, []);
     return (
@@ -38,9 +38,9 @@ const Edit = () => {
                     <ProfileImgBtn profileImg={data.profileImage}/>
                 </div>
             </div>
-            <FavArea/>
-            <FavFood/>
-            <FavStore/>
+            <FavArea favList={data.preferredArea}/>
+            <FavFood favList={data.preferredFood}/>
+            <FavStore favList={data.favStore}/>
 
         </div>
     );

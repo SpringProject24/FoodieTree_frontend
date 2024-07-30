@@ -10,8 +10,9 @@ const favList = [
     {id: 3, text: "서울시 서대문구"},
 ];
 const customerId = "thdghtjd115@gmail.com";
-const FavArea = () => {
-    const [list, setList] = useState(favList);
+const FavArea = ({ favList }) => {
+    const [list, setList] = useState([]);
+
     const clickHandler = async (type, value) => {
         const payload = {
             type,
@@ -43,7 +44,8 @@ const FavArea = () => {
             <div className={styles['edit-wrapper']}>
                 <ul className={styles.preferred} id="preferred-area">
                     {
-                        list.map((item, idx) => {
+                        (favList && favList.size > 0) &&
+                        favList.map((item, idx) => {
                             return (
                                 <li id={idx} key={idx}>
                                     <span>{item.text}</span>
