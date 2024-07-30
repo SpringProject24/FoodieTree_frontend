@@ -35,7 +35,7 @@ const Edit = () => {
                         <NickName name={data.nickname}/>
                         <PhoneNumber phone={data.customerPhoneNumber}/>
                     </div>
-                    <ProfileImgBtn/>
+                    <ProfileImgBtn profileImg={data.profileImage}/>
                 </div>
             </div>
             <FavArea/>
