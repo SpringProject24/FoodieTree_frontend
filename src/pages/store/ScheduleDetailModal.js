@@ -52,7 +52,6 @@ const ScheduleDetailModal = ({ scheduleDetail }) => {
                                 ) : (
                                     <div>업데이트 될 수량: {scheduleDetail.totalProducts}</div>
                                 )}
-                                // {today && (<div>업데이트 된 수량: {scheduleDetail.totalProducts}</div>)}
                                 {(today || scheduleDetail.isPast) && (<div>업데이트 된 수량: {scheduleDetail.updatedProduct}</div>)}
                             </div>
                         </>
