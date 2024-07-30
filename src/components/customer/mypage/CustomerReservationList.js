@@ -3,6 +3,7 @@ import styles from './CustomerReservationList.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "../../../pages/common/ModalProvider";
+import {imgErrorHandler} from "../../../utils/error";
 
 const BASE_URL = window.location.origin;
 
@@ -21,6 +22,16 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    // 날짜를 0월 0일 0시 0분 형식으로 포맷팅하는 함수
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        return `${month}월 ${day}일 ${hours}시 ${minutes}분`;
+    };
 
     // 예약 상세내역을 가져오는 함수
     const fetchReservationDetail = async (reservationId) => {
@@ -55,7 +66,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
 
             // 예약 취소 성공 시 예약 목록 갱신
             const updatedReservations = reservations.map(reservation =>
-                reservation.reservationId === reservationId ? { ...reservation, status: 'CANCELED', cancelReservationAtF: new Date().toISOString() } : reservation
+                reservation.reservationId === reservationId ? { ...reservation, status: 'CANCELED', cancelReservationAtF: formatDate(new Date().toISOString()) } : reservation
             );
             onUpdateReservations(updatedReservations);
         } catch (error) {
@@ -79,7 +90,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
 
             // 예약 픽업 성공 시 예약 목록 갱신
             const updatedReservations = reservations.map(reservation =>
-                reservation.reservationId === reservationId ? { ...reservation, status: 'PICKEDUP', pickedUpAtF: new Date().toISOString() } : reservation
+                reservation.reservationId === reservationId ? { ...reservation, status: 'PICKEDUP', pickedUpAtF: formatDate(new Date().toISOString()) } : reservation
             );
             onUpdateReservations(updatedReservations);
         } catch (error) {
@@ -145,7 +156,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
                                             {reservation.status === 'NOSHOW' && <FontAwesomeIcon icon={faCircleXmark} className={styles.noshow} />}
                                             {reservation.status === 'RESERVED' && <FontAwesomeIcon icon={faSpinner} className={styles.loading} />}
                                             {reservation.status === 'PICKEDUP' && <FontAwesomeIcon icon={faCircleCheck} className={styles.done} />}
-                                            <img src={reservation.storeImg || '/assets/img/defaultImage.jpg'} alt="Store Image" />
+                                            <img src={reservation.storeImg} onError={imgErrorHandler} alt="Store Image" />
                                         </div>
                                         <span>{reservation.storeName}</span>
                                     </div>
