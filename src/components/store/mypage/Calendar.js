@@ -116,14 +116,21 @@ const Calendar = () => {
             holiday.day === day
         );
     };
+    
 
-    // 날짜를 UTC로 맞추는 헬퍼 함수 수정
-    const formatDateToUTC = (date) => {
-        const year = date.getUTCFullYear();
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(date.getUTCDate()).padStart(2, '0');
+    /**
+     * 날짜 formatting
+     * @param date - Date 타입
+     * @returns {`${number}-${string}-${string}`}
+     */
+    const toFormattedDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        console.log(`formatted date : ${year}-${month}-${day}`);
         return `${year}-${month}-${day}`;
     };
+
 
     /**
      * 특정 날짜를 휴무일로 설정하는 함수
@@ -201,41 +208,45 @@ const Calendar = () => {
      */
     const handleDayClick = async (day) => {
         if (!day) return;
-        // 클릭된 날짜를 UTC 기준으로 생성
-        const selectedDate = new Date(Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), day));
-        console.log('달력에서 클릭한 날짜:', selectedDate);
+        const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 9);
+        const tempSelectedDate = selectedDate.setHours(0, 0, 0, 0); // 오늘 날짜와 클릭한 날짜 비교 위한 시간 설정
 
-        const isPast = selectedDate <= new Date(new Date().setHours(23, 59, 59, 999));
+        const today = new Date(new Date().setHours(0, 0, 0, 0));
+        
+        const isPast = tempSelectedDate <= today;
 
-        let soldProducts;
-        if (isPast) {
-            try {
-                const response = await fetch(`${BASE_URL}/store/countPickedUpProducts/${selectedDate.toISOString().split('T')[0]}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch picked up products count');
-                }
-                soldProducts = await response.json();
-            } catch (error) {
-                console.error('Error fetching picked up products count:', error);
-                soldProducts = 0;
+        let calendarDetailDto;
+
+        try {
+            const response = await fetch(`${BASE_URL}/store/calendar/modal/${toFormattedDate(selectedDate)}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch picked up products count');
             }
+            calendarDetailDto = await response.json();
+            console.log(calendarDetailDto);
+        } catch (error) {
+            console.error('Error fetching picked up products count:', error);
+            calendarDetailDto = {};
         }
+
 
         const scheduleDetail = {
             date: selectedDate,
-            openTime: storeInfo.openAt,
-            closeTime: storeInfo.closedAt,
-            totalProducts: storeInfo.productCnt,
-            soldProducts: isPast ? soldProducts : undefined,
+            openTime: calendarDetailDto.openAt,
+            closeTime: calendarDetailDto.closedAt,
+            totalProducts: calendarDetailDto.productCnt,
+            soldProducts: isPast ? calendarDetailDto.todayPickedUpCnt : undefined,
+            updatedProduct: isPast ? calendarDetailDto.todayProductCnt : 0,
             isPast: isPast,
             isHoliday: isHoliday(day),
-            handleSetHoliday: () => handleSetHoliday(selectedDate.toISOString().split('T')[0]),
-            handleUndoHoliday: () => handleUndoHoliday(selectedDate.toISOString().split('T')[0]),
+            handleSetHoliday: () => handleSetHoliday(toFormattedDate(selectedDate)),
+            handleUndoHoliday: () => handleUndoHoliday(toFormattedDate(selectedDate)),
         };
 
-        openModal('scheduleDetail', { scheduleDetail });
+        openModal('scheduleDetail', {scheduleDetail});
     };
 
+    
     return (
         <div className={styles.calendarContainer}>
             <div className={styles.calend}>
@@ -262,7 +273,8 @@ const Calendar = () => {
                     </div>
                     <div className={styles.calendar}>
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                            <div key={day} className={`${styles.calendarDayHeader} ${day === 'Sun' ? styles.sunday : ''}`}>{day}</div>
+                            <div key={day} 
+                                className={`${styles.calendarDayHeader} ${day === 'Sun' ? styles.sunday : ''}`}>{day}</div>
                         ))}
                         {daysInMonth.map((day, index) => (
                             <div
