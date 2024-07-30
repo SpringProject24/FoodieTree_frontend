@@ -17,13 +17,13 @@ const ScheduleDetailModal = ({ scheduleDetail }) => {
     });
 
     const handleSetHoliday = () => {
-        // scheduleDetail.handleSetHoliday();
+        scheduleDetail.handleSetHoliday();
         alert('휴무일로 지정되었습니다.');
         closeModal();
     }
 
     const handleUndoHoliday = () => {
-        // scheduleDetail.handleUndoHoliday();
+        scheduleDetail.handleUndoHoliday();
         alert('정상영업일로 변경되었습니다.');
         closeModal();
     }
