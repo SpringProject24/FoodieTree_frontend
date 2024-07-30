@@ -12,11 +12,11 @@ const ProductDetailModal = ({ productDetail, onClose }) => {
     const [initialCount, setInitialCount] = useState(1);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 400);
 
-    const handleResize = () => {
-        setIsMobile(window.innerWidth <= 400);
-    };
-
     useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 400);
+        };
+
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -24,7 +24,9 @@ const ProductDetailModal = ({ productDetail, onClose }) => {
     }, []);
 
     const handleIncrease = () => {
-        setInitialCount(prevCount => prevCount + 1);
+        if (initialCount < productDetail.productCnt) {
+            setInitialCount(prevCount => prevCount + 1);
+        }
     };
 
     const handleDecrease = () => {
