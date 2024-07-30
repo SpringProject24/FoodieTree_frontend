@@ -31,7 +31,7 @@ const Profile = ({ storeInfo, stats, isShow }) => {
         <div className={`${styles.profileSection} ${isShow ? styles.on : undefined}`}>
             <div className={styles.profile}>
                 <a className={styles.imgBox} href="#" id="avatar">
-                    <img src={storeInfo.storeImg || '/assets/img/defaultImage.jpg'} alt="store image"/>
+                    <img src={storeInfo.storeImg} onError={imgErrorHandler} alt="store image"/>
                 </a>
                 <h2>{storeInfo.storeName}</h2>
                 <p>{storeInfo.storeId}</p>
