@@ -10,6 +10,10 @@ import {CUSTOMER_URL} from "../../../config/host-config";
 
 const Edit = () => {
     const [data, setData] = useState({});
+    const [favArea, setFavArea] = useState([]);
+    const [favFood, setFavFood] = useState([]);
+    const [favStore, setFavStore] = useState([]);
+
     useEffect( () => {
         (async () => {
             const res = await fetch(CUSTOMER_URL+'/info', {
@@ -19,6 +23,9 @@ const Edit = () => {
             });
             const data = await res.json();
             setData(data);
+            setFavArea(data.preferredArea);
+            setFavFood(data.preferredFood);
+            setFavStore(data.favStore);
             console.log(data);
         })();
     }, []);
@@ -38,10 +45,9 @@ const Edit = () => {
                     <ProfileImgBtn profileImg={data.profileImage}/>
                 </div>
             </div>
-            <FavArea favList={data.preferredArea}/>
-            <FavFood favList={data.preferredFood}/>
-            <FavStore favList={data.favStore}/>
-
+            <FavArea favList={favArea} set={setFavArea}/>
+            <FavFood favList={favFood} set={setFavFood}/>
+            <FavStore favList={favStore} set={setFavStore}/>
         </div>
     );
 };
