@@ -205,7 +205,7 @@ const Calendar = () => {
         const selectedDate = new Date(Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), day));
         console.log('달력에서 클릭한 날짜:', selectedDate);
 
-        const isPast = selectedDate <= new Date(new Date().setHours(0, 0, 0, 0));
+        const isPast = selectedDate <= new Date(new Date().setHours(23, 59, 59, 999));
 
         let soldProducts;
         if (isPast) {
