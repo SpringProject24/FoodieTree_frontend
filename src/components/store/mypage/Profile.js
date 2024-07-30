@@ -45,7 +45,7 @@ const Profile = ({ storeInfo, stats, isShow }) => {
                         <div>{stats.coTwo}kg의 이산화탄소 배출을 줄였습니다</div>
                     </div>
                     <div id="community" className={styles.statsBox}>
-                        <img src="/assets/img/mypage-community.png" alt="community"/>
+                        <img src="/assets/img/mypage-community.png" onError={imgErrorHandler} alt="community"/>
                         <div>지금까지 {stats.customerCnt}명의 손님을 만났어요</div>
                     </div>
                 </div>
