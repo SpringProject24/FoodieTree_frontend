@@ -52,7 +52,7 @@ const MyFavMap = () => {
                     console.error('Failed to load Naver Map script', error);
                 });
         } else {
-            console.error('Client ID가 false레여......');
+            console.error('Client ID가 false레여 ......');
         }
     }, []);
 

@@ -9,7 +9,6 @@ function VerifyToken() {
   const [userType, setUserType] = useState(null);
   const [verificationFailed, setVerificationFailed] = useState(false);
 
-
 // 컴포넌트인데 실제 컴포넌트가 없는 경우에는 반드시
 // redirect코드가 필요
   const logoutAction = () => {
@@ -72,6 +71,16 @@ function VerifyToken() {
       navigate('/sign-in');
     }
   }, [verificationFailed, navigate]);
+
+
+  // const response = await fetch(`/verifyEmail`, {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': 'Bearer' + token
+  //   },
+  //   body: JSON.stringify(payload);
+  // });
 
   return (
       <>
