@@ -12,10 +12,11 @@ function loadScript(src) {
 }
 
 const MyFavMap = () => {
-    useEffect(() => {
-        const clientId = process.env.REACT_APP_NAVER_MAP_CLIENT_ID; //env 파일에 키 추가
-        if (clientId) {
-            const scriptUrl = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}`;
+    // useEffect(() => {
+    //     const ncpClientId = process.env.REACT_APP_YOUR_CLIENT_ID; //env 파일에 클라이언트 아이디 추가
+    const ncpClientId = "4p0oi89cry"; // env 값 안불러와짐
+        if (ncpClientId) {
+            const scriptUrl = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${ncpClientId}`;
             loadScript(scriptUrl)
                 .then(() => {
                     console.log('Naver Map script loaded successfully');
@@ -23,7 +24,7 @@ const MyFavMap = () => {
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
                             (position) => {
-                                const { latitude, longitude } = position.coords;
+                                const {latitude, longitude} = position.coords;
                                 const mapOptions = {
                                     center: new window.naver.maps.LatLng(latitude, longitude),
                                     zoom: 10,
@@ -47,9 +48,12 @@ const MyFavMap = () => {
                     console.error('Failed to load Naver Map script', error);
                 });
         }
-    }, []);
+        else {
+            console.error('client id가 false래요');
+        }
+    // }, []);
 
-    return <div id="map" style={{ width: '100%', height: '400px' }} />;
+    return <div id="map" style={{width: '100%', height: '400px'}}/>;
 };
 
 export default MyFavMap;
