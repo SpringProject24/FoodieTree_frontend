@@ -31,15 +31,14 @@ function VerifyToken() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
+            // verify에서는 token 검증이 아예 안되고, 다른 페이지에서 토큰이 있으면 verifyEmail로 보내는로직을 사용해야 할듯
+            // 토큰이 없어도 확인할 수 있어야 한다. 로그아웃하면 토큰이 브라우저에서 삭제됨.
           },
           body: JSON.stringify({ token: tokenToVerify }),
         });
-
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-
         const data = await response.json();
         console.log('json 파싱한 데이터 :', data);
         if (data.success) {
@@ -47,6 +46,7 @@ function VerifyToken() {
           setUserType(data.role); // 서버에서 반환된 userType을 설정
           localStorage.setItem('token', tokenToVerify); // 성공 시 토큰을 localStorage에 저장
         } else {
+          console.log("data에서 값이 가져와지지 않아서 로컬스토리지에 토큰 저장할 수 없 어 ! ");
           setVerificationFailed(true);
         }
       } catch (error) {

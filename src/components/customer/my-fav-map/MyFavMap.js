@@ -9,6 +9,8 @@ function loadScript(src) {
         script.onerror = reject;
         document.head.appendChild(script);
     });
+
+
 }
 
 const MyFavMap = () => {
