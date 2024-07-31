@@ -27,7 +27,7 @@ const MyFavMap = () => {
                                 const {latitude, longitude} = position.coords;
                                 const mapOptions = {
                                     center: new window.naver.maps.LatLng(latitude, longitude),
-                                    zoom: 10,
+                                    zoom: 15,
                                 };
 
                                 const map = new window.naver.maps.Map('map', mapOptions);
