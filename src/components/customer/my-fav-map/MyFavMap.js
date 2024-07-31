@@ -13,8 +13,7 @@ function loadScript(src) {
 
 const MyFavMap = () => {
     useEffect(() => {
-        // const ncpClientId = process.env.REACT_APP_YOUR_CLIENT_ID; //env 파일에 클라이언트 아이디 추가
-        const ncpClientId = "4p0oi89cry"; // env 값 안불러와짐
+        const ncpClientId = process.env.REACT_APP_YOUR_CLIENT_ID; //env 파일에 클라이언트 아이디 추가
         if (ncpClientId) {
             const scriptUrl = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${ncpClientId}`;
             loadScript(scriptUrl)
