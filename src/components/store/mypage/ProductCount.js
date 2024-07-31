@@ -31,10 +31,19 @@ const ProductCount = () => {
     //             body: JSON.stringify({ amount })
     //         });
 
-    //         if (!response.ok) {
-    //             throw new Error('Failed to add product amount');
-    //         }
-
+    /**
+     * 랜덤박스를 추가하는 함수
+     * @param amount 추가할 랜덤박스의 개수
+     */
+    const handleAddProductAmount = async (amount) => {
+        try {
+            const response = await fetch(`${BASE_URL}/store/updateProductCnt`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ newCount: amount })
+            });
     //         const data = await response.json();
     //         setProductData((prevData) => ({
     //             ...prevData,
