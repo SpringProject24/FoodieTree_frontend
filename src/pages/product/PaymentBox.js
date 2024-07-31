@@ -1,31 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './ProductDetailModal.module.scss';
 import { faMinus, faPlus, faShoppingCart, faStar, faTag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const PaymentBox = ({ makeReservation, productDetail }) => {
-    const [initialCount, setInitialCount] = useState(1);
-
-    const handleIncrease = () => {
-        setInitialCount(prevCount => prevCount + 1);
-    };
-
-    const handleDecrease = () => {
-        if (initialCount > 1) {
-            setInitialCount(prevCount => prevCount - 1);
-        }
-    };
+const PaymentBox = ({ makeReservation, productDetail, initialCount, handleIncrease, handleDecrease }) => {
+    const howMuchSaved = Math.floor(((productDetail.storeInfo.price / 0.3) - productDetail.storeInfo.price) * initialCount);
+    const totalPrice = productDetail.storeInfo.price * initialCount;
+    const originalPrice = Math.floor(productDetail.storeInfo.price / 0.3) * initialCount;
 
     const handleMakeReservation = () => {
-        console.log(initialCount);
         makeReservation(initialCount);
-    }
-
-    // 제품 세부정보가 없는 경우를 대비한 기본값 설정
-    const price = productDetail?.storeInfo?.price || 0;
-    const howMuchSaved = Math.floor(((price / 0.3) - price) * initialCount);
-    const totalPrice = price * initialCount;
-    const originalPrice = Math.floor(price / 0.3) * initialCount;
+    };
 
     return (
         <section className={styles.paymentBox}>

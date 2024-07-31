@@ -5,30 +5,30 @@ import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const BottomPlaceOrder = ({ makeReservation, productDetail, initialCount, handleIncrease, handleDecrease }) => {
 
-    // productDetail의 존재를 확인하고, 없으면 기본 값을 사용
-    const remainingProduct = productDetail?.storeInfo?.remainProduct || Infinity;
+    // 디폴트 값 설정: productDetail 및 storeInfo가 없을 경우를 대비
+    const storeInfo = productDetail?.storeInfo || {};
+    const remainProduct = storeInfo.remainProduct || 0;
 
-    // 구매하기 버튼 클릭 핸들러
     const handleMakeReservation = () => {
         console.log(initialCount);
         makeReservation(initialCount);
-    }
+    };
 
     return (
         <div className={styles.bottomPlaceOrder}>
             <div className={styles.productAmtAdjustBtn}>
-                <button 
-                    className={styles.adjustBtn} 
-                    onClick={handleDecrease} 
+                <button
+                    className={styles.adjustBtn}
+                    onClick={handleDecrease}
                     disabled={initialCount <= 1}
                 >
                     <FontAwesomeIcon icon={faMinus} />
                 </button>
                 <p className={styles.initialCnt}>{initialCount}</p>
-                <button 
-                    className={styles.adjustBtn} 
-                    onClick={handleIncrease} 
-                    disabled={initialCount >= remainingProduct}
+                <button
+                    className={styles.adjustBtn}
+                    onClick={handleIncrease}
+                    disabled={initialCount >= remainProduct}
                 >
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
