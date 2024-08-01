@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, redirect } from 'react-router-dom';
+import { EMAIL_URL } from '../../config/host-config'
 
 function VerifyToken() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function VerifyToken() {
 
     const verifyToken = async (tokenToVerify) => {
       try {
-        const response = await fetch('/email/verifyEmail', {
+        const response = await fetch(`/email/verifyEmail`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -72,16 +73,6 @@ function VerifyToken() {
       navigate('/sign-in');
     }
   }, [verificationFailed, navigate]);
-
-
-  // const response = await fetch(`/verifyEmail`, {
-  //   method: 'GET',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': 'Bearer' + token
-  //   },
-  //   body: JSON.stringify(payload);
-  // });
 
   return (
       <>
