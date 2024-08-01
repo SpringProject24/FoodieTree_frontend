@@ -21,12 +21,16 @@ const Edit = () => {
                     // 'Authorization' : 'Bearer ' +
                 }
             });
-            const data = await res.json();
-            setData(data);
-            setFavArea(data.preferredArea);
-            setFavFood(data.preferredFood);
-            setFavStore(data.favStore);
-            console.log(data);
+            if (res.ok) {
+                const data = await res.json();
+                setData(data);
+                setFavArea(data.preferredArea);
+                setFavFood(data.preferredFood);
+                setFavStore(data.favStore);
+                console.log(data);
+            } else {
+                alert("잠시후 다시 이용해주세요");
+            }
         })();
     }, []);
     return (
