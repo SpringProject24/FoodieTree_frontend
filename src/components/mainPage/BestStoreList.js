@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -19,17 +19,17 @@ const BestStoreList = ({ stores = [] }) => {
     dots: true,
     centerMode: true,
     centerPadding: '0',
-      responsive: [
-        {
-          breakpoint: 400,
-          settings: {
-            dots: false,
-            slidesToShow: 2, 
-            centerPadding: '10%',
-            // centerMode: false,
-          },
+    responsive: [
+      {
+        breakpoint: 400,
+        settings: {
+          dots: false,
+          slidesToShow: 2, 
+          centerPadding: '10%',
+          // centerMode: false,
         },
-      ],
+      },
+    ],
   };
 
   const handleClick = (store) => {
@@ -44,8 +44,13 @@ const BestStoreList = ({ stores = [] }) => {
           <div>No stores available</div>
         ) : (
           stores.map((store, index) => (
-            <div key={index} className={styles.storeItem} onClick={() => handleClick(store)}>
+            <div
+              key={index}
+              className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
+              onClick={() => handleClick(store)}
+            >
               <img src={store.storeImg} alt={store.storeName} />
+              {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>
@@ -58,4 +63,3 @@ const BestStoreList = ({ stores = [] }) => {
 };
 
 export default BestStoreList;
-
