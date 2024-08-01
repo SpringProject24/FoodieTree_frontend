@@ -10,12 +10,16 @@ const ProductCount = ({value}) => {
     const inputRef = useRef();
 
     const clickHandler = async () => {
-        const res = await fetch(STORE_URL + '/mypage/edit/update/productCnt', {
-            method: 'PATCH',
+        const payload = {
+            type: "productCnt",
+            value: inputRef.current.value,
+        }
+        const res = await fetch(STORE_URL + '/edit', {
+            method: "PATCH",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(inputRef.current.value),
+            body: JSON.stringify(payload)
         });
         if (res.ok) {
             alert("상품 기본 수량이 업데이트 되었습니다.");

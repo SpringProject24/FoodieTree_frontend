@@ -22,7 +22,7 @@ const ProfileImgBtn = ({value}) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('storeImg', inputRef.current.files[0]);
-        const response = await fetch(STORE_URL + '/mypage/edit/update/img', {
+        const response = await fetch(STORE_URL + '/edit/img', {
             method: 'POST',
             body: formData
         });

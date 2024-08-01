@@ -14,7 +14,7 @@ const PhoneNumber = ({value}) => {
             type: "business_number",
             value: inputRef.current.value
         }
-        const res = await fetch(STORE_URL + '/mypage/edit/update/info', {
+        const res = await fetch(STORE_URL + '/edit', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'

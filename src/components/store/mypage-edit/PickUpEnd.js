@@ -9,12 +9,16 @@ const PickUpEnd = ({ value }) => {
     const [err, setErr] = useState(false);
     const inputRef = useRef();
     const clickHandler = async () => {
-        const res = await fetch(STORE_URL + '/mypage/edit/update/closedAt', {
+        const payload = {
+            type: "closedAt",
+            value: inputRef.current.value,
+        }
+        const res = await fetch(STORE_URL + '/edit', {
             method: "PATCH",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(inputRef.current.value)
+            body: JSON.stringify(payload)
         });
         if (res.ok) {
             alert("픽업 마감 시간이 업데이트 되었습니다.");

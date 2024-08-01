@@ -10,12 +10,16 @@ const ProductPrice = ({value}) => {
     const selectRef = useRef();
 
     const clickHandler = async () => {
-        const res = await fetch(STORE_URL + '/mypage/edit/update/price', {
-            method: 'PATCH',
+        const payload = {
+            type: "price",
+            value: selectRef.current.value,
+        }
+        const res = await fetch(STORE_URL + '/edit', {
+            method: "PATCH",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(selectRef.current.value),
+            body: JSON.stringify(payload)
         });
         if (res.ok) {
             alert("가격이 업데이트 되었습니다.");
