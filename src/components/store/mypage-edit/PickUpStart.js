@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSquareCheck} from "@fortawesome/free-regular-svg-icons";
 import {STORE_URL} from "../../../config/host-config";
 
-const PickUpStart = () => {
+const PickUpStart = ({ value }) => {
     const [err, setErr] = useState(false);
     const inputRef = useRef();
     const clickHandler = async () => {
@@ -29,7 +29,7 @@ const PickUpStart = () => {
                 <div className={styles.icon}><FontAwesomeIcon icon={faClock}/></div>
                 <div>
                     <span>픽업 시작 시간</span>
-                    <input type={"time"} ref={inputRef}/>
+                    <input type={"time"} ref={inputRef} defaultValue={value}/>
                     <FontAwesomeIcon onClick={clickHandler} icon={faSquareCheck}/>
                     { err &&
                         <b id="error-message" style={{color: "red"}}>
