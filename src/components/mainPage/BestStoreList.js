@@ -1,61 +1,61 @@
 import React, { useRef, useEffect } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.css';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import styles from './FoodNav.module.scss';
-import { useModal } from '../../pages/common/ModalProvider'; 
+import Arrow from './Arrow'; // Arrow 컴포넌트가 필요하다면 import 합니다.
+import { useModal } from '../../pages/common/ModalProvider';
 
 const BestStoreList = ({ stores = [] }) => {
-  const swiperElRef = useRef(null);
   const { openModal } = useModal();
 
-  useEffect(() => {
-    if (swiperElRef.current) {
-      swiperElRef.current.addEventListener('swiperprogress', (e) => {
-        const [swiper, progress] = e.detail;
-        console.log(progress);
-      });
-
-      swiperElRef.current.addEventListener('swiperslidechange', () => {
-        console.log('slide changed');
-      });
-    }
-  }, []);
+  const settings = {
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    infinite: true,
+    arrows: true,
+    prevArrow: <Arrow direction="prev" />,
+    nextArrow: <Arrow direction="next" />,
+    dots: true,
+    centerMode: true,
+    centerPadding: '0',
+      responsive: [
+        {
+          breakpoint: 400,
+          settings: {
+            dots: false,
+            slidesToShow: 2, 
+            centerPadding: '10%',
+            // centerMode: false,
+          },
+        },
+      ],
+  };
 
   const handleClick = (store) => {
     openModal('productDetail', { productDetail: store });
   };
 
   return (
-    <>
-      {/* 추천 가게 리스트 */}
-      <div className={styles.list}>
-        <h2 className={styles.title}>추천 가게</h2>
-        <Swiper
-          slidesPerView={5}
-          spaceBetween={10}
-          navigation
-          pagination={{ clickable: true }}
-          loop
-          ref={swiperElRef}
-        >
-          {stores.length === 0 ? (
-            <SwiperSlide>No stores available</SwiperSlide>
-          ) : (
-            stores.map((store, index) => (
-              <SwiperSlide key={index}>
-                <div className={styles.storeItem} onClick={() => handleClick(store)}>
-                  <img src={store.storeImg} alt={store.storeName} />
-                  <p className={styles.storeName}>{store.storeName}</p>
-                  <span className={styles.storePrice}>{store.price}</span>
-                  <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>
-                </div>
-              </SwiperSlide>
-            ))
-          )}
-        </Swiper>
-      </div>
-    </>
+    <div className={styles.list}>
+      <h2 className={styles.title}>추천 가게</h2>
+      <Slider {...settings} className={styles.slider}>
+        {stores.length === 0 ? (
+          <div>No stores available</div>
+        ) : (
+          stores.map((store, index) => (
+            <div key={index} className={styles.storeItem} onClick={() => handleClick(store)}>
+              <img src={store.storeImg} alt={store.storeName} />
+              <p className={styles.storeName}>{store.storeName}</p>
+              <span className={styles.storePrice}>{store.price}</span>
+              <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>
+            </div>
+          ))
+        )}
+      </Slider>
+    </div>
   );
 };
 
 export default BestStoreList;
+
