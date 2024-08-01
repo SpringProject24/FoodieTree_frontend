@@ -4,11 +4,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import {CUSTOMER_URL} from "../../../config/host-config";
 
-// const favList = [
-//     {id: 1, text: "양식", img: "/assets/img/western.jpg"},
-//     {id: 2, text: "한식", img: "/assets/img/korean.jpg"},
-//     {id: 3, text: "중식", img: "/assets/img/chinese.jpg"},
-// ]
 const FavFood = ({ favList, set }) => {
 
     const clickHandler = async (type, value) => {

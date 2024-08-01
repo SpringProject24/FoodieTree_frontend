@@ -5,10 +5,10 @@ import {faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import {CUSTOMER_URL} from "../../../config/host-config";
 
 const FavStore = ({ favList, set}) => {
-    const clickHandler = async (type, value) => {
+    const clickHandler = async (type, {storeId, storeName}) => {
         const payload = {
             type,
-            value
+            value: storeId
         }
         const res = await fetch(CUSTOMER_URL + `/edit`, {
             method: "DELETE",
@@ -20,7 +20,7 @@ const FavStore = ({ favList, set}) => {
         if (res.ok) {
             alert("삭제되었습니다");
             console.log('Delete successful');
-            set(prev => prev.filter((item) => item.text !== value));
+            set(prev => prev.filter((item) => item.storeName !== storeName));
         } else {
             const errorText = await res.text();
             console.error('Delete failed:', errorText);
@@ -36,15 +36,15 @@ const FavStore = ({ favList, set}) => {
             <div className={styles['edit-wrapper']}>
                 <ul className={styles.preferred} id="preferred-area">
                     {
-                        favList.map(({text, img}, idx) => (
+                        favList.map((item, idx) => (
                                 <li id={idx} key={idx}>
                                     <div className={styles["img-box"]}>
-                                        <img src={img} alt="선호음식이미지"/>
+                                        <img src={item.storeImg} alt="선호음식이미지"/>
                                     </div>
-                                    <span>{text}</span>
+                                    <span>{item.storeName}</span>
                                     <FontAwesomeIcon
                                         className={styles.xmark} icon={faCircleXmark}
-                                        onClick={() => clickHandler("favStore", text)}
+                                        onClick={() => clickHandler("favStore", item)}
                                     />
                                 </li>
                             )
