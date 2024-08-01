@@ -47,8 +47,10 @@ const FoodNav = ({ selectedCategory, stores }) => {
       {
         breakpoint: 400,
         settings: {
+          dots: false,
           slidesToShow: 2, 
           centerPadding: '10%',
+          // centerMode: false,
         },
       },
     ],
