@@ -50,7 +50,6 @@ const FoodNav = ({ selectedCategory, stores }) => {
           dots: false,
           slidesToShow: 2, 
           centerPadding: '10%',
-          // centerMode: false,
         },
       },
     ],
@@ -63,8 +62,13 @@ const FoodNav = ({ selectedCategory, stores }) => {
         <h2 className={styles.title}>나의 단골 가게</h2>
         <Slider {...settings(4)} className={styles.slider}>
           {stores.map((store, index) => (
-            <div key={index} onClick={() => handleClick(store)} className={styles.storeItem}>
+            <div
+              key={index}
+              onClick={() => handleClick(store)}
+              className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
+            >
               <img src={store.storeImg} alt={store.storeName} />
+              {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>
@@ -78,8 +82,13 @@ const FoodNav = ({ selectedCategory, stores }) => {
         <h2 className={styles.title}>000동 근처 가게</h2>
         <Slider {...settings(4)} className={styles.slider}>
           {stores.map((store, index) => (
-            <div key={index} onClick={() => handleClick(store)} className={styles.storeItem}>
+            <div
+              key={index}
+              onClick={() => handleClick(store)}
+              className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
+            >
               <img src={store.storeImg} alt={store.storeName} />
+              {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>
@@ -93,12 +102,17 @@ const FoodNav = ({ selectedCategory, stores }) => {
         <h2 className={styles.title}>이웃들의 추천 가게</h2>
         <Slider {...settings(4)} className={styles.slider}>
           {randomStores.map((store, index) => (
-            <div key={index} onClick={() => handleClick(store)} className={styles.storeItem}>
+            <div
+              key={index}
+              onClick={() => handleClick(store)}
+              className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
+            >
               <img src={store.storeImg} alt={store.storeName} className={styles.image} />
               <span className={styles.category}>{extractFoodType(store.category)}</span>
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>
+              {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
             </div>
           ))}
         </Slider>
