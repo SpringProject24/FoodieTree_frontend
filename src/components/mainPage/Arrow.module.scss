@@ -1,0 +1,36 @@
+// 기본 화살표 숨기기
+.slick-prev,
+.slick-next {
+  display: none;
+}
+
+.arrow {
+  background-color: rgba(60, 114, 79, 0.5);
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  user-select: none;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: rgba(72, 148, 86, 0.8);
+  }
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}

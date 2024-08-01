@@ -4,6 +4,7 @@ import { useModal } from "../../pages/common/ModalProvider";
 import styles from "./FoodNav.module.scss";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Arrow from './Arrow';
 
 // 🌿 랜덤 가게 리스트 생성
 const getRandomStores = (stores, count) => {
@@ -36,9 +37,12 @@ const FoodNav = ({ selectedCategory, stores }) => {
     infinite: true,
     speed: 500,
     slidesToShow: slidesToShow,
-    slidesToScroll: 1,
+    slidesToScroll: 5,
     centerMode: true,
     centerPadding: '0',
+    arrows: true,
+    prevArrow: <Arrow direction="prev" />,
+    nextArrow: <Arrow direction="next" />,
     responsive: [
       {
         breakpoint: 400,
