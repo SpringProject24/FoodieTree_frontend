@@ -6,23 +6,23 @@ export const checkAuthToken = async () => {
     if (!token) {
         return false;
     }
+    return true;
 
-    try {
-        const response = await fetch(`${EMAIL_URL}/verifyEmail`, {
-            headers: { 'Authorization': 'Bearer ' + token },
-            method: 'POST',
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            return data.isValid; // 서버에서 토큰 검증 결과를 반환하는 방식에 따라 조정
-        } else {
-            return false;
-        }
-    } catch (error) {
-        console.error("Error verifying token:", error);
-        return false;
-    }
+    // try {
+    //     const response = await fetch(`/email/verifyEmail`, {
+    //         headers: { 'Authorization': 'Bearer ' + token },
+    //         method: 'POST',
+    //     });
+    //
+    //     if (response.ok) {
+    //        return true;
+    //     } else {
+    //         return alert("엑세스 토큰 기한이 만료되었습니다. 재로그인 해주세요 (자동로그인 구현중이에요)");
+    //     }
+    // } catch (error) {
+    //     console.error("Error verifying token:", error);
+    //     return false;
+    // }
 };
 
 export const handleInvalidToken = (navigate) => {
