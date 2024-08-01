@@ -11,7 +11,7 @@ const PhoneNumber = ({value}) => {
 
     const clickHandler = async () => {
         const payload = {
-            type: "business_number",
+            type: "store_contact",
             value: inputRef.current.value
         }
         const res = await fetch(STORE_URL + '/edit', {
