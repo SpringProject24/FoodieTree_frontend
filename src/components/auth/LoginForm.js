@@ -15,9 +15,9 @@ const LoginForm = ({ userType, onVerificationSent }) => {
 
     const getTokenFromLocalStorage = () => {
         console.log(localStorage.getItem('token'))
+        console.log(localStorage.getItem('refreshToken'))
         return localStorage.getItem('token');
     };
-
 
     const checkEmailInput = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

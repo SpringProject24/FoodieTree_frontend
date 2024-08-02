@@ -6,6 +6,7 @@ function VerifyToken() {
   const navigate = useNavigate();
   const query = new URLSearchParams(window.location.search);
   const token = query.get('token');
+  const refreshToken = query.get('refreshToken');
   const [email, setEmail] = useState(null);
   const [userType, setUserType] = useState(null);
   const [verificationFailed, setVerificationFailed] = useState(false);
@@ -21,12 +22,12 @@ function VerifyToken() {
 
   useEffect(() => {
     const redirectToAbsoluteURL = () => {
-      const relativePath = `/verifyEmail?token=${token}`;
+      const relativePath = `/verifyEmail?token=${token}&refreshToken=${refreshToken}`;
       const absoluteURL = window.location.origin + relativePath;
       window.location.href = absoluteURL;
     };
 
-    const verifyToken = async (tokenToVerify) => {
+    const verifyToken = async (tokenToVerify, refreshTokenToVerify) => {
       try {
         const response = await fetch(`/email/verifyEmail`, {
           method: 'POST',
@@ -35,7 +36,7 @@ function VerifyToken() {
             // verify에서는 token 검증이 아예 안되고, 다른 페이지에서 토큰이 있으면 verifyEmail로 보내는로직을 사용해야 할듯
             // 토큰이 없어도 확인할 수 있어야 한다. 로그아웃하면 토큰이 브라우저에서 삭제됨.
           },
-          body: JSON.stringify({ token: tokenToVerify }),
+          body: JSON.stringify({ token: tokenToVerify, refreshToken: refreshTokenToVerify }),
         });
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -46,6 +47,7 @@ function VerifyToken() {
           setEmail(data.email); // 서버에서 반환된 이메일을 설정
           setUserType(data.role); // 서버에서 반환된 userType을 설정
           localStorage.setItem('token', tokenToVerify); // 성공 시 토큰을 localStorage에 저장
+          localStorage.setItem('refreshToken', refreshTokenToVerify);
         } else {
           console.log("data에서 값이 가져와지지 않아서 로컬스토리지에 토큰 저장할 수 없 어 ! ");
           setVerificationFailed(true);
@@ -56,23 +58,25 @@ function VerifyToken() {
       }
     };
 
-    if (token) {
-      verifyToken(token);
+    if (token && refreshToken) {
+      verifyToken(token, refreshToken);
     } else {
       const storedToken = localStorage.getItem('token');
-      if (storedToken) {
-        verifyToken(storedToken);
+      const storedRefreshToken = localStorage.getItem('refreshToken');
+      if (storedToken && storedRefreshToken) {
+        verifyToken(storedToken, storedRefreshToken);
       } else {
         redirectToAbsoluteURL();
       }
     }
-  }, [token]);
+  }, [token, refreshToken]);
 
   useEffect(() => {
     if (verificationFailed) {
       navigate('/sign-in');
     }
   }, [verificationFailed, navigate]);
+
 
   return (
       <>

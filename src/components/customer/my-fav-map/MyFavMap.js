@@ -32,6 +32,7 @@ const callMyLocation = async (token, navigate) => {
     }
 };
 
+
 const MyFavMap = () => {
     const navigate = useNavigate();
 
@@ -43,6 +44,7 @@ const MyFavMap = () => {
                 return;
             }
 
+            // 로컬스토리지 토큰 검색
             const token = localStorage.getItem("token");
             if (token) {
                 console.log("Token:", token);
