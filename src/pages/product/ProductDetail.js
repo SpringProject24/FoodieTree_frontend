@@ -21,6 +21,7 @@ const ProductDetail = ({productDetail}) => (<div className={styles.productDetail
         <div className={styles.price}>
             <p>상품 가격</p>
             <p>{productDetail.storeInfo.price}</p>
+            {/* <p>{productDetail.storeInfo.remainProduct}</p> */}
         </div>
         {/*<div className={styles.sectionLine}></div>*/}
         {/*<div className={styles.productDes}>*/}
