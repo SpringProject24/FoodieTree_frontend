@@ -14,14 +14,14 @@ function loadScript(src) {
     });
 }
 
-const callMyLocation = async (token, navigate) => {
+const callMyLocation = async (token, refreshToken, navigate) => {
     const response = await fetch(`${CUSTOMER_URL}/myFavMap`, {
         headers: {
-            'Authorization': 'Bearer ' + token,
+            'Authorization': 'Bearer ' + token + refreshToken,
             'Content-Type': 'application/json'
         },
         method: 'POST',
-        body: JSON.stringify({ location: "your-location-data" }) // location 문자열 전달
+        body: JSON.stringify({ location: "nong" }) // location 문자열 전달
     });
 
     const data = await response.json();
