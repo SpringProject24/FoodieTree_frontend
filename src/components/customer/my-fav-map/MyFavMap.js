@@ -17,11 +17,12 @@ function loadScript(src) {
 const callMyLocation = async (token, refreshToken, navigate) => {
     const response = await fetch(`${CUSTOMER_URL}/myFavMap`, {
         headers: {
-            'Authorization': 'Bearer ' + token + refreshToken,
+            'Authorization': 'Bearer ' + token,
+            'refreshToken': refreshToken,
             'Content-Type': 'application/json'
         },
         method: 'POST',
-        body: JSON.stringify({ location: "nong" }) // location 문자열 전달
+        body: JSON.stringify({ location: "nong---=-=-=-=-===--==-=" }) // location 문자열 전달
     });
 
     const data = await response.json();
@@ -31,7 +32,6 @@ const callMyLocation = async (token, refreshToken, navigate) => {
         handleInvalidToken(navigate); // handleInvalidToken 호출
     }
 };
-
 
 const MyFavMap = () => {
     const navigate = useNavigate();
@@ -44,13 +44,15 @@ const MyFavMap = () => {
                 return;
             }
 
-            // 로컬스토리지 토큰 검색
+            // 로컬스토리지에서 토큰과 리프레시 토큰 검색
             const token = localStorage.getItem("token");
-            if (token) {
+            const refreshToken = localStorage.getItem("refreshToken");
+            if (token || refreshToken) {
                 console.log("Token:", token);
-                await callMyLocation(token, navigate); // navigate 전달
+                console.log("Refresh Token:", refreshToken);
+                await callMyLocation(token, refreshToken, navigate); // navigate 전달
             } else {
-                console.error("토큰이 없습니다.");
+                console.error("토큰 또는 리프레시 토큰이 없습니다.");
             }
 
             const ncpClientId = process.env.REACT_APP_YOUR_CLIENT_ID;
