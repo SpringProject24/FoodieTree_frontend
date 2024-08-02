@@ -93,20 +93,6 @@
   margin: 0 -100px !important;
 }
 
-@media (max-width: 400px) {
-  .list .title{
-    padding: 20px 20px 5px 0;
-  }
-
-  .storeItem{
-    padding-right: 0px;
-    height: 160px;
-  }
-  .storeItem img {
-    width: 100%;
-    height: 100px;
-  }
-}
 
 
 // 수량 0일 때 회색처리
@@ -128,12 +114,12 @@
 
 .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 10px;
+  left: 10px;
+  width: 91%;
+  height: 72%;
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
+  border-radius: 13px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,4 +136,35 @@
 
 .storeItem.low-stock img {
   opacity: 0.5; 
+}
+
+
+@media (max-width: 400px) {
+
+  .list{
+    margin: 0 20px;
+    width: 90%;
+  }
+
+  .list .title{
+    padding: 20px 20px 5px 0;
+  }
+
+  .storeItem{
+    padding-right: 0px;
+    width:150px;
+  }
+
+  .storeItem img {
+    width: 100%;
+    height: 100px;
+  }
+
+  .overlay{
+    top: 10px;
+    left: 10px;
+    width: 92%;
+    height: 40%;
+    font-size: 15px;
+  }
 }

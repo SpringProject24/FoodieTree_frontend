@@ -53,7 +53,7 @@ const BestStoreList = ({ stores = [] }) => {
               {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
-              <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>
+              <span className={styles.productCnt}>수량: {store.productCnt}</span>
             </div>
           ))
         )}
