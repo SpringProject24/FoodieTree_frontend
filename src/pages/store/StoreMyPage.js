@@ -107,11 +107,16 @@ const StoreMyPage = () => {
                         storeInfo={storeInfo}
                         stats={stats}
                         isShow={show}
+                        width={width}
                     />
                     <div className={styles.content}>
                         <ReservationList reservations={reservations} />
-                        <ProductCount />
-                        <Calendar />
+                        {width > 400 && (
+                            <>
+                                <ProductCount/>
+                                <Calendar />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

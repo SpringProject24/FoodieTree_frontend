@@ -2,10 +2,12 @@ import React, { useEffect } from 'react';
 import styles from './Profile.module.scss';
 import { Link, useLocation } from "react-router-dom";
 import { imgErrorHandler } from "../../../utils/error";
+import ProductCount from "./ProductCount";
+import Calendar from "./Calendar";
 
 const BASE_URL = window.location.origin;
 
-const Profile = ({ storeInfo, stats, isShow }) => {
+const Profile = ({ storeInfo, stats, isShow, width }) => {
     const location = useLocation();
 
     /**
@@ -50,6 +52,12 @@ const Profile = ({ storeInfo, stats, isShow }) => {
                         <div>지금까지 {stats.customerCnt}명의 손님을 만났어요</div>
                     </div>
                 </div>
+                {width <= 400 && (
+                    <>
+                        <ProductCount/>
+                        <Calendar />
+                    </>
+                )}
             </div>
         </div>
     );
