@@ -136,6 +136,7 @@
     height: 50px;
     object-fit: cover;
     transition: transform 0.5s;
+    border-radius: 50%;
   }
 
   svg {
@@ -240,7 +241,7 @@
       justify-content: space-between;
 
       span {
-        margin-left: 0;
+        margin-left: 10px;
         margin-bottom: 5px;
       }
     }

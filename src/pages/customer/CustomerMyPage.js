@@ -50,7 +50,8 @@ const CustomerMyPage = () => {
             const response = await fetch(`${BASE_URL}/reservation/list`);
             if (!response.ok) throw new Error('Failed to fetch reservations');
             const data = await response.json();
-            setReservations(data);
+            const sortedData = sortReservations(data);
+            setReservations(sortedData);
         } catch (error) {
             console.error('Error fetching reservations:', error);
         }
@@ -66,6 +67,47 @@ const CustomerMyPage = () => {
             console.error('Error fetching stats:', error);
         }
     };
+
+    const sortReservations = (reservations) => {
+        const statusOrder = {
+            RESERVED: 1,
+            PICKEDUP: 2,
+            CANCELED: 2,
+            NOSHOW: 2
+        };
+
+        return reservations.sort((a, b) => {
+            const statusComparison = statusOrder[a.status] - statusOrder[b.status];
+            if (statusComparison !== 0) {
+                return statusComparison;
+            }
+
+            // 각 상태에 맞는 시간 값 선택
+            const getTime = (reservation) => {
+                switch (reservation.status) {
+                    case 'RESERVED':
+                        return new Date(reservation.pickupTime);
+                    case 'PICKEDUP':
+                        return new Date(reservation.pickedUpAt);
+                    case 'CANCELED':
+                        return new Date(reservation.cancelReservationAt);
+                    case 'NOSHOW':
+                        return new Date(reservation.pickupTime);
+                    default:
+                        return new Date(); // 기본값 (예외 처리)
+                }
+            };
+
+            // RESERVED 상태인 경우 시간 내림차순
+            if (a.status === 'RESERVED' || b.status === 'RESERVED') {
+                return getTime(a) - getTime(b);
+            }
+
+            // 그 외의 상태인 경우 시간 오름차순
+            return getTime(b) - getTime(a);
+        });
+    };
+
 
     const showHandler = () => {
         setShow(prev => !prev);
