@@ -72,9 +72,11 @@ const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm}) =>
         <>
             <div className={styles.reservationDetailItem} data-reservation-id={reservationDetail.id}>
                 <div className={styles.imgSection}>
-                    <div>
-                        <img className={styles.reservedProductImg} src={reservationDetail.productImg} alt="상품 이미지"/>
-                    </div>
+                    <img
+                        className={styles.reservedProductImg}
+                        src={`${reservationDetail.productImg}||'/assets/img/dessert.jpg'`}
+                        alt="상품 이미지"
+                    />
                     <img className={styles.reservedStoreImg} src={reservationDetail.storeImg} alt="가게 이미지"/>
                 </div>
                 <div className={styles.reservationTextInfo}>
@@ -85,7 +87,7 @@ const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm}) =>
                     </div>
                     <div>가게 주소:
                         <a href="">
-                            {reservationDetail.storeAddress}
+                            {reservationDetail.address}
                         </a>
                     </div>
                     {/* 추후 지도 API로 변경 가능 클릭 시 해당 주소 네이버 지도로 이동*/}
@@ -101,7 +103,7 @@ const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm}) =>
                         <p className={styles.btnDes}>가게에 도착해 스페셜 팩을 수령했다면 <br/> '픽업 확인' 버튼을 눌러주세요!</p>
                         <button className={styles.pickupConfirmBtn} onClick={handleConfirmPickUp}>픽업 확인</button>
                     </>
-            : <></>}
+                    : <></>}
 
                 <div className={styles.needHelp}>도움이 필요하신가요?</div>
                 {/* 추후 추가될 기능 문의하기 버튼 */}

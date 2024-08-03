@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { CUSTOMER_URL } from "../../../config/host-config";
 import { checkAuthToken, handleInvalidToken } from '../../../utils/authUtil';
+
 
 function loadScript(src) {
     return new Promise((resolve, reject) => {
