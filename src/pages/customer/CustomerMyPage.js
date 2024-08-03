@@ -76,12 +76,17 @@ const CustomerMyPage = () => {
             {width <= 400 && <SideBarBtn onShow={showHandler} />}
             <div className={styles.myPageArea}>
                 <div className={styles.container}>
-                    <Profile customerMyPageDto={customerData} stats={stats} isShow={show} />
+                    <Profile customerMyPageDto={customerData} stats={stats} isShow={show} width={width} />
                     <div className={styles.content}>
                         <CustomerReservationList reservations={reservations} onUpdateReservations={setReservations} />
-                        <PreferredArea preferredAreas={customerData.preferredArea} />
-                        <PreferredFood preferredFoods={customerData.preferredFood} />
-                        <FavoriteStore favStores={customerData.favStore} />
+                        {width <= 400 || (
+                            <>
+                                <PreferredArea preferredAreas={customerData.preferredArea} />
+                                <PreferredFood preferredFoods={customerData.preferredFood} />
+                                <FavoriteStore favStores={customerData.favStore} />
+                            </>
+                        )}
+
                     </div>
                 </div>
             </div>
