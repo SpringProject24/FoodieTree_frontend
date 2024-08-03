@@ -66,7 +66,8 @@ const StoreMyPage = () => {
                 throw new Error('Failed to fetch reservations');
             }
             const data = await response.json();
-            setReservations(data);
+            const sortedData = sortReservations(data);
+            setReservations(sortedData);
         } catch (error) {
             console.error('Error fetching reservations:', error);
         }
@@ -97,6 +98,43 @@ const StoreMyPage = () => {
     const showHandler = () => {
         setShow(prev => !prev);
     }
+
+    const sortReservations = (reservations) => {
+        const statusOrder = {
+            RESERVED: 1,
+            PICKEDUP: 2,
+            CANCELED: 2,
+            NOSHOW: 2
+        };
+
+        return reservations.sort((a, b) => {
+            const statusComparison = statusOrder[a.status] - statusOrder[b.status];
+            if (statusComparison !== 0) {
+                return statusComparison;
+            }
+
+            const getTime = (reservation) => {
+                switch (reservation.status) {
+                    case 'RESERVED':
+                        return new Date(reservation.pickupTime);
+                    case 'PICKEDUP':
+                        return new Date(reservation.pickedUpAt);
+                    case 'CANCELED':
+                        return new Date(reservation.cancelReservationAt);
+                    case 'NOSHOW':
+                        return new Date(reservation.pickupTime);
+                    default:
+                        return new Date();
+                }
+            };
+
+            if (a.status === 'RESERVED' && b.status === 'RESERVED') {
+                return getTime(b) - getTime(a);
+            }
+
+            return getTime(a) - getTime(b);
+        });
+    };
 
     return (
         <>
