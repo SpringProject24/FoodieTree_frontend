@@ -132,6 +132,20 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
         }
     };
 
+    // 리뷰 작성 모달을 여는 함수
+    const handleWriteReviewClick = async (reservationId, event) => {
+        event.stopPropagation(); // 이벤트 버블링 방지
+        try {
+            const reservationDetail = reservations.find(r => r.reservationId === reservationId);
+            openModal('writeReview', {
+                reservationDetail
+                // 여기에 리뷰 작성과 관련된 추가 데이터를 전달할 수 있습니다.
+            });
+        } catch (error) {
+            console.error('Error fetching reservation detail for review:', error);
+        }
+    };
+
     return (
         <div className={styles.reservationListForm}>
             <div className={styles.title}>
@@ -190,6 +204,12 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
                                         <>
                                             <span>픽업을 완료했어요</span>
                                             <span>{reservation.pickedUpAtF}</span>
+                                            <button
+                                                className={`${styles.reviewBtn} ${styles.calendarButton} ${styles.writeReview}`}
+                                                onClick={(event) => handleWriteReviewClick(reservation.reservationId, event)}
+                                            >
+                                                {isMobileView ? '리뷰 작성' : '리뷰 작성하기'}
+                                            </button>
                                         </>
                                     )}
                                 </div>
