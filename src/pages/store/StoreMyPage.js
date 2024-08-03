@@ -140,10 +140,10 @@ const StoreMyPage = () => {
             };
 
             if (a.status === 'RESERVED' && b.status === 'RESERVED') {
-                return getTime(b) - getTime(a);
+                return getTime(a) - getTime(b);
             }
 
-            return getTime(a) - getTime(b);
+            return getTime(b) - getTime(a);
         });
     };
 
