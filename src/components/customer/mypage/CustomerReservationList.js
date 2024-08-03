@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './CustomerReservationList.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
@@ -7,9 +7,10 @@ import {imgErrorHandler} from "../../../utils/error";
 
 const BASE_URL = window.location.origin;
 
-const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
+const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading, loadMore, hasMore }) => {
     const { openModal } = useModal();
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 400);
+    const listRef = useRef(null);
 
     useEffect(() => {
         const handleResize = () => {
@@ -22,6 +23,28 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (listRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = listRef.current;
+                if (scrollTop + clientHeight >= scrollHeight && hasMore) {
+                    loadMore();
+                }
+            }
+        };
+
+        const currentListRef = listRef.current;
+        if (currentListRef) {
+            currentListRef.addEventListener('scroll', handleScroll);
+        }
+
+        return () => {
+            if (currentListRef) {
+                currentListRef.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [loadMore, hasMore]);
 
     // 날짜를 0월 0일 0시 0분 형식으로 포맷팅하는 함수
     const formatDate = (dateString) => {
@@ -153,7 +176,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
                     <span>예약 내역</span>
                 </h3>
             </div>
-            <div className={styles.infoWrapper}>
+            <div className={styles.infoWrapper} ref={listRef}>
                 <ul className={styles.reservationList}>
                     {reservations.length > 0 ? (
                         reservations.map((reservation, index) => (
@@ -218,6 +241,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations }) => {
                     ) : (
                         <li>예약 내역이 없습니다.</li>
                     )}
+                    {isLoading && <div className={styles.spinner}>Loading...</div>}
                 </ul>
             </div>
         </div>

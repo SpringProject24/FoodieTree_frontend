@@ -16,6 +16,10 @@ const CustomerMyPage = () => {
     const [customerData, setCustomerData] = useState({});
     const [reservations, setReservations] = useState([]);
     const [stats, setStats] = useState({});
+    const [displayReservations, setDisplayReservations] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [startIndex, setStartIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         window.addEventListener("resize", setInnerWidth);
@@ -52,6 +56,9 @@ const CustomerMyPage = () => {
             const data = await response.json();
             const sortedData = sortReservations(data);
             setReservations(sortedData);
+            setDisplayReservations(sortedData.slice(0, 10));
+            setStartIndex(10);
+            setHasMore(sortedData.length > 10);
         } catch (error) {
             console.error('Error fetching reservations:', error);
         }
@@ -99,15 +106,38 @@ const CustomerMyPage = () => {
             };
 
             // RESERVED 상태인 경우 시간 내림차순
-            if (a.status === 'RESERVED' || b.status === 'RESERVED') {
-                return getTime(a) - getTime(b);
+            if (a.status === 'RESERVED' && b.status === 'RESERVED') {
+                return getTime(b) - getTime(a);
             }
 
             // 그 외의 상태인 경우 시간 오름차순
-            return getTime(b) - getTime(a);
+            return getTime(a) - getTime(b);
         });
     };
 
+    const handleScroll = () => {
+        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
+        if (hasMore && !isLoading) {
+            loadMore();
+        }
+    };
+
+    const loadMore = () => {
+        setIsLoading(true);
+        setTimeout(() => {
+            const newStartIndex = startIndex + 10;
+            const moreReservations = reservations.slice(startIndex, newStartIndex);
+            setDisplayReservations(prev => [...prev, ...moreReservations]);
+            setStartIndex(newStartIndex);
+            setHasMore(newStartIndex < reservations.length);
+            setIsLoading(false);
+        }, 500);
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [startIndex, hasMore, isLoading]);
 
     const showHandler = () => {
         setShow(prev => !prev);
@@ -120,15 +150,21 @@ const CustomerMyPage = () => {
                 <div className={styles.container}>
                     <Profile customerMyPageDto={customerData} stats={stats} isShow={show} width={width} />
                     <div className={styles.content}>
-                        <CustomerReservationList reservations={reservations} onUpdateReservations={setReservations} />
-                        {width <= 400 || (
+                        <CustomerReservationList
+                            reservations={displayReservations}
+                            onUpdateReservations={setReservations}
+                            loadMore={loadMore}
+                            hasMore={hasMore}
+                            isLoading={isLoading}
+                        />
+
+                        {width > 400 && (
                             <>
                                 <PreferredArea preferredAreas={customerData.preferredArea} />
                                 <PreferredFood preferredFoods={customerData.preferredFood} />
                                 <FavoriteStore favStores={customerData.favStore} />
                             </>
                         )}
-
                     </div>
                 </div>
             </div>
