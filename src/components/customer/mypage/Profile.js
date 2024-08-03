@@ -52,11 +52,11 @@ const Profile = ({ customerMyPageDto, stats, isShow, width }) => {
                     </div>
                 </div>
                 {width <= 400 && (
-                    <div className={styles.mobileContent}>
+                    <>
                         <PreferredArea preferredAreas={userData.preferredArea} />
                         <PreferredFood preferredFoods={userData.preferredFood} />
                         <FavoriteStore favStores={userData.favStore} />
-                    </div>
+                    </>
                 )}
             </div>
         </div>
