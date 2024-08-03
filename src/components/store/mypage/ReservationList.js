@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './ReservationList.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "../../../pages/common/ModalProvider";
 
-const ReservationList = ({ reservations }) => {
+const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width }) => {
     const { openModal } = useModal();
+    const listRef = useRef();
 
     const handleReservationClick = async (reservation) => {
         try {
@@ -15,6 +16,28 @@ const ReservationList = ({ reservations }) => {
         }
     };
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (listRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = listRef.current;
+                if (scrollTop + clientHeight >= scrollHeight - 10 && hasMore && !isLoading) {
+                    loadMore();
+                }
+            }
+        };
+
+        const listElement = listRef.current;
+        if (listElement && width > 400) {
+            listElement.addEventListener('scroll', handleScroll);
+        }
+
+        return () => {
+            if (listElement && width > 400) {
+                listElement.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [hasMore, isLoading, loadMore, width]);
+
     return (
         <div className={styles.reservationListForm}>
             <div className={styles.title}>
@@ -22,7 +45,7 @@ const ReservationList = ({ reservations }) => {
                     <span>예약 내역</span>
                 </h3>
             </div>
-            <div className={`${styles.infoWrapper}`}>
+            <div className={`${styles.infoWrapper}`} ref={listRef}>
                 <ul className={styles.reservationList}>
                     {reservations.map((reservation, index) => (
                         <li
@@ -73,6 +96,7 @@ const ReservationList = ({ reservations }) => {
                             </div>
                         </li>
                     ))}
+                    {isLoading && <div className={styles.spinner}>Loading...</div>}
                 </ul>
             </div>
         </div>
