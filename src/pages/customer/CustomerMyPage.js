@@ -107,11 +107,11 @@ const CustomerMyPage = () => {
 
             // RESERVED 상태인 경우 시간 내림차순
             if (a.status === 'RESERVED' && b.status === 'RESERVED') {
-                return getTime(b) - getTime(a);
+                return getTime(a) - getTime(b);
             }
 
             // 그 외의 상태인 경우 시간 오름차순
-            return getTime(a) - getTime(b);
+            return getTime(b) - getTime(a);
         });
     };
 
