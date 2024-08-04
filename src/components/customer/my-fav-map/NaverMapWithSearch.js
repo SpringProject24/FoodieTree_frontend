@@ -15,6 +15,10 @@ const NaverMapWithSearch = () => {
     const [map, setMap] = useState(null);
     const [infoWindow, setInfoWindow] = useState(null);
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [places, setPlaces] = useState([]);
+    const [searchMarker, setSearchMarker] = useState(null);
+    const [alias, setAlias] = useState("");
+    const [activeMarker, setActiveMarker] = useState(null);
 
     useEffect(() => {
         const ncpClientId = process.env.REACT_APP_YOUR_CLIENT_ID;
@@ -37,8 +41,24 @@ const NaverMapWithSearch = () => {
     }, []);
 
     const initMap = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    initializeMap(latitude, longitude);
+                },
+                () => {
+                    initializeMap(37.555183, 126.936883); // 중앙정보처리학원 신촌로176
+                }
+            );
+        } else {
+            initializeMap(37.555183, 126.936883); // Geolocation을 지원하지 않는 경우
+        }
+    };
+
+    const initializeMap = (lat, lng) => {
         const mapOptions = {
-            center: new window.naver.maps.LatLng(37.5564397859151 , 126.945190775648),
+            center: new window.naver.maps.LatLng(lat, lng),
             zoom: 15,
             mapTypeControl: true,
         };
@@ -53,65 +73,73 @@ const NaverMapWithSearch = () => {
 
         mapInstance.setCursor('pointer');
         mapInstance.addListener('click', function (e) {
-            searchCoordinateToAddress(e.coord);
+            if (infoWindowInstance.getMap()) {
+                infoWindowInstance.close();
+            }
+            if (places.length < 3) {
+                addPlace(e.coord);
+            } else {
+                alert('최대 3개의 장소만 저장할 수 있습니다.');
+            }
         });
 
-        // 기본 검색어로 초기화
-        searchAddressToCoordinate('신촌로 176');
+        // 더미 데이터로 시작하는 장소
+        const dummyPlaces = [
+            { id: 1, title: '집', latlng: new window.naver.maps.LatLng(37.554722, 126.970833) },
+            { id: 2, title: '회사', latlng: new window.naver.maps.LatLng(37.566535, 126.977969) },
+            { id: 3, title: '학교', latlng: new window.naver.maps.LatLng(37.579617, 126.977041) }
+        ];
+        setPlaces(dummyPlaces);
+        dummyPlaces.forEach(place => {
+            addMarker(place, mapInstance, infoWindowInstance, 'blue');
+        });
     };
 
-    const searchCoordinateToAddress = (latlng) => {
-        if (!window.naver.maps.Service) {
-            console.error('Naver Maps Service is not initialized');
-            return;
-        }
+    const addPlace = (latlng, alias = `장소 ${places.length + 1}`) => {
+        const newPlace = { id: places.length + 1, title: alias, latlng: latlng };
+        setPlaces(prevPlaces => {
+            const updatedPlaces = [...prevPlaces, newPlace];
+            addMarker(newPlace, map, infoWindow, 'blue');
+            return updatedPlaces;
+        });
+    };
 
-        infoWindow.close();
-
-        window.naver.maps.Service.reverseGeocode(
-            {
-                coords: latlng,
-                orders: [window.naver.maps.Service.OrderType.ADDR, window.naver.maps.Service.OrderType.ROAD_ADDR].join(','),
-            },
-            function (status, response) {
-                if (status === window.naver.maps.Service.Status.ERROR) {
-                    return alert('Something Wrong!');
-                }
-
-                const items = response.v2.results;
-                let address = '';
-                const htmlAddresses = [];
-
-                for (let i = 0; i < items.length; i++) {
-                    const item = items[i];
-                    address = makeAddress(item) || '';
-                    const addrType = item.name === 'roadaddr' ? '[도로명 주소]' : '[지번 주소]';
-
-                    htmlAddresses.push(`${i + 1}. ${addrType} ${address}`);
-                }
-
-                infoWindow.setContent([
-                    '<div style="padding:10px;min-width:200px;line-height:150%;">',
-                    '<h4 style="margin-top:5px;">검색 좌표</h4><br />',
-                    htmlAddresses.join('<br />'),
-                    '</div>',
-                ].join('\n'));
-
-                infoWindow.open(map, latlng);
+    const addMarker = (place, mapInstance, infoWindowInstance, color = 'blue') => {
+        const markerOptions = {
+            position: place.latlng,
+            map: mapInstance,
+            title: place.title,
+            icon: {
+                content: `<div style="background-color: ${color}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
+                anchor: new window.naver.maps.Point(10, 10)
             }
-        );
+        };
+
+        const marker = new window.naver.maps.Marker(markerOptions);
+
+        window.naver.maps.Event.addListener(marker, 'click', () => {
+            if (infoWindowInstance.getMap()) {
+                infoWindowInstance.close();
+            }
+            setActiveMarker(marker);
+            infoWindowInstance.setContent([
+                '<div style="padding:10px;min-width:200px;line-height:150%;">',
+                `<h4 style="margin-top:5px;">${place.title}</h4>`,
+                `<button onclick="document.getElementById('removeFav').click()">선호 지역에서 제거하기</button>`,
+                '</div>',
+            ].join('\n'));
+            infoWindowInstance.open(mapInstance, marker);
+        });
     };
 
     const searchAddressToCoordinate = (address) => {
-        if (!window.naver.maps.Service) {
-            console.error('Naver Maps Service is not initialized');
+        if (!window.naver.maps.Service || !infoWindow) {
+            console.error('Naver Maps Service or InfoWindow is not initialized');
             return;
         }
 
         window.naver.maps.Service.geocode(
-            {
-                query: address,
-            },
+            { query: address },
             function (status, response) {
                 if (status === window.naver.maps.Service.Status.ERROR) {
                     return alert('Something Wrong!');
@@ -123,6 +151,24 @@ const NaverMapWithSearch = () => {
 
                 const item = response.v2.addresses[0];
                 const point = new window.naver.maps.Point(item.x, item.y);
+                const latlng = new window.naver.maps.LatLng(item.y, item.x);
+
+                if (searchMarker) {
+                    searchMarker.setMap(null);
+                }
+
+                const markerOptions = {
+                    position: latlng,
+                    map: map,
+                    title: address,
+                    icon: {
+                        content: `<div style="background-color: red; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
+                        anchor: new window.naver.maps.Point(10, 10)
+                    }
+                };
+
+                const newSearchMarker = new window.naver.maps.Marker(markerOptions);
+                setSearchMarker(newSearchMarker);
 
                 const htmlAddresses = [];
                 if (item.roadAddress) {
@@ -139,73 +185,42 @@ const NaverMapWithSearch = () => {
                     '<div style="padding:10px;min-width:200px;line-height:150%;">',
                     `<h4 style="margin-top:5px;">검색 주소 : ${address}</h4><br />`,
                     htmlAddresses.join('<br />'),
+                    `<input type="text" id="aliasInput" placeholder="별칭 입력" style="margin-top:10px;" />`,
+                    `<button onclick="document.getElementById('addFav').click()">선호 지역으로 추가하기</button>`,
                     '</div>',
                 ].join('\n'));
 
                 map.setCenter(point);
-                infoWindow.open(map, point);
+                infoWindow.open(map, newSearchMarker);
             }
         );
     };
 
-    const makeAddress = (item) => {
-        if (!item) {
-            return '';
-        }
-
-        const name = item.name;
-        const region = item.region;
-        const land = item.land;
-        const isRoadAddress = name === 'roadaddr';
-
-        let sido = '', sigugun = '', dongmyun = '', ri = '', rest = '';
-
-        if (hasArea(region.area1)) {
-            sido = region.area1.name;
-        }
-        if (hasArea(region.area2)) {
-            sigugun = region.area2.name;
-        }
-        if (hasArea(region.area3)) {
-            dongmyun = region.area3.name;
-        }
-        if (hasArea(region.area4)) {
-            ri = region.area4.name;
-        }
-
-        if (land) {
-            if (hasData(land.number1)) {
-                if (hasData(land.type) && land.type === '2') {
-                    rest += '산';
-                }
-                rest += land.number1;
-
-                if (hasData(land.number2)) {
-                    rest += `-${land.number2}`;
-                }
-            }
-
-            if (isRoadAddress === true) {
-                if (checkLastString(dongmyun, '면')) {
-                    ri = land.name;
-                } else {
-                    dongmyun = land.name;
-                    ri = '';
-                }
-
-                if (hasAddition(land.addition0)) {
-                    rest += ` ${land.addition0.value}`;
-                }
+    const addSearchMarkerToFavorite = () => {
+        if (searchMarker) {
+            const aliasInput = document.getElementById('aliasInput');
+            const aliasValue = aliasInput ? aliasInput.value : `장소 ${places.length + 1}`;
+            addPlace(searchMarker.getPosition(), aliasValue);
+            searchMarker.setMap(null);
+            setSearchMarker(null);
+            if (infoWindow.getMap()) {
+                infoWindow.close();
             }
         }
-
-        return [sido, sigugun, dongmyun, ri, rest].join(' ');
     };
 
-    const hasArea = (area) => !!(area && area.name && area.name !== '');
-    const hasData = (data) => !!(data && data !== '');
-    const checkLastString = (word, lastString) => new RegExp(lastString + '$').test(word);
-    const hasAddition = (addition) => !!(addition && addition.value);
+    const removePlaceFromFavorites = (marker) => {
+        if (marker) {
+            const placeToRemove = places.find(place => place.latlng.equals(marker.getPosition()));
+            if (placeToRemove) {
+                setPlaces(prevPlaces => prevPlaces.filter(place => place !== placeToRemove));
+                marker.setMap(null);
+                if (infoWindow.getMap()) {
+                    infoWindow.close();
+                }
+            }
+        }
+    };
 
     return (
         <div>
@@ -213,9 +228,11 @@ const NaverMapWithSearch = () => {
                 type="text"
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
-                placeholder="Search address"
+                placeholder="주소 검색"
             />
-            <button onClick={() => searchAddressToCoordinate(searchKeyword)}>Search</button>
+            <button onClick={() => searchAddressToCoordinate(searchKeyword)}>검색</button>
+            <button id="addFav" style={{ display: 'none' }} onClick={addSearchMarkerToFavorite}>선호 지역으로 추가하기</button>
+            <button id="removeFav" style={{ display: 'none' }} onClick={() => removePlaceFromFavorites(activeMarker)}>선호 지역에서 제거하기</button>
             <div id="map" style={{ width: '100%', height: '400px' }} />
         </div>
     );
