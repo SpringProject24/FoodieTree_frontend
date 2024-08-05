@@ -20,6 +20,7 @@ const CustomerMyPage = () => {
     const [hasMore, setHasMore] = useState(true);
     const [startIndex, setStartIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const ITEMS_PER_PAGE = 10; // 한번에 가져올 예약목록 개수 설정
 
     useEffect(() => {
         window.addEventListener("resize", setInnerWidth);
@@ -56,9 +57,9 @@ const CustomerMyPage = () => {
             const data = await response.json();
             const sortedData = sortReservations(data);
             setReservations(sortedData);
-            setDisplayReservations(sortedData.slice(0, 10));
-            setStartIndex(10);
-            setHasMore(sortedData.length > 10);
+            setDisplayReservations(sortedData.slice(0, ITEMS_PER_PAGE));
+            setStartIndex(ITEMS_PER_PAGE);
+            setHasMore(sortedData.length > ITEMS_PER_PAGE);
         } catch (error) {
             console.error('Error fetching reservations:', error);
         }
@@ -125,7 +126,7 @@ const CustomerMyPage = () => {
     const loadMore = () => {
         setIsLoading(true);
         setTimeout(() => {
-            const newStartIndex = startIndex + 10;
+            const newStartIndex = startIndex + ITEMS_PER_PAGE;
             const moreReservations = reservations.slice(startIndex, newStartIndex);
             setDisplayReservations(prev => [...prev, ...moreReservations]);
             setStartIndex(newStartIndex);
