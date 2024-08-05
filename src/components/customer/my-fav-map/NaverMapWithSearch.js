@@ -17,7 +17,6 @@ const NaverMapWithSearch = () => {
     const [searchKeyword, setSearchKeyword] = useState("");
     const [places, setPlaces] = useState([]);
     const [searchMarker, setSearchMarker] = useState(null);
-    const [alias, setAlias] = useState("");
     const [activeMarker, setActiveMarker] = useState(null);
 
     useEffect(() => {
@@ -85,9 +84,9 @@ const NaverMapWithSearch = () => {
 
         // 더미 데이터로 시작하는 장소
         const dummyPlaces = [
-            { id: 1, title: '집', latlng: new window.naver.maps.LatLng(37.554722, 126.970833) },
-            { id: 2, title: '회사', latlng: new window.naver.maps.LatLng(37.566535, 126.977969) },
-            { id: 3, title: '학교', latlng: new window.naver.maps.LatLng(37.579617, 126.977041) }
+            { id: 1, title: '집', latlng: new window.naver.maps.LatLng(37.554722, 126.970833), roadAddress: '서울특별시 용산구 남산공원길 105', jibunAddress: '서울특별시 용산구 용산동2가 산1-3' },
+            { id: 2, title: '회사', latlng: new window.naver.maps.LatLng(37.566535, 126.977969), roadAddress: '서울특별시 중구 세종대로 110', jibunAddress: '서울특별시 중구 태평로1가 1-1' },
+            { id: 3, title: '학교', latlng: new window.naver.maps.LatLng(37.579617, 126.977041), roadAddress: '서울특별시 종로구 세종대로 1', jibunAddress: '서울특별시 종로구 세종로 1-68' }
         ];
         setPlaces(dummyPlaces);
         dummyPlaces.forEach(place => {
@@ -95,8 +94,8 @@ const NaverMapWithSearch = () => {
         });
     };
 
-    const addPlace = (latlng, alias = `장소 ${places.length + 1}`) => {
-        const newPlace = { id: places.length + 1, title: alias, latlng: latlng };
+    const addPlace = (latlng, alias = `장소 ${places.length + 1}`, roadAddress, jibunAddress) => {
+        const newPlace = { id: places.length + 1, title: alias, latlng: latlng, roadAddress, jibunAddress };
         setPlaces(prevPlaces => {
             const updatedPlaces = [...prevPlaces, newPlace];
             addMarker(newPlace, map, infoWindow, 'blue');
@@ -125,6 +124,8 @@ const NaverMapWithSearch = () => {
             infoWindowInstance.setContent([
                 '<div style="padding:10px;min-width:200px;line-height:150%;">',
                 `<h4 style="margin-top:5px;">${place.title}</h4>`,
+                place.roadAddress ? `<p>[도로명 주소] ${place.roadAddress}</p>` : '',
+                place.jibunAddress ? `<p>[지번 주소] ${place.jibunAddress}</p>` : '',
                 `<button onclick="document.getElementById('removeFav').click()">선호 지역에서 제거하기</button>`,
                 '</div>',
             ].join('\n'));
@@ -162,7 +163,7 @@ const NaverMapWithSearch = () => {
                     map: map,
                     title: address,
                     icon: {
-                        content: `<div style="background-color: red; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
+                        content: `<div style="background-color: #e87a7a; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
                         anchor: new window.naver.maps.Point(10, 10)
                     }
                 };
@@ -200,7 +201,9 @@ const NaverMapWithSearch = () => {
         if (searchMarker) {
             const aliasInput = document.getElementById('aliasInput');
             const aliasValue = aliasInput ? aliasInput.value : `장소 ${places.length + 1}`;
-            addPlace(searchMarker.getPosition(), aliasValue);
+            const roadAddress = document.querySelector('.roadAddress')?.textContent || '';
+            const jibunAddress = document.querySelector('.jibunAddress')?.textContent || '';
+            addPlace(searchMarker.getPosition(), aliasValue, roadAddress, jibunAddress);
             searchMarker.setMap(null);
             setSearchMarker(null);
             if (infoWindow.getMap()) {
