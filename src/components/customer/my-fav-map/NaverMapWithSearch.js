@@ -75,23 +75,79 @@ const NaverMapWithSearch = () => {
             if (infoWindowInstance.getMap()) {
                 infoWindowInstance.close();
             }
-            if (places.length < 3) {
+            if (places.length < 10) {
                 addPlace(e.coord);
             } else {
-                alert('최대 3개의 장소만 저장할 수 있습니다.');
+                alert('최대 10개의 장소만 저장할 수 있습니다.');
             }
         });
 
-        // 더미 데이터로 시작하는 장소
-        const dummyPlaces = [
-            { id: 1, title: '집', latlng: new window.naver.maps.LatLng(37.554722, 126.970833), roadAddress: '서울특별시 용산구 남산공원길 105', jibunAddress: '서울특별시 용산구 용산동2가 산1-3' },
-            { id: 2, title: '회사', latlng: new window.naver.maps.LatLng(37.566535, 126.977969), roadAddress: '서울특별시 중구 세종대로 110', jibunAddress: '서울특별시 중구 태평로1가 1-1' },
-            { id: 3, title: '학교', latlng: new window.naver.maps.LatLng(37.579617, 126.977041), roadAddress: '서울특별시 종로구 세종대로 1', jibunAddress: '서울특별시 종로구 세종로 1-68' }
-        ];
-        setPlaces(dummyPlaces);
-        dummyPlaces.forEach(place => {
-            addMarker(place, mapInstance, infoWindowInstance, 'blue');
-        });
+        // 서버에서 장소 데이터를 가져와서 지도에 추가
+        fetchPlacesFromServer();
+    };
+
+    const fetchPlacesFromServer = async () => {
+        try {
+            const response = await fetch('/customer/info/area'); // 엔드포인트를 실제로 맞춰주세요.
+            const fetchedPlaces = response.ok ? await response.json() : [];
+
+            console.log('Fetched places:', fetchedPlaces);
+
+            setPlaces(fetchedPlaces);
+            // fetchedPlaces.forEach(place => {
+            //     addMarker({
+            //         id: place.id,
+            //         title: place.alias,
+            //         latlng: new window.naver.maps.LatLng(place.latitude, place.longitude),
+            //         roadAddress: place.preferredArea,
+            //         jibunAddress: place.preferredArea
+            //     }, map, infoWindow, 'blue');
+            // });
+            for (let place of fetchedPlaces) {
+                await addPlaceByAddress(place.preferredArea, place.alias);
+            }
+        } catch (error) {
+            console.error('Failed to fetch places from server:', error);
+        }
+    };
+
+    const addPlaceByAddress = async (address, alias) => {
+        if (!window.naver.maps.Service) {
+            console.error('Naver Maps Service is not initialized');
+            return;
+        }
+
+        window.naver.maps.Service.geocode(
+            { query: address },
+            function (status, response) {
+                if (status === window.naver.maps.Service.Status.ERROR) {
+                    console.error('Geocoding error');
+                    return;
+                }
+
+                if (response.v2.meta.totalCount === 0) {
+                    console.error('No results found for the address');
+                    return;
+                }
+
+                const item = response.v2.addresses[0];
+                const latlng = new window.naver.maps.LatLng(item.y, item.x);
+
+                const newPlace = {
+                    id: places.length + 1,
+                    title: alias,
+                    latlng: latlng,
+                    roadAddress: item.preferredArea,
+                    jibunAddress: item.preferredArea
+                };
+
+                setPlaces(prevPlaces => {
+                    const updatedPlaces = [...prevPlaces, newPlace];
+                    addMarker(newPlace, map, infoWindow, 'blue');
+                    return updatedPlaces;
+                });
+            }
+        );
     };
 
     const addPlace = (latlng, alias = `장소 ${places.length + 1}`, roadAddress, jibunAddress) => {
@@ -124,8 +180,8 @@ const NaverMapWithSearch = () => {
             infoWindowInstance.setContent([
                 '<div style="padding:10px;min-width:200px;line-height:150%;">',
                 `<h4 style="margin-top:5px;">${place.title}</h4>`,
-                place.roadAddress ? `<p>[도로명 주소] ${place.roadAddress}</p>` : '',
-                place.jibunAddress ? `<p>[지번 주소] ${place.jibunAddress}</p>` : '',
+                place.preferredArea ? `<p>[도로명 주소] ${place.preferredArea}</p>` : '',
+                place.preferredArea ? `<p>[지번 주소] ${place.preferredArea}</p>` : '',
                 `<button onclick="document.getElementById('removeFav').click()">선호 지역에서 제거하기</button>`,
                 '</div>',
             ].join('\n'));
@@ -205,6 +261,7 @@ const NaverMapWithSearch = () => {
             const jibunAddress = document.querySelector('.jibunAddress')?.textContent || '';
             const preferredArea = roadAddress || jibunAddress;
 
+            console.log(preferredArea, aliasValue);
             addPlace(searchMarker.getPosition(), aliasValue, roadAddress, jibunAddress);
 
             // 서버에 추가 요청 보내기
@@ -215,9 +272,8 @@ const NaverMapWithSearch = () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        preferredArea: preferredArea,
-                        alias: aliasValue, // 위치 정보
-                        // alias: aliasValue
+                        preferredArea: preferredArea, // 위치 정보
+                        alias: aliasValue,
                     })
                 });
 
@@ -240,15 +296,28 @@ const NaverMapWithSearch = () => {
         }
     };
 
-
-    const removePlaceFromFavorites = (marker) => {
+    const removePlaceFromFavorites = async (marker) => {
         if (marker) {
             const placeToRemove = places.find(place => place.latlng.equals(marker.getPosition()));
             if (placeToRemove) {
-                setPlaces(prevPlaces => prevPlaces.filter(place => place !== placeToRemove));
-                marker.setMap(null);
-                if (infoWindow.getMap()) {
-                    infoWindow.close();
+                try {
+                    const response = await fetch('/customer/edit/area', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            preferredArea: placeToRemove.roadAddress || placeToRemove.jibunAddress,
+                            alias: placeToRemove.title,
+                        })
+                    });
+                    setPlaces(prevPlaces => prevPlaces.filter(place => place !== placeToRemove));
+                    marker.setMap(null);
+                    if (infoWindow.getMap()) {
+                        infoWindow.close();
+                    }
+                } catch (error) {
+                    console.error('Failed to remove place from favorites:', error);
                 }
             }
         }
