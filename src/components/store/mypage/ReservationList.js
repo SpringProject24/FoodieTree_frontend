@@ -3,6 +3,7 @@ import styles from './ReservationList.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "../../../pages/common/ModalProvider";
+import {imgErrorHandler} from "../../../utils/error";
 
 const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width }) => {
     const { openModal } = useModal();
@@ -61,7 +62,7 @@ const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width }) 
                                         {reservation.status === 'NOSHOW' && <FontAwesomeIcon icon={faCircleXmark} className={styles.noshow} />}
                                         {reservation.status === 'RESERVED' && <FontAwesomeIcon icon={faSpinner} className={styles.loading} />}
                                         {reservation.status === 'PICKEDUP' && <FontAwesomeIcon icon={faCircleCheck} className={styles.done} />}
-                                        <img src={reservation.profileImage || "/assets/img/defaultImage.jpg"} alt="profile Image" />
+                                        <img src={reservation.profileImage} onError={imgErrorHandler} alt="profile Image" />
                                     </div>
                                 </div>
                                 <span className={styles.reservationNickname}>
