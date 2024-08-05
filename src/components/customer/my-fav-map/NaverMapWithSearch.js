@@ -98,12 +98,12 @@ const NaverMapWithSearch = () => {
         const newPlace = { id: places.length + 1, title: alias, latlng: latlng, roadAddress, jibunAddress };
         setPlaces(prevPlaces => {
             const updatedPlaces = [...prevPlaces, newPlace];
-            addMarker(newPlace, map, infoWindow, 'blue');
+            addMarker(newPlace, map, infoWindow, 'skyblue');
             return updatedPlaces;
         });
     };
 
-    const addMarker = (place, mapInstance, infoWindowInstance, color = 'blue') => {
+    const addMarker = (place, mapInstance, infoWindowInstance, color = 'skyblue') => {
         const markerOptions = {
             position: place.latlng,
             map: mapInstance,
@@ -197,20 +197,49 @@ const NaverMapWithSearch = () => {
         );
     };
 
-    const addSearchMarkerToFavorite = () => {
+    const addSearchMarkerToFavorite = async () => {
         if (searchMarker) {
             const aliasInput = document.getElementById('aliasInput');
             const aliasValue = aliasInput ? aliasInput.value : `장소 ${places.length + 1}`;
             const roadAddress = document.querySelector('.roadAddress')?.textContent || '';
             const jibunAddress = document.querySelector('.jibunAddress')?.textContent || '';
+            const preferredArea = roadAddress || jibunAddress;
+
             addPlace(searchMarker.getPosition(), aliasValue, roadAddress, jibunAddress);
-            searchMarker.setMap(null);
-            setSearchMarker(null);
-            if (infoWindow.getMap()) {
-                infoWindow.close();
+
+            // 서버에 추가 요청 보내기
+            try {
+                const response = await fetch('/customer/edit/area', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        preferredArea: preferredArea,
+                        alias: aliasValue, // 위치 정보
+                        // alias: aliasValue
+                    })
+                });
+
+                // 응답을 JSON으로 파싱
+                const result = await response.json();
+
+                if (result) {
+                    // 성공적으로 추가된 경우 처리
+                    searchMarker.setMap(null);
+                    setSearchMarker(null);
+                    if (infoWindow.getMap()) {
+                        infoWindow.close();
+                    }
+                } else {
+                    alert('선호 지역 추가에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error adding to favorites:', error);
             }
         }
     };
+
 
     const removePlaceFromFavorites = (marker) => {
         if (marker) {
