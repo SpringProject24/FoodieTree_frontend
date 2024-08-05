@@ -4,7 +4,7 @@
 export const checkAuthToken = async (navigate) => {
     const token = localStorage.getItem("token");
     const refreshToken = localStorage.getItem("refreshToken");
-    if (token || refreshToken) {
+    if (token && refreshToken) {
         return { token, refreshToken };
     } else {
         alert("로그인이 필요한 서비스입니다.");
