@@ -3,7 +3,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './FoodNav.module.scss';
-import Arrow from './Arrow'; // Arrow 컴포넌트가 필요하다면 import 합니다.
+
 import { useModal } from '../../pages/common/ModalProvider';
 
 const BestStoreList = ({ stores = [] }) => {
@@ -14,8 +14,6 @@ const BestStoreList = ({ stores = [] }) => {
     slidesToScroll: 5,
     infinite: true,
     arrows: true,
-    prevArrow: <Arrow direction="prev" />,
-    nextArrow: <Arrow direction="next" />,
     dots: true,
     centerMode: true,
     centerPadding: '0',
