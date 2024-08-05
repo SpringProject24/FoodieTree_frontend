@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {floor} from "lodash";
 
 function loadScript(src) {
     return new Promise((resolve, reject) => {
@@ -11,6 +12,7 @@ function loadScript(src) {
     });
 }
 
+
 const NaverMapWithSearch = () => {
     const [map, setMap] = useState(null);
     const [infoWindow, setInfoWindow] = useState(null);
@@ -18,6 +20,13 @@ const NaverMapWithSearch = () => {
     const [places, setPlaces] = useState([]);
     const [searchMarker, setSearchMarker] = useState(null);
     const [activeMarker, setActiveMarker] = useState(null);
+
+    useEffect(() => {
+        if (map) {
+            // map이 설정된 후 실행할 코드
+            fetchPlacesFromServer();
+        }
+    }, [map]);
 
     useEffect(() => {
         const ncpClientId = process.env.REACT_APP_YOUR_CLIENT_ID;
@@ -63,7 +72,7 @@ const NaverMapWithSearch = () => {
         };
 
         const mapInstance = new window.naver.maps.Map('map', mapOptions);
-        setMap(mapInstance);
+        setMap(mapInstance); // map 상태 설정
 
         const infoWindowInstance = new window.naver.maps.InfoWindow({
             anchorSkew: true,
@@ -94,15 +103,6 @@ const NaverMapWithSearch = () => {
             console.log('Fetched places:', fetchedPlaces);
 
             setPlaces(fetchedPlaces);
-            // fetchedPlaces.forEach(place => {
-            //     addMarker({
-            //         id: place.id,
-            //         title: place.alias,
-            //         latlng: new window.naver.maps.LatLng(place.latitude, place.longitude),
-            //         roadAddress: place.preferredArea,
-            //         jibunAddress: place.preferredArea
-            //     }, map, infoWindow, 'blue');
-            // });
             for (let place of fetchedPlaces) {
                 await addPlaceByAddress(place.preferredArea, place.alias);
             }
@@ -137,9 +137,14 @@ const NaverMapWithSearch = () => {
                     id: places.length + 1,
                     title: alias,
                     latlng: latlng,
-                    roadAddress: item.preferredArea,
-                    jibunAddress: item.preferredArea
+                    roadAddress: item.roadAddress,
+                    jibunAddress: item.jibunAddress
                 };
+
+                if (!map) {
+                    console.error('Map instance is not initialized');
+                    return;
+                }
 
                 setPlaces(prevPlaces => {
                     const updatedPlaces = [...prevPlaces, newPlace];
@@ -160,6 +165,18 @@ const NaverMapWithSearch = () => {
     };
 
     const addMarker = (place, mapInstance, infoWindowInstance, color = 'skyblue') => {
+        if (!mapInstance) {
+            console.error('Map instance is not initialized');
+            return;
+        }
+
+        if (!(place.latlng instanceof window.naver.maps.LatLng)) {
+            console.error('Invalid LatLng object');
+            return;
+        }
+
+        console.log(`Adding marker at ${place.latlng} with title: ${place.title}`);
+
         const markerOptions = {
             position: place.latlng,
             map: mapInstance,
@@ -180,14 +197,15 @@ const NaverMapWithSearch = () => {
             infoWindowInstance.setContent([
                 '<div style="padding:10px;min-width:200px;line-height:150%;">',
                 `<h4 style="margin-top:5px;">${place.title}</h4>`,
-                place.preferredArea ? `<p>[도로명 주소] ${place.preferredArea}</p>` : '',
-                place.preferredArea ? `<p>[지번 주소] ${place.preferredArea}</p>` : '',
+                place.roadAddress ? `<p>[도로명 주소] ${place.roadAddress}</p>` : '',
+                place.jibunAddress ? `<p>[지번 주소] ${place.jibunAddress}</p>` : '',
                 `<button onclick="document.getElementById('removeFav').click()">선호 지역에서 제거하기</button>`,
                 '</div>',
             ].join('\n'));
             infoWindowInstance.open(mapInstance, marker);
         });
     };
+
 
     const searchAddressToCoordinate = (address) => {
         if (!window.naver.maps.Service || !infoWindow) {
@@ -229,10 +247,10 @@ const NaverMapWithSearch = () => {
 
                 const htmlAddresses = [];
                 if (item.roadAddress) {
-                    htmlAddresses.push(`[도로명 주소] ${item.roadAddress}`);
+                    htmlAddresses.push(`[도로명 주소] <span class="roadAddress">${item.roadAddress}</span>`);
                 }
                 if (item.jibunAddress) {
-                    htmlAddresses.push(`[지번 주소] ${item.jibunAddress}`);
+                    htmlAddresses.push(`[지번 주소] <span class="jibunAddress">${item.jibunAddress}</span>`);
                 }
                 if (item.englishAddress) {
                     htmlAddresses.push(`[영문 주소] ${item.englishAddress}`);
@@ -298,7 +316,13 @@ const NaverMapWithSearch = () => {
 
     const removePlaceFromFavorites = async (marker) => {
         if (marker) {
-            const placeToRemove = places.find(place => place.latlng.equals(marker.getPosition()));
+            const position = marker.getPosition();
+            if (!position) {
+                console.error('Marker position is undefined');
+                return;
+            }
+
+            const placeToRemove = places.find(place => place.latlng && place.latlng.equals(position));
             if (placeToRemove) {
                 try {
                     const response = await fetch('/customer/edit/area', {
@@ -311,17 +335,27 @@ const NaverMapWithSearch = () => {
                             alias: placeToRemove.title,
                         })
                     });
-                    setPlaces(prevPlaces => prevPlaces.filter(place => place !== placeToRemove));
-                    marker.setMap(null);
-                    if (infoWindow.getMap()) {
-                        infoWindow.close();
+
+                    if (response.ok) {
+                        setPlaces(prevPlaces => prevPlaces.filter(place => place !== placeToRemove));
+                        marker.setMap(null);
+                        if (infoWindow.getMap()) {
+                            infoWindow.close();
+                        }
+                    } else {
+                        alert('Failed to remove place from favorites.');
                     }
                 } catch (error) {
                     console.error('Failed to remove place from favorites:', error);
                 }
+            } else {
+                console.error('Place to remove not found');
             }
+        } else {
+            console.error('Marker is undefined');
         }
     };
+
 
     return (
         <div>
