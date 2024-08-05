@@ -66,7 +66,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
             >
               <img src={store.storeImg} alt={store.storeName} />
-              {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
+              {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>수량 : {store.productCnt}</span>
@@ -86,7 +86,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
             >
               <img src={store.storeImg} alt={store.storeName} />
-              {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
+              {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>수량 : {store.productCnt}</span>
@@ -110,7 +110,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>수량 : {store.productCnt}</span>
-              {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
+              {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
             </div>
           ))}
         </Slider>

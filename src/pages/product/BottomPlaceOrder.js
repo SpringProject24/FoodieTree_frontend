@@ -36,7 +36,7 @@ const BottomPlaceOrder = ({ makeReservation, productDetail, initialCount, handle
                 className={`${styles.placeOrderBtn} ${isReservation ? styles.reservation : ''}`} 
                 onClick={handleMakeReservation}
             >
-                <p>{isReservation ? '예약하기' : '구매하기'}</p>
+                <p>{isReservation ? 'SOLD OUT' : '구매하기'}</p>
             </div>
         </div>
     );

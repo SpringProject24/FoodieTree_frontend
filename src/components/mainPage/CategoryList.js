@@ -20,7 +20,7 @@ const CategoryList = ({ stores }) => {
                         onClick={() => handleClick(store)}
                     >
                         <img src={store.storeImg} alt={store.storeName} className={styles.categoryImage} />
-                        {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
+                        {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
                         <p className={styles.categoryName}>{store.storeName}</p>
                         <span className={styles.storePrice}>{store.price}원</span>
                         <span className={styles.productCnt}>남은 갯수 : {store.productCnt}</span>

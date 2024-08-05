@@ -48,7 +48,7 @@ const BestStoreList = ({ stores = [] }) => {
               onClick={() => handleClick(store)}
             >
               <img src={store.storeImg} alt={store.storeName} />
-              {store.productCnt === 1 && <div className={styles.overlay}>예약 가능</div>}
+              {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>수량: {store.productCnt}</span>
