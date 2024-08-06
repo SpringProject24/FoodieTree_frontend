@@ -7,15 +7,25 @@ import PreferredFood from "../../components/customer/mypage/PreferredFood";
 import FavoriteStore from "../../components/customer/mypage/FavoriteStore";
 import SideBarBtn from "../../components/store/mypage-edit/SideBarBtn";
 
+import { jwtDecode } from 'jwt-decode';
+
 const BASE_URL = window.location.origin;
 
 const CustomerMyPage = () => {
-    const customerId = "test@gmail.com"; // 하드코딩된 customerId
+    // const customerId = "test@gmail.com"; // 하드코딩된 customerId
     const [width, setWidth] = useState(window.innerWidth);
     const [show, setShow] = useState(false);
     const [customerData, setCustomerData] = useState({});
     const [reservations, setReservations] = useState([]);
     const [stats, setStats] = useState({});
+
+    const token = localStorage.getItem('token');
+    const refreshToken = localStorage.getItem('refreshToken');
+    const tokenInfo = token ? jwtDecode(token) : null;
+    const customerId = tokenInfo ? tokenInfo.sub : null;
+
+    console.log("email from token : ",customerId);
+
 
     useEffect(() => {
         window.addEventListener("resize", setInnerWidth);
@@ -34,10 +44,37 @@ const CustomerMyPage = () => {
         setWidth(window.innerWidth);
     }
 
+    // const fetchCustomerData = async () => {
+    //     try {
+    //         const response = await fetch(`${BASE_URL}/customer/info?customerId=${customerId}`);
+    //         if (!response.ok) throw new Error('Failed to fetch customer info');
+    //         const data = await response.json();
+    //         setCustomerData(data);
+    //     } catch (error) {
+    //         console.error('Error fetching customer info:', error);
+    //     }
+    // };
+
     const fetchCustomerData = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/customer/info?customerId=${customerId}`);
-            if (!response.ok) throw new Error('Failed to fetch customer info');
+
+            if (!token || !refreshToken) {
+                throw new Error('Token or refreshToken not found in localStorage');
+            }
+
+            const response = await fetch(`${BASE_URL}/customer/info?customerId=${customerId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'refreshToken': refreshToken
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch customer info');
+            }
+
             const data = await response.json();
             setCustomerData(data);
         } catch (error) {
@@ -47,7 +84,16 @@ const CustomerMyPage = () => {
 
     const fetchReservations = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/reservation/list`);
+
+            const response = await fetch(`${BASE_URL}/reservation/list` , {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'refreshToken': refreshToken
+                }
+            });
+
             if (!response.ok) throw new Error('Failed to fetch reservations');
             const data = await response.json();
             setReservations(data);
@@ -57,8 +103,18 @@ const CustomerMyPage = () => {
     };
 
     const fetchStats = async () => {
+
         try {
-            const response = await fetch(`${BASE_URL}/customer/stats?customerId=${customerId}`);
+            const response = await fetch(`${BASE_URL}/customer/stats?customerId=${customerId}`
+                ,{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                        'refreshToken': refreshToken
+                    }
+                });
+
             if (!response.ok) throw new Error('Failed to fetch stats');
             const data = await response.json();
             setStats(data);
