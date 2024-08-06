@@ -15,48 +15,48 @@ const MainPage = () => {
     setSelectedCategory(category);
   };
 
-  // useEffect(() => {
-  //   // API로부터 데이터 가져오기
-  //   fetch(STORELISTS_URL)
-  //     .then(response => response.json())
-  //     .then(data => setStores(data))
-  //     .catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
-  // }, []);
-
   useEffect(() => {
-    const fetchData = async () => {
-      const tokenData = await checkAuthToken(navigate);
-      if (tokenData) {
-        const { token, refreshToken } = tokenData;
-        try {
-          const response = await fetchWithAuth(STORELISTS_URL, {
-            headers: {
-              'Authorization': 'Bearer ' + token,
-              'refreshToken': refreshToken,
-              'Content-Type': 'application/json'
-            },
-            method: 'GET'
-          }, navigate);
+    // API로부터 데이터 가져오기
+    fetch(STORELISTS_URL)
+      .then(response => response.json())
+      .then(data => setStores(data))
+      .catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
+  }, []);
 
-          // 응답을 텍스트로 읽어서 출력
-          const responseText = await response.text();
-          console.log('Server response:', responseText);
-
-          // JSON 파싱 시도
-          try {
-            const data = JSON.parse(responseText);
-            setStores(data);
-          } catch (jsonError) {
-            console.error('JSON 파싱 오류:', jsonError);
-          }
-        } catch (error) {
-          console.error('데이터를 가져오는 중 오류 발생:', error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [navigate]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const tokenData = await checkAuthToken(navigate);
+  //     if (tokenData) {
+  //       const { token, refreshToken } = tokenData;
+  //       try {
+  //         const response = await fetchWithAuth(STORELISTS_URL, {
+  //           headers: {
+  //             'Authorization': 'Bearer ' + token,
+  //             'refreshToken': refreshToken,
+  //             'Content-Type': 'application/json'
+  //           },
+  //           method: 'GET'
+  //         }, navigate);
+  //
+  //         // 응답을 텍스트로 읽어서 출력
+  //         const responseText = await response.text();
+  //         console.log('Server response:', responseText);
+  //
+  //         // JSON 파싱 시도
+  //         try {
+  //           const data = JSON.parse(responseText);
+  //           setStores(data);
+  //         } catch (jsonError) {
+  //           console.error('JSON 파싱 오류:', jsonError);
+  //         }
+  //       } catch (error) {
+  //         console.error('데이터를 가져오는 중 오류 발생:', error);
+  //       }
+  //     }
+  //   };
+  //
+  //   fetchData();
+  // }, [navigate]);
 
 
   return (
