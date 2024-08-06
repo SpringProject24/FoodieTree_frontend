@@ -39,10 +39,10 @@ const FoodNav = ({ selectedCategory, stores }) => {
   const settings = (slidesToShow) => ({
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 900,
     slidesToShow: slidesToShow,
-    slidesToScroll: 5,
-    centerMode: true,
+    slidesToScroll: slidesToShow,
+    centerMode: false,
     centerPadding: '0',
     arrows: true,
     responsive: [
@@ -50,7 +50,9 @@ const FoodNav = ({ selectedCategory, stores }) => {
         breakpoint: 400,
         settings: {
           dots: false,
-          slidesToShow: 2, 
+          slidesToShow: 2,
+          slidesToScroll: 1, 
+          centerMode: true,
           centerPadding: '10%',
         },
       },
@@ -102,7 +104,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
       {/* 추천 가게 리스트(랜덤) */}
       <div className={styles.list}>
         <h2 className={styles.title}>이웃들의 추천 가게</h2>
-        <Slider {...settings(4)} className={styles.slider}>
+        <Slider {...settings(5)} className={styles.slider}>
           {randomStores.map((store, index) => (
             <div
               key={index}
