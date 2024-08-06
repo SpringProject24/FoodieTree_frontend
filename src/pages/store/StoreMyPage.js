@@ -166,7 +166,7 @@ const StoreMyPage = () => {
      * 스크롤 이벤트를 처리하는 함수
      */
     const handleWindowScroll = () => {
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
+        if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight - 1) return;
         if (hasMore && !isLoading) {
             loadMore();
         }
