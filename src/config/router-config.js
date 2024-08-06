@@ -20,11 +20,12 @@ import ProductRegisterForm from "../components/storeRegister/ProductRegisterForm
 import VerifyToken from "../components/auth/VerifyToken";
 import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
 import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSearch";
+import Main from "../pages/Main";
 
 const homeRouter = [
     {
         index: true,
-        element: <div>hi</div>,
+        element: <Main/>,
     },
     {
         path: '/sign-up',
