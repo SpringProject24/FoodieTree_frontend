@@ -14,9 +14,13 @@ const getRandomStores = (stores, count) => {
 
 // 🌿 카테고리 문자열에서 실제 foodType만 추출하는 함수
 const extractFoodType = (category) => {
-  // category 문자열에서 'foodType=' 이후의 값을 추출
-  const match = category.match(/\(foodType=(.*?)\)/);
-  return match ? match[1] : category; // 추출된 foodType 또는 원래 문자열 반환
+   // category가 유효한 문자열인지 확인
+   if (category && typeof category === 'string') {
+    // 'foodType=' 이후의 값 추출
+    const match = category.match(/\(foodType=(.*?)\)/);
+    return match ? match[1] : category; 
+    }
+  return ''; // category가 유효하지 않은 경우 빈 문자열 반환
 };
 
 const FoodNav = ({ selectedCategory, stores }) => {
