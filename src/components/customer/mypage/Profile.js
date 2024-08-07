@@ -34,7 +34,7 @@ const Profile = ({ customerMyPageDto, stats, isShow, width }) => {
         <div className={`${styles.profileSection} ${isShow ? styles.on : undefined}`}>
             <div className={styles.profile}>
                 <a className={styles.imgBox} href="#">
-                    <img src={userData.profileImage} onError={imgErrorHandler} alt="Customer profile image" />
+                    <img src={userData.profileImage || imgErrorHandler } onError={imgErrorHandler} alt="Customer profile image" />
                 </a>
                 <h2>{userData.nickname}</h2>
                 <p>{userData.customerId}</p>
