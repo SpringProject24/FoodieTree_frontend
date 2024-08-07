@@ -116,7 +116,7 @@ const ApprovalTable = () => {
   console.log("row 확인: ", rowSelection)
 
   return (
-    <>
+    <div className={styles['table-section']}>
       <SearchInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters} />
       <table width={table.getTotalSize()} className={styles['tbl-line']}>
         <thead>
@@ -161,13 +161,16 @@ const ApprovalTable = () => {
           {table.getState().pagination.pageIndex + 1 /*현재 페이지*/}
           {table.getPageCount() /*총 페이지 수*/}
         </div>
-    </>
+    </div>
   );
 };
 
 export default ApprovalTable;
 
-// export const loader = async() => {
-//   const res = await fetch("/store/approval/list");
-//   return res.json();
-// }
+export const loader = async({params}) => {
+
+  console.log("로더 params: ", params);
+
+  const res = await fetch("/admin/approve");
+  return res.json();
+}
