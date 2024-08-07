@@ -19,6 +19,7 @@ import {storeRegisterAction} from "../components/storeRegister/StoreRegisterForm
 import ProductRegisterForm from "../components/storeRegister/ProductRegisterForm";
 import VerifyToken from "../components/auth/VerifyToken";
 import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
+import AdminPage from "../pages/AdminPage";
 
 const homeRouter = [
     {
@@ -105,6 +106,10 @@ export const router = createBrowserRouter([
                 path: '/customer',
                 children: customerMyPageRouter
             },
+            {
+                path: '/admin',
+                element: <AdminPage/>
+            }
         ]
     },
 ]);
