@@ -20,6 +20,7 @@ import ProductRegisterForm from "../components/storeRegister/ProductRegisterForm
 import VerifyToken from "../components/auth/VerifyToken";
 import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
 import AdminPage from "../pages/AdminPage";
+import {loader as approvalLoader} from "../components/admin/approval/ApprovalTable";
 
 const homeRouter = [
     {
@@ -108,7 +109,8 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/admin',
-                element: <AdminPage/>
+                element: <AdminPage/>,
+                loader: approvalLoader,
             }
         ]
     },
