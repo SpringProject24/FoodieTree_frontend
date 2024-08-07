@@ -180,7 +180,8 @@ export const storeRegisterAction = async ({request}) => {
   if(!response.ok) {
     const errorMessage = await response.text();
     alert(errorMessage);
+    return;
   }
 
-  return redirect('/store/approval/p')
+  return redirect('/store/approval/p');
 }
