@@ -38,7 +38,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
   };
 
   const settings = (slidesToShow) => ({
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 900,
     slidesToShow: slidesToShow,
@@ -50,7 +50,6 @@ const FoodNav = ({ selectedCategory, stores }) => {
       {
         breakpoint: 400,
         settings: {
-          dots: false,
           slidesToShow: 2,
           slidesToScroll: 1, 
           centerMode: true,
