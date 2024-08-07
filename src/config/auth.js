@@ -1,4 +1,5 @@
 import { redirect } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
 // 로그인한 유저의 정보 가져오기
 const getUserData = () => {
@@ -29,3 +30,9 @@ export const authCheckLoader = () => {
     }
     return null; // 현재페이지에 머묾...
 }
+
+export const getToken = () => localStorage.getItem("token");
+export const getUserType = () => {
+  const token = getToken();
+  return jwtDecode(token).role;
+};
