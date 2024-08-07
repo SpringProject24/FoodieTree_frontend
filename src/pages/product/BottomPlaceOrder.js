@@ -4,13 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { createReservation } from './ProductReservation';
 
-const BottomPlaceOrder = ({ productDetail, initialCount, handleIncrease, handleDecrease, remainProduct }) => {
+const BottomPlaceOrder = ({ productDetail, initialCount, handleIncrease, handleDecrease, remainProduct, closeModal }) => {
   const storeId = productDetail.storeInfo?.storeId || '';
   const customerId = 'test@gmail.com';
 
   const handleMakeReservation = async () => {
     if (remainProduct <= 1) {
       alert('해당 상품은 품절되었습니다.');
+      closeModal();
       return;
     }
 
@@ -18,9 +19,11 @@ const BottomPlaceOrder = ({ productDetail, initialCount, handleIncrease, handleD
       const response = await createReservation(customerId, storeId, initialCount);
       console.log('예약 처리 응답:', response);
       alert('예약이 완료되었습니다!');
+      closeModal();
     } catch (error) {
       console.error('예약 처리 중 오류 발생:', error);
       alert('예약 처리 중 오류가 발생했습니다!');
+      closeModal();
     }
   };
 

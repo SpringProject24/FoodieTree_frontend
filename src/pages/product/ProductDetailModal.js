@@ -74,6 +74,7 @@ const ProductDetailModal = ({ productDetail, onClose }) => {
                         handleIncrease={handleIncrease}
                         handleDecrease={handleDecrease}
                         remainProduct={productCnt}
+                        closeModal={closeModal}
                     />
                 )}
             </section>
