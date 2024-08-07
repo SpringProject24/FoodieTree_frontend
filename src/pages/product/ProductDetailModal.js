@@ -66,7 +66,7 @@ const ProductDetailModal = ({ productDetail, onClose }) => {
             <section className={styles.infoBox}>
                 <StoreInfo productDetail={productInfo} />
                 <ProductDetail productDetail={productInfo} />
-                {!isMobile && (
+                {isMobile? (
                     <BottomPlaceOrder
                         makeReservation={makeReservation}
                         productDetail={productInfo}
@@ -76,7 +76,15 @@ const ProductDetailModal = ({ productDetail, onClose }) => {
                         remainProduct={productCnt}
                         closeModal={closeModal}
                     />
-                )}
+                ) : <div className={styles.modalFooter}><BottomPlaceOrder
+                    makeReservation={makeReservation}
+                    productDetail={productInfo}
+                    initialCount={initialCount}
+                    handleIncrease={handleIncrease}
+                    handleDecrease={handleDecrease}
+                    remainProduct={productCnt}
+                    closeModal={closeModal}
+                    /></div>}
             </section>
             {!isMobile && (
                 <PaymentBox
