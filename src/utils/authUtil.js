@@ -2,6 +2,17 @@
 import { jwtDecode } from 'jwt-decode';
 
 /**
+ * 로그아웃 기능
+ * @param navigate to sign-in
+ * @returns {Promise<void>}
+ */
+export const logoutAction = async (navigate) => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    navigate('/');
+};
+
+/**
  * checkAuthToken method
  *
  * 위의 메서드 활용하여 리턴값{token, refreshToken, userType, email}으로 활용
@@ -34,6 +45,8 @@ export const checkAuthToken = async (navigate) => {
 //로그인 창에서 토큰이 이미 있으면
 export const checkLoggedIn = (navigate, currentPath) => {
     const token = localStorage.getItem("token");
+
+    // access token이 없을 때
     if (!token) {
         console.log("로그인이 안되어 있어요. 엑세스 토큰이 없어요 ~ ❌");
         if (currentPath === '/sign-up') {
@@ -44,6 +57,7 @@ export const checkLoggedIn = (navigate, currentPath) => {
         return null;
     }
 
+    // access token이 있을 때
     try {
         const tokenInfo = jwtDecode(token);
         const userType = tokenInfo.role;
@@ -63,10 +77,10 @@ export const checkLoggedIn = (navigate, currentPath) => {
         }
 
         if (userType === 'store') {
-            alert(`안녕하세요 ${email}님 ! ${userType} 마이페이지에 접속합니다.`);
+            alert(`안녕하세요 ${email}님! 이미 로그인되어 있어 ${userType} 마이페이지로 이동합니다.`);
             navigate('/store');
         } else if (userType === 'customer') {
-            alert(`안녕하세요 ${email}님 ! ${userType} 마이페이지에 접속합니다.`);
+            alert(`안녕하세요 ${email}님! 이미 로그인되어 있어 ${userType} 마이페이지로 이동합니다.`);
             navigate('/customer');
         }
     } catch (error) {
