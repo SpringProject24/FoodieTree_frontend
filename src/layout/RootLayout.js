@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import ModalProvider from "../pages/common/ModalProvider";
+import Header from "./Header";
 
 const RootLayout = () => {
     const location = useLocation();
@@ -24,9 +25,7 @@ const RootLayout = () => {
 
     return (
         <ModalProvider>
-            <header>
-                header
-            </header>
+            <Header/>
             <main>
                 <Outlet />
             </main>
