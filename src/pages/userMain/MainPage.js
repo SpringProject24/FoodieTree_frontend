@@ -12,19 +12,41 @@ const MainPage = () => {
 
   const navigate = useNavigate();
 
-  checkAuthToken(navigate);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
 
-  useEffect(() => {
-    // API로부터 데이터 가져오기
-    fetch(STORELISTS_URL)
-      .then(response => response.json())
-      .then(data => setStores(data))
-      .catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
-  }, []);
+  useEffect( async () => {
+    /**
+     * checkAuthToken
+     *
+     * 토큰이 있으면 현재 페이지 유지
+     * - 토큰이 있으면 userType(role), email(sub), token, refreshToken 리턴
+     * 토큰이 없으면 sign-in 리다이렉션
+     */
+    const fetchUserAndData = async () => {
+    const userInfo = await checkAuthToken(navigate);
+    if (userInfo) {
+      const {token, refreshToken} = userInfo;
+
+      // API로부터 데이터 가져오기
+      fetch(STORELISTS_URL, {
+
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+          'refreshToken': refreshToken
+        }
+      })
+          .then(response => response.json())
+          .then(data => setStores(data))
+          .catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
+      }
+    }
+    fetchUserAndData();
+  }, [navigate]);
 
 
   return (
