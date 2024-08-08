@@ -73,9 +73,9 @@ const CustomerReservationFilterModal = ({ onApply, initialFilters }) => {
 
     return (
         <div className={styles.modalContent}>
-            <div className={styles.header}>
-                <h2>필터</h2>
-            </div>
+            {/*<div className={styles.header}>*/}
+            {/*    <h2>필터</h2>*/}
+            {/*</div>*/}
             <div className={styles.filterGroup}>
                 <label>메뉴 종류(카테고리)</label>
                 <div className={styles.options}>
