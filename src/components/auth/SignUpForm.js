@@ -35,7 +35,7 @@ const SignUpForm = ({ userType, onVerificationSent }) => {
   // 새로운 아이디 -> 중복검사 후 no -> 회원가입하기로 유도
   const checkCustomerDupId = async (email) => {
     try {
-      const response = await fetch(`/customer/check?keyword=${email}`);
+      const response = await fetch(`/email/check?keyword=${email}`);
       const result = await response.json();
       if (!result) {
         console.log(`입력하신 이메일 [ ${email} ] 은 customer 회원이 아닙니다.`);
@@ -55,7 +55,7 @@ const SignUpForm = ({ userType, onVerificationSent }) => {
 // store
 const checkStoreDupId = async (email) => {
     try {
-      const response = await fetch(`/store/check?type=account&keyword=${email}`);
+      const response = await fetch(`/email/check?keyword=${email}`);
       const result = await response.json();
       if (!result) { //찾지 못하였으면
         console.log(`입력하신 이메일[ ${email} ]은 store 회원이 아닙니다. `);

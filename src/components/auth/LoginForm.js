@@ -31,7 +31,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
 
     const checkCustomerDupId = async (email) => {
         try {
-            const response = await fetch(`/customer/check?keyword=${email}`);
+            const response = await fetch(`/email/check?keyword=${email}`);
             const result = await response.json();
             if (result) {
                 console.log(`입력하신 이메일 [ ${email} ] 은 customer 회원입니다.`);
@@ -50,7 +50,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
 
     const checkStoreDupId = async (email) => {
         try {
-            const response = await fetch(`/store/check?keyword=${email}`);
+            const response = await fetch(`/email/check?keyword=${email}`);
             const result = await response.json();
             if (result) {
                 console.log(`입력하신 이메일[ ${email} ]은 store 회원입니다... `);
