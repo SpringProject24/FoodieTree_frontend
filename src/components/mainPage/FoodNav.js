@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import { FAVORITESTORE_URL } from '../../config/host-config';
-import {getRefreshToken, getToken, getUserData, getUserEmail, getUserToken} from "../../config/auth";
+import {getUserEmail} from "../../utils/authUtil";
 
 // 🌿 랜덤 가게 리스트 생성
 const getRandomStores = (stores, count) => {
