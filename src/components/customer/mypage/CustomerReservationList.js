@@ -7,9 +7,10 @@ import { imgErrorHandler } from "../../../utils/error";
 
 const BASE_URL = window.location.origin;
 
-const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading, loadMore, hasMore, onApplyFilters }) => {
+const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading, loadMore, hasMore, initialFilters, onApplyFilters }) => {
     const { openModal } = useModal();
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 400);
+    const [filters, setFilters] = useState(initialFilters || {}); // 필터 유지
     const listRef = useRef(null);
 
     useEffect(() => {
@@ -169,10 +170,19 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
         }
     };
 
+    // 필터 모달을 여는 함수
     const openFilterModal = () => {
         openModal('customerReservationFilter', {
-            onApply: onApplyFilters
+            onApply: handleApplyFilters,
+            initialFilters: filters
         });
+        console.log("filters: ", filters);
+    };
+
+    // 필터 적용 함수
+    const handleApplyFilters = (newFilters) => {
+        setFilters(newFilters);
+        onApplyFilters(newFilters);
     };
 
     return (
