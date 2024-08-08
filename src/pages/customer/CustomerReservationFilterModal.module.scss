@@ -79,6 +79,7 @@
       }
 
       .resetText {
+        user-select: none;
         font-size: 12px;
       }
     }
@@ -89,10 +90,6 @@
       border-radius: 5px;
       cursor: pointer;
       width: 100%;
-
-      &.resetButton {
-        background: #f0f0f0;
-      }
 
       &.applyButton {
         font-size: 16px;

@@ -4,13 +4,13 @@ import { useModal } from "../common/ModalProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
-const CustomerReservationFilterModal = ({ onApply }) => {
+const CustomerReservationFilterModal = ({ onApply, initialFilters }) => {
     const { closeModal } = useModal();
     const [categories, setCategories] = useState([]);
-    const [category, setCategory] = useState([]);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [status, setStatus] = useState([]);
+    const [category, setCategory] = useState(initialFilters?.category || []);
+    const [startDate, setStartDate] = useState(initialFilters?.dateRange?.startDate || '');
+    const [endDate, setEndDate] = useState(initialFilters?.dateRange?.endDate || '');
+    const [status, setStatus] = useState(initialFilters?.status || []);
 
     // 컴포넌트가 마운트될 때 카테고리를 가져오는 함수 호출
     useEffect(() => {
@@ -40,6 +40,21 @@ const CustomerReservationFilterModal = ({ onApply }) => {
         setStatus((prev) =>
             prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
         );
+    };
+
+    const getStatusDisplayName = (status) => {
+        switch (status) {
+            case 'RESERVED':
+                return '진행 중';
+            case 'PICKEDUP':
+                return '픽업 완료';
+            case 'CANCELED':
+                return '취소';
+            case 'NOSHOW':
+                return '노쇼';
+            default:
+                return status;
+        }
     };
 
     // 필터 적용 버튼 클릭 시 호출되는 함수
@@ -94,13 +109,13 @@ const CustomerReservationFilterModal = ({ onApply }) => {
             <div className={styles.filterGroup}>
                 <label>주문 상태</label>
                 <div className={styles.options}>
-                    {['진행 중', '픽업 완료', '취소', '노쇼'].map((item) => (
+                    {['RESERVED', 'PICKEDUP', 'CANCELED', 'NOSHOW'].map((item) => (
                         <div
                             key={item}
                             className={`${styles.option} ${status.includes(item) ? styles.selected : ''}`}
                             onClick={() => handleStatusClick(item)}
                         >
-                            {item}
+                            {getStatusDisplayName(item)}
                         </div>
                     ))}
                 </div>
