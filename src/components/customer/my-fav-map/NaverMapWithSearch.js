@@ -226,15 +226,17 @@ const NaverMapWithSearch = ({type, productDetail}) => {
                 infoWindowInstance.close();
             }
             setActiveMarker(marker);
-            infoWindowInstance.setContent([
-                '<div className={styles.infoWindow}>',
-                `<h4 style="margin-top:5px;">${place.title}</h4>`,
-                place.roadAddress ? `<p>[도로명 주소] ${place.roadAddress}</p>` : '',
-                place.jibunAddress ? `<p>[지번 주소] ${place.jibunAddress}</p>` : '',
-                `<button onclick="document.getElementById('removeFav').click()">선호 지역에서 제거하기</button>`,
-                '</div>',
-            ].join('\n'));
-            infoWindowInstance.open(mapInstance, marker);
+            if (type === 'customer') {
+                infoWindowInstance.setContent([
+                    '<div className={styles.infoWindow}>',
+                    `<h4 style="margin-top:5px;">${place.title}</h4>`,
+                    place.roadAddress ? `<p>[도로명 주소] ${place.roadAddress}</p>` : '',
+                    place.jibunAddress ? `<p>[지번 주소] ${place.jibunAddress}</p>` : '',
+                    `<button onclick="document.getElementById('removeFav').click()">선호 지역에서 제거하기</button>`,
+                    '</div>',
+                ].join('\n'));
+                infoWindowInstance.open(mapInstance, marker);
+            }
         });
     };
 
