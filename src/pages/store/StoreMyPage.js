@@ -20,6 +20,7 @@ const StoreMyPage = () => {
     const [hasMore, setHasMore] = useState(true); // 추가 예약 목록이 있는지 여부 확인 (무한스크롤)
     const [startIndex, setStartIndex] = useState(0); // 무한 스크롤 작동 시 현재 불러온 데이터의 끝 인덱스 추적
     const [isLoading, setIsLoading] = useState(false); // 데이터를 불러오는 중인지 여부를 추적 (로딩 상태)
+    const [filters, setFilters] = useState({}); // 필터 상태 저장
     const ITEMS_PER_PAGE = 10; // 한번에 가져올 예약목록 개수 설정
 
     /**
@@ -179,6 +180,27 @@ const StoreMyPage = () => {
         }
     }, [startIndex, hasMore, isLoading, width]);
 
+    /**
+     * 필터를 적용하는 함수
+     */
+    const onApplyFilters = (newFilters) => {
+        setFilters(newFilters);
+        const filteredReservations = reservations.filter(reservation => {
+            const { startDate, endDate, status } = newFilters;
+
+            const withinDateRange = (!startDate || new Date(reservation.pickupTime) >= new Date(startDate)) &&
+                (!endDate || new Date(reservation.pickupTime) <= new Date(endDate));
+
+            const matchesStatus = status.length === 0 || status.includes(reservation.status);
+
+            return withinDateRange && matchesStatus;
+        });
+
+        setDisplayReservations(filteredReservations.slice(0, ITEMS_PER_PAGE));
+        setStartIndex(ITEMS_PER_PAGE);
+        setHasMore(filteredReservations.length > ITEMS_PER_PAGE);
+    };
+
     return (
         <>
             {width <= 400 && <SideBarBtn onShow={showHandler} />}
@@ -197,6 +219,8 @@ const StoreMyPage = () => {
                             loadMore={loadMore}
                             hasMore={hasMore}
                             width={width}
+                            initialFilters={filters}
+                            onApplyFilters={onApplyFilters}
                         />
                         {width > 400 && (
                             <>

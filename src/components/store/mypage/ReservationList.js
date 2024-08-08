@@ -1,13 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './ReservationList.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark, faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark, faCircleCheck, faSpinner, faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "../../../pages/common/ModalProvider";
 import {imgErrorHandler} from "../../../utils/error";
 
-const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width }) => {
+const BASE_URL = window.location.origin;
+
+const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width, initialFilters, onApplyFilters }) => {
     const { openModal } = useModal();
     const listRef = useRef();
+    const [filters, setFilters] = useState(initialFilters || {});
 
     const handleReservationClick = async (reservation) => {
         try {
@@ -39,12 +42,26 @@ const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width }) 
         };
     }, [hasMore, isLoading, loadMore, width]);
 
+    // 필터 모달을 여는 함수
+    const openFilterModal = () => {
+        openModal('storeReservationFilter', {
+            onApply: handleApplyFilters,
+            initialFilters: filters
+        });
+    };
+
+    const handleApplyFilters = (newFilters) => {
+        setFilters(newFilters);
+        onApplyFilters(newFilters);
+    };
+
     return (
         <div className={styles.reservationListForm}>
             <div className={styles.title}>
                 <h3 className={styles.titleText}>
                     <span>예약 내역</span>
                 </h3>
+                <FontAwesomeIcon icon={faSliders} className={styles.filter} onClick={openFilterModal}/>
             </div>
             <div className={`${styles.infoWrapper}`} ref={listRef}>
                 <ul className={styles.reservationList}>
