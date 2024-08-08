@@ -363,7 +363,7 @@ const NaverMapWithSearch = ({type, productDetail}) => {
 
     return (
         <div>
-            {type === 'customer' &&
+            {type === 'customer' ?
                 <div>
                     <input
                         type="text"
@@ -372,11 +372,16 @@ const NaverMapWithSearch = ({type, productDetail}) => {
                         placeholder="주소 검색"
                     />
                     <button onClick={() => searchAddressToCoordinate(searchKeyword)}>검색</button>
-                    <button id="addFav" style={{ display: 'none' }} onClick={addSearchMarkerToFavorite}>선호 지역으로 추가하기</button>
-                    <button id="removeFav" style={{ display: 'none' }} onClick={() => removePlaceFromFavorites(activeMarker)}>선호 지역에서 제거하기</button>
+                    <button id="addFav" style={{display: 'none'}} onClick={addSearchMarkerToFavorite}>선호 지역으로 추가하기
+                    </button>
+                    <button id="removeFav" style={{display: 'none'}}
+                            onClick={() => removePlaceFromFavorites(activeMarker)}>선호 지역에서 제거하기
+                    </button>
+                    <div id="map" style={{width: '100%', height: '400px'}}/>
                 </div>
+                : <div id="map" style={{width: '100%', height: '144px'}}/>
             }
-            <div id="map" style={{ width: '100%', height: '400px' }} />
+
         </div>
     );
 };
