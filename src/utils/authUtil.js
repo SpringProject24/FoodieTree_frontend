@@ -1,31 +1,42 @@
-import { useNavigate } from 'react-router-dom';
-import {EMAIL_URL} from "../config/host-config";
 
-export const checkAuthToken = async () => {
+import { jwtDecode } from 'jwt-decode';
+
+export const checkAuthToken = async (navigate) => {
     const token = localStorage.getItem("token");
     if (!token) {
-        return false;
+        alert("로그인이 필요한 서비스입니다.");
+        navigate('/sign-in');
+        return null;
     }
-    return true;
+}
 
-    // try {
-    //     const response = await fetch(`/email/verifyEmail`, {
-    //         headers: { 'Authorization': 'Bearer ' + token },
-    //         method: 'POST',
-    //     });
-    //
-    //     if (response.ok) {
-    //        return true;
-    //     } else {
-    //         return alert("엑세스 토큰 기한이 만료되었습니다. 재로그인 해주세요 (자동로그인 구현중이에요)");
-    //     }
-    // } catch (error) {
-    //     console.error("Error verifying token:", error);
-    //     return false;
-    // }
-};
+//로그인 창에서 토큰이 이미 있으면 customerMyPage, storeMyPage path 리다이렉션
+export const checkLoggedIn = (navigate) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.log("로그인이 안되어 있어요. 엑세스 토큰이 없어요 ~ ❌");
+        navigate('/sign-in');
+        return null;
+    }
 
-export const handleInvalidToken = (navigate) => {
-    alert("로그인이 필요한 서비스입니다.");
-    navigate('/sign-in');
-};
+    try {
+        const userInfo = jwtDecode(token);
+        const userType = userInfo.role;
+        const email = userInfo.sub;
+
+        console.log("usertype : ", userType);
+        console.log("로그인이 되어있어요 ~ ✅");
+
+        if (userType === 'store') {
+            alert(`안녕하세요 ${email}님 ! ${userType} 마이페이지에 접속합니다.`);
+            navigate('/store');
+        } else if (userType === 'customer') {
+            alert(`안녕하세요 ${email}님 ! ${userType} 마이페이지에 접속합니다.`);
+            navigate('/customer');
+        }
+    } catch (error) {
+        console.error('Invalid token:', error);
+        navigate('/sign-in');
+    }
+}
+

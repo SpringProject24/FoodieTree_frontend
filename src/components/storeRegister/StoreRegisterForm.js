@@ -163,8 +163,8 @@ export const storeRegisterAction = async ({request}) => {
   }
   console.log('store 페이로드: ', payload)
 
-  const token = query.get('token');
-  const refreshToken = query.get('refreshToken');
+  const token = localStorage.getItem('token');
+  const refreshToken = localStorage.getItem('refreshToken');
 
 
   console.log("did i get a token info? : ",token);
