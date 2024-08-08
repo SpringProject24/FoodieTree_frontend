@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {floor} from "lodash";
-
+import styles from "./NaverMapWithSearch.module.scss";
 function loadScript(src) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -199,7 +199,7 @@ const NaverMapWithSearch = ({type, productDetail}) => {
             }
             setActiveMarker(marker);
             infoWindowInstance.setContent([
-                '<div style="padding:10px;min-width:200px;line-height:150%;">',
+                '<div className={styles.infoWindow}>',
                 `<h4 style="margin-top:5px;">${place.title}</h4>`,
                 place.roadAddress ? `<p>[도로명 주소] ${place.roadAddress}</p>` : '',
                 place.jibunAddress ? `<p>[지번 주소] ${place.jibunAddress}</p>` : '',
@@ -264,7 +264,7 @@ const NaverMapWithSearch = ({type, productDetail}) => {
                     '<div style="padding:10px;min-width:200px;line-height:150%;">',
                     `<h4 style="margin-top:5px;">검색 주소 : ${address}</h4><br />`,
                     htmlAddresses.join('<br />'),
-                    `<input type="text" id="aliasInput" placeholder="별칭 입력" style="margin-top:10px;" />`,
+                    `<input type="text" id="aliasInput" placeholder="별칭 입력" style="margin-top:10px;" onkeydown="if(event.key === 'Enter'){document.getElementById('addFav').click();}" />`,
                     `<button onclick="document.getElementById('addFav').click()">선호 지역으로 추가하기</button>`,
                     '</div>',
                 ].join('\n'));
@@ -365,13 +365,20 @@ const NaverMapWithSearch = ({type, productDetail}) => {
         <div>
             {type === 'customer' ?
                 <div>
+                    <h2 className={styles.descText}>선호하는 지역의 도로명 주소를 입력해주세요</h2>
                     <input
+                        className={styles.searchInput}
                         type="text"
                         value={searchKeyword}
                         onChange={(e) => setSearchKeyword(e.target.value)}
                         placeholder="주소 검색"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                searchAddressToCoordinate(searchKeyword);
+                            }
+                        }}
                     />
-                    <button onClick={() => searchAddressToCoordinate(searchKeyword)}>검색</button>
+                    <button className={styles.searchBtn} onClick={() => searchAddressToCoordinate(searchKeyword)}>검색</button>
                     <button id="addFav" style={{display: 'none'}} onClick={addSearchMarkerToFavorite}>선호 지역으로 추가하기
                     </button>
                     <button id="removeFav" style={{display: 'none'}}
