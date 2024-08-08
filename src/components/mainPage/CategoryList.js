@@ -13,6 +13,8 @@ const toggleFavorite = async (storeId, customerId) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                // 'Authorization' : 'Bearer ' + token,
+                // 'refreshToken' : refreshToken
             },
             body: JSON.stringify({ customerId }),
         });
@@ -21,15 +23,15 @@ const toggleFavorite = async (storeId, customerId) => {
         const contentType = response.headers.get('Content-Type');
         if (contentType && contentType.includes('application/json')) {
             const data = await response.json();
-            console.log('Favorite toggled successfully:', data);
+            //console.log('Favorite toggled successfully!', data);
         } else {
             // JSON이 아닌 응답을 처리
             const text = await response.text();
-            console.error('Unexpected response format:', text);
+            console.error('⚠️Unexpected response format:', text);
         }
 
     } catch (error) {
-        console.error('Error toggling favorite:', error);
+        console.error('⚠️Error toggling:', error);
     }
 };
 
@@ -50,19 +52,23 @@ const fetchFavorites = async (customerId, setFavorites) => {
         } else {
             // JSON이 아닌 응답을 처리
             const text = await response.text();
-            console.error('Unexpected response format:', text);
+            console.error('⚠️Unexpected response format:', text);
         }
 
     } catch (error) {
-        console.error('Error fetching favorites:', error);
+        console.error('⚠️Error fetching:', error);
     }
 };
+
+
+
+
 
 const CategoryList = ({ stores }) => {
     const { openModal } = useModal();
     const [favorites, setFavorites] = useState({});
 
-    // 실제 customerId와 storeId 설정
+    // customerId 더미값
     const customerId = 'test@gmail.com';
 
     const handleClick = (store) => {
@@ -79,7 +85,7 @@ const CategoryList = ({ stores }) => {
                 [storeId]: !prevFavorites[storeId]
             }));
         } catch (error) {
-            console.error('Error toggling favorite:', error);
+            console.error('⚠️Error toggling:', error);
         }
     };
 
