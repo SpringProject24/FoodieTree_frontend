@@ -106,7 +106,7 @@ const CategoryList = ({ stores }) => {
                         onClick={() => handleClick(store)}
                     >
                         <div 
-                            className={styles.heartIcon} 
+                            className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
                             onClick={(e) => {
                                 e.stopPropagation();
                                 handleFavoriteClick(store.storeId);
@@ -114,7 +114,6 @@ const CategoryList = ({ stores }) => {
                         >
                             <FontAwesomeIcon 
                                 icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
-                                className={favorites[store.storeId] ? styles.favorited : styles.notFavorited}
                             />
                         </div>
                         <img src={store.storeImg} alt={store.storeName} className={styles.categoryImage} />

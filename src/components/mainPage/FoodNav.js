@@ -5,6 +5,10 @@ import styles from "./FoodNav.module.scss";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './slick-theme.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
+import { FAVORITESTORE_URL } from '../../config/host-config';
 
 // 🌿 랜덤 가게 리스트 생성
 const getRandomStores = (stores, count) => {
@@ -14,26 +18,91 @@ const getRandomStores = (stores, count) => {
 
 // 🌿 카테고리 문자열에서 실제 foodType만 추출하는 함수
 const extractFoodType = (category) => {
-   // category가 유효한 문자열인지 확인
-   if (category && typeof category === 'string') {
-    // 'foodType=' 이후의 값 추출
+  if (category && typeof category === 'string') {
     const match = category.match(/\(foodType=(.*?)\)/);
-    return match ? match[1] : category; 
+    return match ? match[1] : category;
+  }
+  return '';
+};
+
+// 하트 상태를 토글하고 서버에 저장하는 함수
+const toggleFavorite = async (storeId, customerId) => {
+  try {
+    const response = await fetch(`${FAVORITESTORE_URL}/${storeId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ customerId }),
+    });
+
+    const contentType = response.headers.get('Content-Type');
+    if (contentType && contentType.includes('application/json')) {
+      const data = await response.json();
+    } else {
+      const text = await response.text();
+      console.error('⚠️Unexpected response format:', text);
     }
-  return ''; // category가 유효하지 않은 경우 빈 문자열 반환
+  } catch (error) {
+    console.error('⚠️Error toggling:', error);
+  }
+};
+
+// 사용자의 모든 찜 상태 조회
+const fetchFavorites = async (customerId, setFavorites) => {
+  try {
+    const response = await fetch(`${FAVORITESTORE_URL}/${customerId}`);
+    
+    const contentType = response.headers.get('Content-Type');
+    if (contentType && contentType.includes('application/json')) {
+      const data = await response.json();
+      const favorites = data.reduce((acc, store) => {
+        acc[store.storeId] = true;
+        return acc;
+      }, {});
+      setFavorites(favorites);
+    } else {
+      const text = await response.text();
+      console.error('⚠️Unexpected response format:', text);
+    }
+  } catch (error) {
+    console.error('⚠️Error fetching:', error);
+  }
 };
 
 const FoodNav = ({ selectedCategory, stores }) => {
   const [randomStores, setRandomStores] = useState([]);
+  const [favorites, setFavorites] = useState({});
   const { openModal } = useModal();
 
+  // customerId 더미값
+  const customerId = 'test@gmail.com';
+
   useEffect(() => {
-    // 랜덤한 가게 목록을 선택하여 상태를 업데이트
-    setRandomStores(getRandomStores(stores, 5)); 
+    setRandomStores(getRandomStores(stores, 5));
   }, [stores]);
+
+  useEffect(() => {
+    if (customerId) {
+      fetchFavorites(customerId, setFavorites);
+    }
+  }, [customerId]);
 
   const handleClick = (store) => {
     openModal('productDetail', { productDetail: store });
+  };
+
+  const handleFavoriteClick = async (storeId) => {
+    try {
+      await toggleFavorite(storeId, customerId);
+
+      setFavorites(prevFavorites => ({
+        ...prevFavorites,
+        [storeId]: !prevFavorites[storeId]
+      }));
+    } catch (error) {
+      console.error('⚠️Error toggling:', error);
+    }
   };
 
   const settings = (slidesToShow) => ({
@@ -51,7 +120,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
         settings: {
           dots: false,
           slidesToShow: 2,
-          slidesToScroll: 1, 
+          slidesToScroll: 1,
           centerMode: true,
           centerPadding: '10%',
         },
@@ -71,6 +140,17 @@ const FoodNav = ({ selectedCategory, stores }) => {
               onClick={() => handleClick(store)}
               className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
             >
+              <div 
+                className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFavoriteClick(store.storeId);
+                }}
+              >
+                <FontAwesomeIcon 
+                  icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
+                />
+              </div>
               <img src={store.storeImg} alt={store.storeName} />
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
@@ -91,6 +171,17 @@ const FoodNav = ({ selectedCategory, stores }) => {
               onClick={() => handleClick(store)}
               className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
             >
+              <div 
+                className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFavoriteClick(store.storeId);
+                }}
+              >
+                <FontAwesomeIcon 
+                  icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
+                />
+              </div>
               <img src={store.storeImg} alt={store.storeName} />
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
@@ -111,6 +202,17 @@ const FoodNav = ({ selectedCategory, stores }) => {
               onClick={() => handleClick(store)}
               className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
             >
+              <div 
+                className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFavoriteClick(store.storeId);
+                }}
+              >
+                <FontAwesomeIcon 
+                  icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
+                />
+              </div>
               <img src={store.storeImg} alt={store.storeName} className={styles.image} />
               <span className={styles.category}>{extractFoodType(store.category)}</span>
               <p className={styles.storeName}>{store.storeName}</p>
