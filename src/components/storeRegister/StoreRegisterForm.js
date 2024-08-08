@@ -163,7 +163,8 @@ export const storeRegisterAction = async ({request}) => {
   }
   console.log('store 페이로드: ', payload)
 
-    const token = query.get('token');
+  const token = localStorage.getItem('token');
+  const refreshToken = localStorage.getItem('refreshToken');
 
   console.log("did i get a token info? : ",token);
 
@@ -172,7 +173,8 @@ export const storeRegisterAction = async ({request}) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // 'Authorization': 'Bearer ' + token,
+      'Authorization': 'Bearer ' + token,
+      'refreshToken': refreshToken
     },
     body: JSON.stringify(payload),
   });
