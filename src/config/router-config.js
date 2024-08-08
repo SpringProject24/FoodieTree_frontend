@@ -110,7 +110,7 @@ export const router = createBrowserRouter([
             {
                 path: '/admin',
                 element: <AdminPage/>,
-                loader: approvalLoader,
+                // loader: approvalLoader,
             }
         ]
     },
