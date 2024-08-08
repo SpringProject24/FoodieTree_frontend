@@ -2,8 +2,17 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
 
 .table-section {
   margin: 20px auto 50px;
-  width: 1600px;
+  width: 1580px;
+  box-shadow: 2px 5px 8px 3px rgba(100,100,100,0.1);
+  padding: 20px 10px;
+  border-radius: 20px;
   //border: 1px solid yellowgreen;
+
+  .table-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 
   .tbl-line {
     font-family: $font-pretendard ;
