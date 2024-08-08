@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import {floor} from "lodash";
 import styles from "./NaverMapWithSearch.module.scss";
 function loadScript(src) {
     return new Promise((resolve, reject) => {
@@ -49,18 +48,47 @@ const NaverMapWithSearch = ({type, productDetail}) => {
     }, []);
 
     const initMap = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    initializeMap(latitude, longitude);
-                },
-                () => {
-                    initializeMap(37.555183, 126.936883); // 중앙정보처리학원 신촌로176
+
+        if (type === 'store') {
+            const storeName = productDetail.storeInfo.storeName;
+            const storeAddress = productDetail.storeInfo.storeAddress;
+            console.log(storeName, storeAddress);
+
+            window.naver.maps.Service.geocode(
+                { query: storeAddress },
+                function (status, response) {
+                    if (status === window.naver.maps.Service.Status.ERROR) {
+                        console.error('Geocoding error');
+                        return;
+                    }
+
+                    if (response.v2.meta.totalCount === 0) {
+                        console.error('No results found for the address');
+                        return;
+                    }
+
+                    const item = response.v2.addresses[0];
+                    const latlng = new window.naver.maps.LatLng(item.y, item.x);
+
+                    initializeMap(item.y, item.x); // Initialize map with store location
+                    addPlace(latlng, storeName, item.roadAddress, item.jibunAddress);
                 }
             );
-        } else {
-            initializeMap(37.555183, 126.936883); // Geolocation을 지원하지 않는 경우
+        }
+        if(type === 'customer') {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        initializeMap(latitude, longitude);
+                    },
+                    () => {
+                        initializeMap(37.555183, 126.936883); // 중앙정보처리학원 신촌로176
+                    }
+                );
+            } else {
+                initializeMap(37.555183, 126.936883); // Geolocation을 지원하지 않는 경우
+            }
         }
     };
 
