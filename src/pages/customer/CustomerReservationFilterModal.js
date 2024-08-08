@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CustomerReservationFilterModal.module.scss';
 import { useModal } from "../common/ModalProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,28 +6,49 @@ import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 const CustomerReservationFilterModal = ({ onApply }) => {
     const { closeModal } = useModal();
+    const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState([]);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [status, setStatus] = useState([]);
 
+    // 컴포넌트가 마운트될 때 카테고리를 가져오는 함수 호출
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    // 백엔드에서 카테고리 데이터를 가져오는 비동기 함수
+    const fetchCategories = async () => {
+        try {
+            const response = await fetch('/categories');
+            const data = await response.json();
+            setCategories(data); // 카테고리 목록 상태 업데이트
+        } catch (error) {
+            console.error('Failed to fetch categories:', error);
+        }
+    };
+
+    // 카테고리 클릭 시 호출되는 함수
     const handleCategoryClick = (value) => {
         setCategory((prev) =>
             prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
         );
     };
 
+    // 주문 상태 클릭 시 호출되는 함수
     const handleStatusClick = (value) => {
         setStatus((prev) =>
             prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
         );
     };
 
+    // 필터 적용 버튼 클릭 시 호출되는 함수
     const handleApply = () => {
         onApply({ category, dateRange: { startDate, endDate }, status });
         closeModal();
     };
 
+    // 초기화
     const handleReset = () => {
         setCategory([]);
         setStartDate('');
@@ -38,18 +59,18 @@ const CustomerReservationFilterModal = ({ onApply }) => {
     return (
         <div className={styles.modalContent}>
             <div className={styles.header}>
-                <h2></h2>
+                <h2>필터</h2>
             </div>
             <div className={styles.filterGroup}>
                 <label>메뉴 종류(카테고리)</label>
                 <div className={styles.options}>
-                    {['카테고리1', '카테고리2', '카테고리3'].map((item) => (
+                    {categories.map((item) => (
                         <div
-                            key={item}
-                            className={`${styles.option} ${category.includes(item) ? styles.selected : ''}`}
-                            onClick={() => handleCategoryClick(item)}
+                            key={item.foodName}
+                            className={`${styles.option} ${category.includes(item.foodName) ? styles.selected : ''}`}
+                            onClick={() => handleCategoryClick(item.foodName)}
                         >
-                            {item}
+                            {item.foodName}
                         </div>
                     ))}
                 </div>
@@ -73,7 +94,7 @@ const CustomerReservationFilterModal = ({ onApply }) => {
             <div className={styles.filterGroup}>
                 <label>주문 상태</label>
                 <div className={styles.options}>
-                    {['예약', '취소됨', '픽업 완료'].map((item) => (
+                    {['진행 중', '픽업 완료', '취소', '노쇼'].map((item) => (
                         <div
                             key={item}
                             className={`${styles.option} ${status.includes(item) ? styles.selected : ''}`}

@@ -7,7 +7,7 @@ import { imgErrorHandler } from "../../../utils/error";
 
 const BASE_URL = window.location.origin;
 
-const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading, loadMore, hasMore }) => {
+const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading, loadMore, hasMore, onApplyFilters }) => {
     const { openModal } = useModal();
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 400);
     const listRef = useRef(null);
@@ -169,12 +169,9 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
         }
     };
 
-    const handleFilterClick = () => {
+    const openFilterModal = () => {
         openModal('customerReservationFilter', {
-            onApply: (filters) => {
-                console.log('Applied filters:', filters);
-                // 여기에 필터 적용 후 데이터를 다시 불러오는 로직을 추가할 수 있습니다.
-            }
+            onApply: onApplyFilters
         });
     };
 
@@ -184,7 +181,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
                 <h3 className={styles.titleText}>
                     <span>예약 내역</span>
                 </h3>
-                <FontAwesomeIcon icon={faSliders} className={styles.filter} onClick={handleFilterClick}/>
+                <FontAwesomeIcon icon={faSliders} className={styles.filter} onClick={openFilterModal}/>
             </div>
             <div className={styles.infoWrapper} ref={listRef}>
                 <ul className={styles.reservationList}>
@@ -199,11 +196,16 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
                                 <div className={styles.item}>
                                     <div className={styles.imgWrapper}>
                                         <div className={styles.imgBox}>
-                                            {reservation.status === 'CANCELED' && <FontAwesomeIcon icon={faCircleXmark} className={styles.canceled} />}
-                                            {reservation.status === 'NOSHOW' && <FontAwesomeIcon icon={faCircleXmark} className={styles.noshow} />}
-                                            {reservation.status === 'RESERVED' && <FontAwesomeIcon icon={faSpinner} className={styles.loading} />}
-                                            {reservation.status === 'PICKEDUP' && <FontAwesomeIcon icon={faCircleCheck} className={styles.done} />}
-                                            <img src={reservation.storeImg} onError={imgErrorHandler} alt="Store Image" />
+                                            {reservation.status === 'CANCELED' &&
+                                                <FontAwesomeIcon icon={faCircleXmark} className={styles.canceled}/>}
+                                            {reservation.status === 'NOSHOW' &&
+                                                <FontAwesomeIcon icon={faCircleXmark} className={styles.noshow}/>}
+                                            {reservation.status === 'RESERVED' &&
+                                                <FontAwesomeIcon icon={faSpinner} className={styles.loading}/>}
+                                            {reservation.status === 'PICKEDUP' &&
+                                                <FontAwesomeIcon icon={faCircleCheck} className={styles.done}/>}
+                                            <img src={reservation.storeImg} onError={imgErrorHandler}
+                                                 alt="Store Image"/>
                                         </div>
                                         <span>{reservation.storeName}</span>
                                     </div>
