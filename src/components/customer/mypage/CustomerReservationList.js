@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './CustomerReservationList.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark, faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark, faCircleCheck, faSpinner, faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "../../../pages/common/ModalProvider";
-import {imgErrorHandler} from "../../../utils/error";
+import { imgErrorHandler } from "../../../utils/error";
 
 const BASE_URL = window.location.origin;
 
@@ -169,12 +169,22 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
         }
     };
 
+    const handleFilterClick = () => {
+        openModal('customerReservationFilter', {
+            onApply: (filters) => {
+                console.log('Applied filters:', filters);
+                // 여기에 필터 적용 후 데이터를 다시 불러오는 로직을 추가할 수 있습니다.
+            }
+        });
+    };
+
     return (
         <div className={styles.reservationListForm}>
             <div className={styles.title}>
                 <h3 className={styles.titleText}>
                     <span>예약 내역</span>
                 </h3>
+                <FontAwesomeIcon icon={faSliders} className={styles.filter} onClick={handleFilterClick}/>
             </div>
             <div className={styles.infoWrapper} ref={listRef}>
                 <ul className={styles.reservationList}>
