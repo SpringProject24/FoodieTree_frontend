@@ -71,7 +71,9 @@ const NaverMapWithSearch = ({type, productDetail}) => {
                     const latlng = new window.naver.maps.LatLng(item.y, item.x);
 
                     initializeMap(item.y, item.x); // Initialize map with store location
-                    addPlace(latlng, storeName, item.roadAddress, item.jibunAddress);
+                    addPlace(latlng, storeName, item.roadAddress, item.jibunAddress, 'red'); // 색상 'red' 전달
+                    console.log('Store location:', latlng.toString());
+                    console.log("marker added");
                 }
             );
         }
@@ -123,7 +125,7 @@ const NaverMapWithSearch = ({type, productDetail}) => {
         if(type === 'customer') {
             fetchPlacesFromServer();
         }else{
-            addPlace(new window.naver.maps.LatLng(productDetail.storeInfo.lat, productDetail.storeInfo.lng), productDetail.storeInfo.storeName, productDetail.storeInfo.storeAddress);
+            addPlace(new window.naver.maps.LatLng(productDetail.storeInfo.lat, productDetail.storeInfo.lng), productDetail.storeInfo.storeName, productDetail.storeInfo.storeAddress, 'red');
         }
     };
 
@@ -187,16 +189,20 @@ const NaverMapWithSearch = ({type, productDetail}) => {
         );
     };
 
-    const addPlace = (latlng, alias = `장소 ${places.length + 1}`, roadAddress, jibunAddress) => {
+    const addPlace = (latlng, alias = `장소 ${places.length + 1}`, roadAddress, jibunAddress, color = 'skyblue') => {
+
+        console.log('Adding place:', alias, latlng.toString());
         const newPlace = { id: places.length + 1, title: alias, latlng: latlng, roadAddress, jibunAddress };
         setPlaces(prevPlaces => {
+            console.log('Adding place!!!!:', newPlace);
             const updatedPlaces = [...prevPlaces, newPlace];
-            addMarker(newPlace, map, infoWindow, 'skyblue');
+            addMarker(newPlace, map, infoWindow, color);
             return updatedPlaces;
         });
     };
 
     const addMarker = (place, mapInstance, infoWindowInstance, color = 'skyblue') => {
+        console.log('Adding marker!!!!!!!!!!!!!!!:', place.title)
         if (!mapInstance) {
             console.error('Map instance is not initialized');
             return;
