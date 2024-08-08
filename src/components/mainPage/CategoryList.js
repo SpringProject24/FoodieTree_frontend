@@ -8,10 +8,11 @@ import { faWonSign, faBoxOpen, faHeart as faHeartSolid } from "@fortawesome/free
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { FAVORITESTORE_URL } from '../../config/host-config';
-import {getUserEmail} from "../../config/auth";
+import {getRefreshToken, getToken, getUserEmail} from "../../config/auth";
 
 // 하트 상태를 토글하고 서버에 저장하는 함수
 const toggleFavorite = async (storeId, customerId) => {
+
     let userEmail = getUserEmail();
     console.log("userEmail :" ,userEmail)
 
@@ -20,8 +21,8 @@ const toggleFavorite = async (storeId, customerId) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization' : 'Bearer ' + token,
-                // 'refreshToken' : refreshToken
+                'Authorization' : 'Bearer ' + getToken(),
+                'refreshToken' : getRefreshToken()
             },
             body: JSON.stringify({ customerId }),
         });
@@ -45,7 +46,15 @@ const toggleFavorite = async (storeId, customerId) => {
 // 사용자의 모든 찜 상태 조회
 const fetchFavorites = async (customerId, setFavorites) => {
     try {
-        const response = await fetch(`${FAVORITESTORE_URL}/${customerId}`);
+        const response = await fetch(`${FAVORITESTORE_URL}/${customerId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + getToken(),
+                'refreshToken' : getRefreshToken()
+            },
+            body: JSON.stringify({ getUserEmail }),
+        });
         
         // 응답의 Content-Type을 확인하여 JSON으로 파싱할 수 있는지 확인
         const contentType = response.headers.get('Content-Type');
@@ -76,7 +85,8 @@ const CategoryList = ({ stores }) => {
     const [favorites, setFavorites] = useState({});
 
     // customerId 더미값
-    const customerId = 'test@gmail.com';
+    // const customerId = 'test@gmail.com';
+    const customerId = getUserEmail();
 
     const handleClick = (store) => {
         openModal('productDetail', { productDetail: store });

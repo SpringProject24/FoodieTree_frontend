@@ -28,17 +28,12 @@ const extractFoodType = (category) => {
 
 // 하트 상태를 토글하고 서버에 저장하는 함수
 const toggleFavorite = async (storeId, customerId) => {
-  let userEmail = getUserEmail();
-  console.log("userEmail :" ,userEmail)
-  console.log("userToken : ", getToken());
 
   try {
     const response = await fetch(`${FAVORITESTORE_URL}/${storeId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization' : 'Bearer ' + getToken(),
-        'refreshToken' : getRefreshToken()
       },
       body: JSON.stringify({ customerId }),
     });
@@ -83,7 +78,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
   const { openModal } = useModal();
 
   // customerId 더미값
-  const customerId = 'test@gmail.com';
+  const customerId = getUserEmail();
 
   useEffect(() => {
     setRandomStores(getRandomStores(stores, 5));
