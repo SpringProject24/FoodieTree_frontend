@@ -4,11 +4,12 @@ import { useModal } from '../../pages/common/ModalProvider';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWonSign, faBoxOpen, faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
+import { FAVORITESTORE_URL } from '../../config/host-config';
 
 // 하트 상태를 토글하고 서버에 저장하는 함수
 const toggleFavorite = async (storeId, customerId) => {
     try {
-        const response = await fetch(`http://localhost:8083/api/favorites/${storeId}`, {
+        const response = await fetch(`${FAVORITESTORE_URL}/${storeId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -16,29 +17,42 @@ const toggleFavorite = async (storeId, customerId) => {
             body: JSON.stringify({ customerId }),
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        // 응답의 Content-Type을 확인하여 JSON으로 파싱할 수 있는지 확인
+        const contentType = response.headers.get('Content-Type');
+        if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            console.log('Favorite toggled successfully:', data);
+        } else {
+            // JSON이 아닌 응답을 처리
+            const text = await response.text();
+            console.error('Unexpected response format:', text);
         }
 
-        const data = await response.json();
-        console.log('Favorite toggled successfully:', data);
     } catch (error) {
         console.error('Error toggling favorite:', error);
     }
 };
 
+// 사용자의 모든 찜 상태 조회
 const fetchFavorites = async (customerId, setFavorites) => {
     try {
-        const response = await fetch(`http://localhost:8083/api/favorites/user/${customerId}`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        const response = await fetch(`${FAVORITESTORE_URL}/${customerId}`);
+        
+        // 응답의 Content-Type을 확인하여 JSON으로 파싱할 수 있는지 확인
+        const contentType = response.headers.get('Content-Type');
+        if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            const favorites = data.reduce((acc, store) => {
+                acc[store.storeId] = true;
+                return acc;
+            }, {});
+            setFavorites(favorites);
+        } else {
+            // JSON이 아닌 응답을 처리
+            const text = await response.text();
+            console.error('Unexpected response format:', text);
         }
-        const data = await response.json();
-        const favorites = data.reduce((acc, store) => {
-            acc[store.storeId] = true;
-            return acc;
-        }, {});
-        setFavorites(favorites);
+
     } catch (error) {
         console.error('Error fetching favorites:', error);
     }
@@ -49,8 +63,7 @@ const CategoryList = ({ stores }) => {
     const [favorites, setFavorites] = useState({});
 
     // 실제 customerId와 storeId 설정
-    const customerId = 'test@gmail.com'; // 실제 customerId
-    const storeId = 'thdghtjd115@naver.com'; // 실제 storeId
+    const customerId = 'test@gmail.com';
 
     const handleClick = (store) => {
         openModal('productDetail', { productDetail: store });
