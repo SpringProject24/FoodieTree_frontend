@@ -8,9 +8,13 @@ import { faWonSign, faBoxOpen, faHeart as faHeartSolid } from "@fortawesome/free
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { FAVORITESTORE_URL } from '../../config/host-config';
+import {getUserEmail} from "../../config/auth";
 
 // 하트 상태를 토글하고 서버에 저장하는 함수
 const toggleFavorite = async (storeId, customerId) => {
+    let userEmail = getUserEmail();
+    console.log("userEmail :" ,userEmail)
+
     try {
         const response = await fetch(`${FAVORITESTORE_URL}/${storeId}`, {
             method: 'POST',

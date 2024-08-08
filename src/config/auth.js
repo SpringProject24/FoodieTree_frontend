@@ -1,38 +1,60 @@
-// import { redirect } from "react-router-dom";
-//
-// // 로그인한 유저의 정보 가져오기
-// const getUserData = () => {
-//     const userDataJson = localStorage.getItem('email');
-//     const userData = JSON.parse(userDataJson);
-//
-//     return userData;
-// };
-//
-// // 인증 토큰만 가져오기
-// export const getUserToken = () => {
-//     return getUserData().token;
-// };
-//
-// // 로그인 회원정보를 불러오는 loader
-// export const userDataLoader = () => {
-//     console.log('userDataLoader call!');
-//     return getUserData();
-// };
-//
-// // 접근 권한을 확인하는 loader
-// export const authCheckLoader = () => {
-//     const userData = getUserData();
-//
-//     if(!userData) {
-//         alert('로그인이 필요한 서비스 입니다');
-//         return redirect('/');
-//     }
-//     return null; // 현재페이지에 머묾...
-// }
+import { redirect } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
-//////////////////////////////////////////////////////////////
+// 로그인한 유저의 정보 가져오기
+export const getUserData = () => {
+    const userDataJson = localStorage.getItem('token');
+    const userData = JSON.parse(userDataJson);
 
-// auth.js
+    return userData;
+};
+
+export const getToken = () => {
+    const token = localStorage.getItem('token');
+
+    return token;
+}
+
+export const getRefreshToken = () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    return refreshToken;
+}
+
+// 로컬스토리지에서 이메일 가져오기
+export const getUserEmail = () => {
+    const userEmail = localStorage.getItem("email");
+
+    return userEmail;
+};
+
+// 인증 토큰에서 role 가져오기
+export const getUserRole = () => {
+    const userType = localStorage.getItem("userType");
+
+    return userType;
+};
+
+
+// 로그인 회원정보를 불러오는 loader
+export const userDataLoader = () => {
+    console.log('userDataLoader call!');
+    return getUserData();
+};
+
+// 접근 권한을 확인하는 loader
+export const authCheckLoader = () => {
+    const userData = getUserData();
+
+    if(!userData) {
+        alert('로그인이 필요한 서비스 입니다');
+        return redirect('/');
+    }
+    return null; // 현재페이지에 머묾...
+}
+
+
+// 이메일 토큰 판별
 export const verifyTokenLoader = async ({ request }) => {
     const url = new URL(request.url);
     const token = url.searchParams.get('token');
