@@ -15,10 +15,10 @@ const CancelReservationDetailModal = lazy(() => import("../customer/CancelReserv
 const StoreReservationDetailModal = lazy(() => import("../store/StoreReservationDetailModal"));
 const AddProductAmountModal = lazy(() => import("../store/AddProductAmountModal"));
 const ScheduleDetailModal = lazy(() => import("../store/ScheduleDetailModal"));
-
+const MyFavAreaEditModal = lazy(() => import("../customer/FavAreaEditModal"));
 const Modal = () => {
-    const { modalState, closeModal } = useModal();
-    const { isOpen, type, props } = modalState;
+    const {modalState, closeModal} = useModal();
+    const {isOpen, type, props} = modalState;
     const [customStyle, setCustomStyle] = useState({width: '100%'});
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 400); // 추가
 
@@ -26,9 +26,9 @@ const Modal = () => {
         const handleResize = () => {
             if (type === 'productDetail') {
                 if (window.innerWidth <= 400) {
-                    setCustomStyle({ width: '100%'});
+                    setCustomStyle({width: '100%'});
                 } else {
-                    setCustomStyle({ width: '80%', height: '80%', margin: '140px auto' });
+                    setCustomStyle({width: '80%', height: '80%', margin: '140px auto'});
                 }
             } else {
                 setCustomStyle({});
@@ -57,7 +57,7 @@ const Modal = () => {
         };
     }, [isOpen]);
 
-    if (!isOpen)return null;
+    if (!isOpen) return null;
 
     let ModalComponent;
 
@@ -86,6 +86,9 @@ const Modal = () => {
         case 'scheduleDetail': // 가게페이지 스케줄 상세조회 및 수정
             ModalComponent = ScheduleDetailModal;
             break;
+        case 'favAreaEdit': // 가게페이지 스케줄 상세조회 및 수정
+            ModalComponent = MyFavAreaEditModal;
+            break;
         default:
             ModalComponent = null;
     }
@@ -96,9 +99,10 @@ const Modal = () => {
         }
     };
 
-    return ReactDOM.createPortal (
+    return ReactDOM.createPortal(
         <div className={styles.modal} onClick={handleClose}>
-            <div className={styles.modalContent} style={type === 'productDetail' ? customStyle : {}} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalContent} style={type === 'productDetail' ? customStyle : {}}
+                 onClick={(e) => e.stopPropagation()}>
                 <div className={styles.close}>
                     <span><FontAwesomeIcon className={styles.closeBtn} onClick={closeModal} icon={faTimes}/></span>
                 </div>
