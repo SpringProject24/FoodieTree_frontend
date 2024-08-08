@@ -8,9 +8,9 @@ import {useModal} from "../../../pages/common/ModalProvider";
 const FavArea = ({ favList, set }) => {
 
     const {openModal} = useModal();
-    
+
     const modalHandler = () => {
-        openModal('favAreaEdit');
+        openModal('favAreaEdit', {type: 'customer'});
     }
 
     const clickHandler = async (type, value) => {

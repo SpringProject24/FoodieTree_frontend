@@ -4,7 +4,7 @@ import NaverMapWithSearch from "../../components/customer/my-fav-map/NaverMapWit
 const FavAreaEditModal = () => {
     return (
         <div>
-            <NaverMapWithSearch/>
+            <NaverMapWithSearch type={'customer'}/>
         </div>
     );
 };

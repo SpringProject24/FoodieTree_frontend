@@ -12,15 +12,15 @@ function loadScript(src) {
     });
 }
 
-
-const NaverMapWithSearch = () => {
+// type: 'customer' or 'store'
+const NaverMapWithSearch = ({type}) => {
     const [map, setMap] = useState(null);
     const [infoWindow, setInfoWindow] = useState(null);
     const [searchKeyword, setSearchKeyword] = useState("");
     const [places, setPlaces] = useState([]);
     const [searchMarker, setSearchMarker] = useState(null);
     const [activeMarker, setActiveMarker] = useState(null);
-
+    // const [type, setType] = useState('store');
     useEffect(() => {
         if (map) {
             // map이 설정된 후 실행할 코드
@@ -92,12 +92,29 @@ const NaverMapWithSearch = () => {
         });
 
         // 서버에서 장소 데이터를 가져와서 지도에 추가
-        fetchPlacesFromServer();
+        if(type === 'customer') {
+            fetchPlacesFromServer();
+        }else{
+            fetchStoreAddressFromServer();
+        }
     };
+
+    const fetchStoreAddressFromServer = async () => {
+        try{
+            const response = await fetch('/store/info');
+            const storeInfo = response.ok? await response.json() : [];
+
+            console.log('Fetched store info:', storeInfo);
+
+            setPlaces(storeInfo.address);
+        }catch (error){
+            console.error('Failed to fetch store info from server:', error);
+        }
+    }
 
     const fetchPlacesFromServer = async () => {
         try {
-            const response = await fetch('/customer/info/area'); // 엔드포인트를 실제로 맞춰주세요.
+            const response = await fetch('/customer/info/area');
             const fetchedPlaces = response.ok ? await response.json() : [];
 
             console.log('Fetched places:', fetchedPlaces);
@@ -359,15 +376,19 @@ const NaverMapWithSearch = () => {
 
     return (
         <div>
-            <input
-                type="text"
-                value={searchKeyword}
-                onChange={(e) => setSearchKeyword(e.target.value)}
-                placeholder="주소 검색"
-            />
-            <button onClick={() => searchAddressToCoordinate(searchKeyword)}>검색</button>
-            <button id="addFav" style={{ display: 'none' }} onClick={addSearchMarkerToFavorite}>선호 지역으로 추가하기</button>
-            <button id="removeFav" style={{ display: 'none' }} onClick={() => removePlaceFromFavorites(activeMarker)}>선호 지역에서 제거하기</button>
+            {type === 'customer' &&
+                <div>
+                    <input
+                        type="text"
+                        value={searchKeyword}
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                        placeholder="주소 검색"
+                    />
+                    <button onClick={() => searchAddressToCoordinate(searchKeyword)}>검색</button>
+                    <button id="addFav" style={{ display: 'none' }} onClick={addSearchMarkerToFavorite}>선호 지역으로 추가하기</button>
+                    <button id="removeFav" style={{ display: 'none' }} onClick={() => removePlaceFromFavorites(activeMarker)}>선호 지역에서 제거하기</button>
+                </div>
+            }
             <div id="map" style={{ width: '100%', height: '400px' }} />
         </div>
     );
