@@ -9,6 +9,10 @@ import { jwtDecode } from 'jwt-decode';
 export const logoutAction = async (navigate) => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('email');
+    localStorage.removeItem('userType');
+    // navigate를 호출하는 것도 비동기 작업으로 상태가 안정적으로 업데이트된 후 호출되도록 합니다.
+    await new Promise((resolve) => setTimeout(resolve, 0));
     navigate('/');
 };
 
