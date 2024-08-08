@@ -6,7 +6,7 @@ const ProductDetail = ({productDetail}) => (<div className={styles.productDetail
     {/*<p>스페셜팩 정보</p>*/}
     <div className={styles.map}>
         <div className={styles.mapImg}>
-            <NaverMapWithSearch type={'store'}/>
+            <NaverMapWithSearch type={'store'} productDetail={productDetail}/>
         </div>
         <div className={styles.storeAddress}>
             <p>픽업 주소 </p>

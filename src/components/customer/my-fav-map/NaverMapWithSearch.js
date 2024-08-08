@@ -13,7 +13,7 @@ function loadScript(src) {
 }
 
 // type: 'customer' or 'store'
-const NaverMapWithSearch = ({type}) => {
+const NaverMapWithSearch = ({type, productDetail}) => {
     const [map, setMap] = useState(null);
     const [infoWindow, setInfoWindow] = useState(null);
     const [searchKeyword, setSearchKeyword] = useState("");
@@ -95,22 +95,9 @@ const NaverMapWithSearch = ({type}) => {
         if(type === 'customer') {
             fetchPlacesFromServer();
         }else{
-            fetchStoreAddressFromServer();
+            addPlace(new window.naver.maps.LatLng(productDetail.storeInfo.lat, productDetail.storeInfo.lng), productDetail.storeInfo.storeName, productDetail.storeInfo.storeAddress);
         }
     };
-
-    const fetchStoreAddressFromServer = async () => {
-        try{
-            const response = await fetch('/store/info');
-            const storeInfo = response.ok? await response.json() : [];
-
-            console.log('Fetched store info:', storeInfo);
-
-            setPlaces(storeInfo.address);
-        }catch (error){
-            console.error('Failed to fetch store info from server:', error);
-        }
-    }
 
     const fetchPlacesFromServer = async () => {
         try {
