@@ -3,6 +3,7 @@ import styles from "./Edit.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import {CUSTOMER_URL} from "../../../config/host-config";
+import {authFetch} from "../../../utils/authUtil";
 
 const FavArea = ({ favList, set }) => {
     const clickHandler = async (type, value) => {
@@ -10,7 +11,7 @@ const FavArea = ({ favList, set }) => {
             type,
             value
         }
-        const res = await fetch(CUSTOMER_URL + `/edit`, {
+        const res = await authFetch(CUSTOMER_URL + `/edit`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
