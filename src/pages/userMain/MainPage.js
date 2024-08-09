@@ -2,11 +2,17 @@ import React, { useState, useEffect } from 'react';
 import FoodNav from '../../components/mainPage/FoodNav';
 import CategoryBtn from '../../components/mainPage/CategoryBtn';
 import { STORELISTS_URL } from '../../config/host-config';
+import { useNavigate } from 'react-router-dom';
+import {checkAuthToken} from "../../utils/authUtil";
 
 const MainPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [stores, setStores] = useState([]);
   const categories = ["한식", "중식", "양식", "일식", "디저트", "카페", "기타"];
+
+  const navigate = useNavigate();
+
+  checkAuthToken(navigate);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -19,7 +25,8 @@ const MainPage = () => {
       .then(data => setStores(data))
       .catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
   }, []);
- 
+
+
   return (
     <div className="main-page">
       <CategoryBtn categories={categories} onCategoryClick={handleCategoryClick} />
