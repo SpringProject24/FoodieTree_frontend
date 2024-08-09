@@ -8,7 +8,7 @@ import FavoriteStore from "../../components/customer/mypage/FavoriteStore";
 import SideBarBtn from "../../components/store/mypage-edit/SideBarBtn";
 
 import { jwtDecode } from 'jwt-decode';
-import {checkAuthToken} from "../../utils/authUtil";
+import {authFetch, checkAuthToken} from "../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
 
 const BASE_URL = window.location.origin;
@@ -60,7 +60,7 @@ const CustomerMyPage = () => {
                 throw new Error('Token or refreshToken not found in localStorage');
             }
 
-            const response = await fetch(`${BASE_URL}/customer/info?customerId=${customerId}`, {
+            const response = await authFetch(`${BASE_URL}/customer/info?customerId=${customerId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const CustomerMyPage = () => {
     const fetchReservations = async () => {
         try {
 
-            const response = await fetch(`${BASE_URL}/reservation/list` , {
+            const response = await authFetch(`${BASE_URL}/reservation/list` , {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ const CustomerMyPage = () => {
     const fetchStats = async () => {
 
         try {
-            const response = await fetch(`${BASE_URL}/customer/stats?customerId=${customerId}`
+            const response = await authFetch(`${BASE_URL}/customer/stats?customerId=${customerId}`
                 ,{
                     method: 'GET',
                     headers: {
