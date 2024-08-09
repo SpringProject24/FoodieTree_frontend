@@ -17,7 +17,7 @@ const ApprovalTable = () => {
   const [data, setData] = useState([]);
   const columns = useMemo(() => ApprovalColumns, []);
   const [columnFilters, setColumnFilters] = useState([]);
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState({}); // 선택한 행
   const [startDate, setStartDate] = useState(new Date('2024-06-01'));
   const [endDate, setEndDate] = useState(new Date());
 
@@ -34,38 +34,40 @@ const ApprovalTable = () => {
       rowSelection,
     },
   });
+  const fetchApprovals = async () => {
+    console.log('fetchApprovals 실행중!')
+
+    const startISO = startDate.toISOString();
+    const endISO = endDate.toISOString()
+
+    // const token = localStorage.getItem('token');
+    // const refreshToken = localStorage.getItem('refreshToken');
+
+    const res = await fetch(
+      `/admin/approve?start=${startISO}&end=${endISO}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type' : 'application/json',
+          'Cache-Control': 'no-cache',
+          // 'Authorization' : 'Bearer ' + getUserToken(),
+          // 'refreshToken': refreshToken,
+        },
+      });
+    if(!res.ok) {
+      const errorMessage = await res.text();
+      alert(errorMessage);
+      return null;
+    }
+    const DATA =  await res.json();
+    setData(DATA.approvals);
+  }
 
   // 기간을 기준으로 서버에 데이터 요청 및 렌더링
   useEffect(() => {
     console.log('approval useEffect 실행중!')
-    const fetchApprovals = async () => {
-      console.log('fetchApprovals 실행중!')
-
-      const startISO = startDate.toISOString();
-      const endISO = endDate.toISOString()
-
-      const res = await fetch(
-        `/admin/approve?start=${startISO}&end=${endISO}`,
-        {
-            method: 'GET',
-            headers: {
-              'Content-Type' : 'application/json',
-              'Cache-Control': 'no-cache',
-              // 'Authorization' : 'Bearer ' + getUserToken(),
-              // 'refreshToken': refreshToken,
-          },
-      });
-      if(!res.ok) {
-        const errorMessage = await res.text();
-        alert(errorMessage);
-        return null;
-      }
-      const DATA =  await res.json();
-      setData(DATA.approvals);
-    }
     fetchApprovals();
   }, [startDate, endDate]);
-  console.log(rowSelection)
 
   return (
     <div className={styles['table-section']}>
@@ -82,6 +84,7 @@ const ApprovalTable = () => {
         <ApprovalButtons
           rows={rowSelection}
           data={data}
+          onFetch={fetchApprovals}
         />
       </div>
       <table width={table.getTotalSize()} className={styles['tbl-line']}>
