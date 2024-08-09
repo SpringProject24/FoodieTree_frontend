@@ -15,7 +15,11 @@ const CancelReservationDetailModal = lazy(() => import("../customer/CancelReserv
 const StoreReservationDetailModal = lazy(() => import("../store/StoreReservationDetailModal"));
 const AddProductAmountModal = lazy(() => import("../store/AddProductAmountModal"));
 const ScheduleDetailModal = lazy(() => import("../store/ScheduleDetailModal"));
+
 const MyFavAreaEditModal = lazy(() => import("../customer/FavAreaEditModal"));
+
+const CustomerReservationFilterModal = lazy(() => import("../customer/CustomerReservationFilterModal")); // 새로운 모달 추가
+
 const Modal = () => {
     const {modalState, closeModal} = useModal();
     const {isOpen, type, props} = modalState;
@@ -86,8 +90,13 @@ const Modal = () => {
         case 'scheduleDetail': // 가게페이지 스케줄 상세조회 및 수정
             ModalComponent = ScheduleDetailModal;
             break;
+
         case 'favAreaEdit': // 가게페이지 스케줄 상세조회 및 수정
             ModalComponent = MyFavAreaEditModal;
+
+        case 'customerReservationFilter': // 소비자페이지 예약내역 필터
+            ModalComponent = CustomerReservationFilterModal;
+
             break;
         default:
             ModalComponent = null;
