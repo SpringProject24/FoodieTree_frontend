@@ -5,8 +5,6 @@ import { faCircleXmark, faCircleCheck, faSpinner, faSliders } from "@fortawesome
 import { useModal } from "../../../pages/common/ModalProvider";
 import {imgErrorHandler} from "../../../utils/error";
 
-const BASE_URL = window.location.origin;
-
 const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width, initialFilters, onApplyFilters }) => {
     const { openModal } = useModal();
     const listRef = useRef();

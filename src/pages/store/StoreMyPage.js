@@ -16,12 +16,14 @@ const StoreMyPage = () => {
     const [storeInfo, setStoreInfo] = useState({}); // 가게 정보 저장
     const [stats, setStats] = useState({}); // 가게 통계 정보 저장
     const [reservations, setReservations] = useState([]); // 전체 예약 목록 저장
+    const [filteredReservations, setFilteredReservations] = useState([]);
     const [displayReservations, setDisplayReservations] = useState([]); // 화면에 표시할 예약 목록 (무한스크롤)
     const [hasMore, setHasMore] = useState(true); // 추가 예약 목록이 있는지 여부 확인 (무한스크롤)
     const [startIndex, setStartIndex] = useState(0); // 무한 스크롤 작동 시 현재 불러온 데이터의 끝 인덱스 추적
     const [isLoading, setIsLoading] = useState(false); // 데이터를 불러오는 중인지 여부를 추적 (로딩 상태)
     const [filters, setFilters] = useState({}); // 필터 상태 저장
     const ITEMS_PER_PAGE = 10; // 한번에 가져올 예약목록 개수 설정
+    const [isFiltered, setIsFiltered] = useState(false); // 필터 적용 상태를 나타내는 값
 
     /**
      * 현재 창의 너비를 설정하는 함수
@@ -68,6 +70,7 @@ const StoreMyPage = () => {
     const fetchReservations = async () => {
         try {
             const response = await fetch(`${BASE_URL}/store/reservations`);
+            console.log('isFiltered: ', isFiltered);
             if (!response.ok) {
                 throw new Error('Failed to fetch reservations');
             }
@@ -152,15 +155,20 @@ const StoreMyPage = () => {
      * 추가 데이터를 불러오는 함수
      */
     const loadMore = () => {
+        console.log('isFiltered: ', isFiltered);
         setIsLoading(true);
-        setTimeout(() => {
+        // setTimeout(() => {
             const newStartIndex = startIndex + ITEMS_PER_PAGE;
-            const moreReservations = reservations.slice(startIndex, newStartIndex);
+        console.log('isFiltered: ', isFiltered);
+            const moreReservations = isFiltered
+                ? filteredReservations.slice(startIndex, newStartIndex)
+                : reservations.slice(startIndex, newStartIndex);
             setDisplayReservations(prev => [...prev, ...moreReservations]);
             setStartIndex(newStartIndex);
-            setHasMore(newStartIndex < reservations.length);
+            setHasMore(newStartIndex < (isFiltered ? filteredReservations : reservations).length);
             setIsLoading(false);
-        }, 500);
+        console.log('isFiltered: ', isFiltered);
+        // }, 500);
     };
 
     /**
@@ -183,10 +191,17 @@ const StoreMyPage = () => {
     /**
      * 필터를 적용하는 함수
      */
-    const onApplyFilters = (newFilters) => {
+    const handleApplyFilters = (newFilters) => {
         setFilters(newFilters);
-        const filteredReservations = reservations.filter(reservation => {
-            const { startDate, endDate, status } = newFilters;
+        console.log('isFiltered: ', isFiltered);
+        setIsFiltered(true); // 필터가 적용되었음을 표시
+        console.log('isFiltered: ', isFiltered);
+        applyFilters(newFilters, reservations);
+    };
+
+    const applyFilters = (filters, reservations) => {
+        const filtered = reservations.filter(reservation => {
+            const { startDate, endDate, status } = filters;
 
             const withinDateRange = (!startDate || new Date(reservation.pickupTime) >= new Date(startDate)) &&
                 (!endDate || new Date(reservation.pickupTime) <= new Date(endDate));
@@ -196,9 +211,10 @@ const StoreMyPage = () => {
             return withinDateRange && matchesStatus;
         });
 
-        setDisplayReservations(filteredReservations.slice(0, ITEMS_PER_PAGE));
+        setFilteredReservations(filtered);
+        setDisplayReservations(filtered.slice(0, ITEMS_PER_PAGE));
         setStartIndex(ITEMS_PER_PAGE);
-        setHasMore(filteredReservations.length > ITEMS_PER_PAGE);
+        setHasMore(filtered.length > ITEMS_PER_PAGE);
     };
 
     return (
@@ -220,7 +236,7 @@ const StoreMyPage = () => {
                             hasMore={hasMore}
                             width={width}
                             initialFilters={filters}
-                            onApplyFilters={onApplyFilters}
+                            onApplyFilters={handleApplyFilters}
                         />
                         {width > 400 && (
                             <>

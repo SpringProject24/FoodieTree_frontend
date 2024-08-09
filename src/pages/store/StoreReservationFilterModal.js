@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './StoreReservationFilterModal.module.scss';
 import { useModal } from "../common/ModalProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
