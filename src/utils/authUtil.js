@@ -6,9 +6,8 @@ import { redirect } from "react-router-dom";
 // 로그인한 유저의 정보 가져오기
 export const getUserData = () => {
     const userDataJson = localStorage.getItem('token');
-    const userData = JSON.parse(userDataJson);
 
-    return userData;
+    return userDataJson;
 };
 
 export const getToken = () => {
@@ -50,7 +49,7 @@ export const authCheckLoader = () => {
 
     if(!userData) {
         alert('로그인이 필요한 서비스 입니다');
-        return redirect('/');
+        return redirect('/sign-in');
     }
     return null; // 현재페이지에 머묾...
 }
