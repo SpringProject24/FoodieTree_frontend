@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWonSign, faBoxOpen, faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import { FAVORITESTORE_URL } from '../../config/host-config';
+import {getUserData, getUserEmail} from "../../utils/authUtil";
 
 // 하트 상태를 토글하고 서버에 저장하는 함수
 const toggleFavorite = async (storeId, customerId) => {
@@ -61,7 +62,8 @@ const BestStoreList = ({ stores = [] }) => {
     const [favorites, setFavorites] = useState({});
 
     // customerId 더미값
-    const customerId = 'test@gmail.com';
+    // const customerId = 'test@gmail.com';
+    const customerId = getUserEmail();
 
     useEffect(() => {
         if (customerId) {
