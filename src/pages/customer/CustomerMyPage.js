@@ -8,6 +8,8 @@ import FavoriteStore from "../../components/customer/mypage/FavoriteStore";
 import SideBarBtn from "../../components/store/mypage-edit/SideBarBtn";
 
 import { jwtDecode } from 'jwt-decode';
+import {checkAuthToken} from "../../utils/authUtil";
+import {useNavigate} from "react-router-dom";
 
 const BASE_URL = window.location.origin;
 
@@ -17,6 +19,7 @@ const CustomerMyPage = () => {
     const [show, setShow] = useState(false);
     const [customerData, setCustomerData] = useState({});
     const [reservations, setReservations] = useState([]);
+    const [filteredReservations, setFilteredReservations] = useState([]);
     const [stats, setStats] = useState({});
     const [displayReservations, setDisplayReservations] = useState([]);
     const [hasMore, setHasMore] = useState(true);
@@ -29,8 +32,15 @@ const CustomerMyPage = () => {
     const tokenInfo = token ? jwtDecode(token) : null;
     const customerId = tokenInfo ? tokenInfo.sub : null;
 
-    console.log("email from token : ",customerId);
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        checkAuthToken(navigate);
+
+        fetchCustomerData();
+        fetchReservations();
+        fetchStats();
+    }, [customerId]);
 
     useEffect(() => {
         window.addEventListener("resize", setInnerWidth);
@@ -39,26 +49,10 @@ const CustomerMyPage = () => {
         }
     }, []);
 
-    useEffect(() => {
-        fetchCustomerData();
-        fetchReservations();
-        fetchStats();
-    }, [customerId]);
 
     const setInnerWidth = () => {
         setWidth(window.innerWidth);
     }
-
-    // const fetchCustomerData = async () => {
-    //     try {
-    //         const response = await fetch(`${BASE_URL}/customer/info?customerId=${customerId}`);
-    //         if (!response.ok) throw new Error('Failed to fetch customer info');
-    //         const data = await response.json();
-    //         setCustomerData(data);
-    //     } catch (error) {
-    //         console.error('Error fetching customer info:', error);
-    //     }
-    // };
 
     const fetchCustomerData = async () => {
         try {
@@ -103,6 +97,7 @@ const CustomerMyPage = () => {
             const data = await response.json();
             const sortedData = sortReservations(data);
             setReservations(sortedData);
+            setFilteredReservations(sortedData);
             setDisplayReservations(sortedData.slice(0, ITEMS_PER_PAGE));
             setStartIndex(ITEMS_PER_PAGE);
             setHasMore(sortedData.length > ITEMS_PER_PAGE);
@@ -183,10 +178,10 @@ const CustomerMyPage = () => {
         setIsLoading(true);
         setTimeout(() => {
             const newStartIndex = startIndex + ITEMS_PER_PAGE;
-            const moreReservations = reservations.slice(startIndex, newStartIndex);
+            const moreReservations = filteredReservations.slice(startIndex, newStartIndex);
             setDisplayReservations(prev => [...prev, ...moreReservations]);
             setStartIndex(newStartIndex);
-            setHasMore(newStartIndex < reservations.length);
+            setHasMore(newStartIndex < filteredReservations.length);
             setIsLoading(false);
         }, 500);
     };
@@ -194,11 +189,28 @@ const CustomerMyPage = () => {
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [startIndex, hasMore, isLoading]);
+    }, [startIndex, hasMore, isLoading, filteredReservations]);
 
     const showHandler = () => {
         setShow(prev => !prev);
     }
+
+    const applyFilters = (filters) => {
+        const { category, dateRange, status } = filters;
+
+        const filtered = reservations.filter(reservation => {
+            const categoryMatch = category.length === 0 || category.includes(reservation.category);
+            const statusMatch = status.length === 0 || status.includes(reservation.status);
+            const dateMatch = (!dateRange.startDate || new Date(reservation.pickupTime) >= new Date(dateRange.startDate)) &&
+                (!dateRange.endDate || new Date(reservation.pickupTime) <= new Date(dateRange.endDate));
+            return categoryMatch && statusMatch && dateMatch;
+        });
+
+        setFilteredReservations(filtered);
+        setDisplayReservations(filtered.slice(0, ITEMS_PER_PAGE));
+        setStartIndex(ITEMS_PER_PAGE);
+        setHasMore(filtered.length > ITEMS_PER_PAGE);
+    };
 
     return (
         <>
@@ -213,6 +225,7 @@ const CustomerMyPage = () => {
                             loadMore={loadMore}
                             hasMore={hasMore}
                             isLoading={isLoading}
+                            onApplyFilters={applyFilters}
                         />
 
                         {width > 400 && (
