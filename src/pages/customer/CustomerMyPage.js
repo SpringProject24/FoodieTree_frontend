@@ -186,10 +186,10 @@ const CustomerMyPage = () => {
         setIsLoading(true);
         setTimeout(() => {
             const newStartIndex = startIndex + ITEMS_PER_PAGE;
-            const moreReservations = reservations.slice(startIndex, newStartIndex);
+            const moreReservations = filteredReservations.slice(startIndex, newStartIndex);
             setDisplayReservations(prev => [...prev, ...moreReservations]);
             setStartIndex(newStartIndex);
-            setHasMore(newStartIndex < reservations.length);
+            setHasMore(newStartIndex < filteredReservations.length);
             setIsLoading(false);
         }, 500);
     };
@@ -197,7 +197,7 @@ const CustomerMyPage = () => {
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [startIndex, hasMore, isLoading]);
+    }, [startIndex, hasMore, isLoading, filteredReservations]);
 
     const showHandler = () => {
         setShow(prev => !prev);
