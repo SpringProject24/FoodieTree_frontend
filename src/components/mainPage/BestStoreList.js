@@ -119,6 +119,7 @@ const BestStoreList = ({ stores = [] }) => {
                         <div
                             key={index}
                             className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
+                            onClick={() => handleClick(store)} 
                         >
                             <div 
                                 className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
