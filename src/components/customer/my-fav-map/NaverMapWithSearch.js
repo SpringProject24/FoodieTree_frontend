@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {floor} from "lodash";
+import {authFetch} from "../../../utils/authUtil";
 
 function loadScript(src) {
     return new Promise((resolve, reject) => {
@@ -97,7 +98,7 @@ const NaverMapWithSearch = () => {
 
     const fetchPlacesFromServer = async () => {
         try {
-            const response = await fetch('/customer/info/area'); // 엔드포인트를 실제로 맞춰주세요.
+            const response = await authFetch('/customer/info/area'); // 엔드포인트를 실제로 맞춰주세요.
             const fetchedPlaces = response.ok ? await response.json() : [];
 
             console.log('Fetched places:', fetchedPlaces);
@@ -284,7 +285,7 @@ const NaverMapWithSearch = () => {
 
             // 서버에 추가 요청 보내기
             try {
-                const response = await fetch('/customer/edit/area', {
+                const response = await authFetch('/customer/edit/area', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -325,7 +326,7 @@ const NaverMapWithSearch = () => {
             const placeToRemove = places.find(place => place.latlng && place.latlng.equals(position));
             if (placeToRemove) {
                 try {
-                    const response = await fetch('/customer/edit/area', {
+                    const response = await authFetch('/customer/edit/area', {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',

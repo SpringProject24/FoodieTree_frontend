@@ -6,6 +6,7 @@ import ProductCount from "../../components/store/mypage/ProductCount";
 import Calendar from "../../components/store/mypage/Calendar";
 import { useModal } from '../common/ModalProvider';
 import SideBarBtn from "../../components/store/mypage-edit/SideBarBtn";
+import {authFetch} from "../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
 import {checkAuthToken} from "../../utils/authUtil";
 
@@ -36,7 +37,7 @@ const StoreMyPage = () => {
      */
     const fetchStoreInfo = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/store/info`);
+            const response = await authFetch(`${BASE_URL}/store/info`);
             if (!response.ok) {
                 throw new Error('Failed to fetch store info');
             }
@@ -52,7 +53,7 @@ const StoreMyPage = () => {
      */
     const fetchStats = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/store/stats`);
+            const response = await authFetch(`${BASE_URL}/store/stats`);
             if (!response.ok) {
                 throw new Error('Failed to fetch stats');
             }
@@ -68,7 +69,7 @@ const StoreMyPage = () => {
      */
     const fetchReservations = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/store/reservations`);
+            const response = await authFetch(`${BASE_URL}/store/reservations`);
             if (!response.ok) {
                 throw new Error('Failed to fetch reservations');
             }
@@ -92,7 +93,6 @@ const StoreMyPage = () => {
             window.removeEventListener("resize", setInnerWidth);
         }
     }, []);
-
 
     /**
      * 토큰이 있으면 현재 페이지 유지
