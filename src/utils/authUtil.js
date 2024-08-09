@@ -40,3 +40,16 @@ export const checkLoggedIn = (navigate) => {
     }
 }
 
+export const authFetch = async (url, req) => {
+    const token = localStorage.getItem("token");
+    const refreshToken = localStorage.getItem("refreshToken");
+    const init = {
+        ...req,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'refreshToken': refreshToken
+        }
+    }
+    return await fetch(url , init);
+}

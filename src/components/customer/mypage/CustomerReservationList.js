@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "../../../pages/common/ModalProvider";
 import {imgErrorHandler} from "../../../utils/error";
+import {authFetch} from "../../../utils/authUtil";
 
 const BASE_URL = window.location.origin;
 
@@ -59,7 +60,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
     // 예약 상세내역을 가져오는 함수
     const fetchReservationDetail = async (reservationId) => {
         try {
-            const res = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
+            const res = await authFetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
             if (res.ok) {
                 const data = await res.json();
                 return data;
@@ -76,7 +77,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
     // 예약 취소 fetch 함수
     const cancelReservation = async (reservationId) => {
         try {
-            const response = await fetch(`${BASE_URL}/reservation/cancel?reservationId=${reservationId}`, {
+            const response = await authFetch(`${BASE_URL}/reservation/cancel?reservationId=${reservationId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -100,7 +101,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
     // 예약 픽업 fetch 함수
     const completePickup = async (reservationId) => {
         try {
-            const response = await fetch(`${BASE_URL}/reservation/pickup?reservationId=${reservationId}`, {
+            const response = await authFetch(`${BASE_URL}/reservation/pickup?reservationId=${reservationId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'

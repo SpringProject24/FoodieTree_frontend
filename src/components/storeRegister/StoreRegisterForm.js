@@ -6,6 +6,7 @@ import {STORE_URL} from "../../config/host-config";
 import useFormValidation from "./useFormValidation";
 import ErrorSpan from "./ErrorSpan";
 import query from "lodash";
+import {authFetch} from "../../utils/authUtil";
 
 // select option 배열
 const OPTIONS = [
@@ -167,7 +168,7 @@ export const storeRegisterAction = async ({request}) => {
 
   console.log("did i get a token info? : ",token);
 
-  const response = await fetch(`${STORE_URL}/approval`, {
+  const response = await authFetch(`${STORE_URL}/approval`, {
 
     method: 'POST',
     headers: {
