@@ -7,11 +7,50 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
   padding: 20px 10px;
   border-radius: 20px;
   //border: 1px solid yellowgreen;
+  font-family: $font-pretendard;
 
-  .table-header {
+  .table-interaction {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin: 5px auto;
+
+    .date-input-container {
+      display: flex;
+      flex-direction: row;
+      input {
+        font-size: 14px;
+        color: var(--color-gray-700);
+        width: 140px;
+        height: 30px;
+        margin: 5px;
+        border: 1px solid rgba(0,0,0,0.2);
+        border-radius: 5px;
+        padding: 5px;
+      }
+      span {
+        line-height: 30px;
+        padding: 5px;
+      }
+    }
+    .status-btn-container {
+
+      button {
+        font-family: $font-pretendard;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--color-gray-800);
+        padding: 7px 20px;
+        background: #43e97b;
+        border: none;
+        //box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);
+        border-radius: 5px;
+        margin: 0 5px;
+        &:last-child {
+          background: #ff8487;
+        }
+      }
+    }
   }
 
   .tbl-line {
@@ -21,12 +60,12 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
     border-collapse: collapse;
 
     tr {
-      border-bottom: 1px solid var(--color-gray-200);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
       height: 40px;
       line-height: 40px;
       display: flex;
       align-items: center;
-
+      color: rgb(60,60,60);
       &:nth-child(even) {
         background: #f2f4f4;
       }

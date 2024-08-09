@@ -10,6 +10,7 @@ import SearchInTable from "./SearchInTable";
 import {BiSortAlt2} from "react-icons/bi";
 import styles from "./ApprovalTables.module.scss";
 import {ApprovalColumns} from "./ApprovalColumns";
+import DateRangePicker from "./DateRangePicker";
 
 const ApprovalTable = () => {
   const [data, setData] = useState([]);
@@ -63,16 +64,20 @@ const ApprovalTable = () => {
     }
     fetchApprovals();
   }, [startDate, endDate]);
-  // useEffect(() => {
-  //   console.log('현재 데이터 상태: ', data);
-  // }, [data]);
+
 
   return (
     <div className={styles['table-section']}>
-      <div className={styles['table-header']}>
+      <div className={styles['table-interaction']}>
         <SearchInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters} />
         <div className={styles['date-input-container']}>
-          <input type={"date"}/>
+          <DateRangePicker
+            startDate={startDate}
+            endDate={endDate}
+            dateFormat={"yyyy년 MM월 dd일"}
+            onStart={(date) => setStartDate(date)}
+            onEnd={(date) => setEndDate(date)}
+          />
         </div>
         <div className={styles['status-btn-container']}>
           <button className={styles['btn-approved']}>승인</button>
