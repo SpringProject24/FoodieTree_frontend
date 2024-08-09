@@ -2,6 +2,8 @@ import React from 'react';
 import DatePicker from "react-datepicker";
 import styles from "./ApprovalTables.module.scss";
 import {ko} from "date-fns/locale";
+import "react-datepicker/dist/react-datepicker.css";
+import calStyles from "./DateRangePicker.css"
 
 const DateRangePicker = ({startDate, endDate, dateFormat, onStart, onEnd, styleName}) => {
 

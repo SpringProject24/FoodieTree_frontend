@@ -4,6 +4,7 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
   margin: 20px auto 50px;
   width: 1580px;
   //width: 83%;
+  min-height: 500px;
   box-shadow: 2px 5px 8px 3px rgba(100,100,100,0.1);
   padding: 20px 10px;
   border-radius: 20px;
@@ -20,14 +21,18 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
       display: flex;
       flex-direction: row;
       input {
-        font-size: 14px;
+        font-size: 15px;
         color: var(--color-gray-700);
-        width: 140px;
-        height: 30px;
+        width: 145px;
+        height: 33px;
         margin: 5px;
         border: 1px solid rgba(0,0,0,0.2);
-        border-radius: 5px;
+        border-radius: 6px;
         padding: 5px;
+
+        &:focus-visible {
+          outline-color: #7bde9a;
+        }
       }
       span {
         line-height: 30px;
@@ -41,15 +46,25 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
         font-size: 16px;
         font-weight: 500;
         color: var(--color-gray-800);
-        padding: 7px 20px;
-        background: #43e97b;
+        padding: 7px 30px;
+        background: #ebebeb;
         border: none;
         //box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);
-        border-radius: 5px;
+        border-radius: 8px;
         margin: 0 5px;
 
         &:last-child {
-          background: #ff8487;
+          background: #ebebeb;
+          &:hover {
+            color: #fff;
+            background: #ff525c;
+            box-shadow: 0 2px 8px -1px rgba(#151924, .22);
+          }
+        }
+        &:hover {
+          color: #fff;
+          background: #10da72;
+          box-shadow: 0 2px 8px -1px rgba(#151924, .22);
         }
       }
     }
