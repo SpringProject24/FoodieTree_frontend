@@ -1,5 +1,5 @@
-import React from 'react';
-import {Form, redirect} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Form, redirect, useNavigate} from 'react-router-dom';
 import styles from './StoreRegisterForm.module.scss'
 import SelectBox from "./SelectBox";
 import {STORE_URL} from "../../config/host-config";
@@ -7,6 +7,7 @@ import useFormValidation from "./useFormValidation";
 import ErrorSpan from "./ErrorSpan";
 import query from "lodash";
 import {authFetch} from "../../utils/authUtil";
+import {checkAuthToken} from "../../utils/authUtil";
 
 // select option 배열
 const OPTIONS = [
@@ -69,7 +70,6 @@ const StoreRegisterForm = () => {
 
   const { values, errors, isFormValid, changeHandler, setValues }
       = useFormValidation(initialValues, validate);
-
 
   return (
     <Form
@@ -181,7 +181,7 @@ export const storeRegisterAction = async ({request}) => {
   if(!response.ok) {
     const errorMessage = await response.text();
     alert(errorMessage);
+    return null;
   }
-
-  return redirect('/store/approval/p')
+  return redirect('/store/approval/p');
 }

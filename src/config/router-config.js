@@ -18,13 +18,16 @@ import StoreRegisterPage from "../pages/store/StoreRegisterPage";
 import {storeRegisterAction} from "../components/storeRegister/StoreRegisterForm";
 import ProductRegisterForm from "../components/storeRegister/ProductRegisterForm";
 import VerifyToken from "../components/auth/VerifyToken";
+import {verifyTokenLoader} from "../utils/authUtil";
 import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
+import AdminPage from "../pages/AdminPage";
 import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSearch";
+import Main from "../pages/Main";
 
 const homeRouter = [
     {
         index: true,
-        element: <div>hi</div>,
+        element: <Main/>,
     },
     {
         path: '/sign-up',
@@ -40,7 +43,8 @@ const homeRouter = [
     },
     {
         path: '/verifyEmail',
-        element: <VerifyToken/>
+        element: <VerifyToken/>,
+        loader: verifyTokenLoader, // Add the loader here
     },
     {
         path: '/main',
@@ -106,6 +110,10 @@ export const router = createBrowserRouter([
                 path: '/customer',
                 children: customerMyPageRouter
             },
+            {
+                path: '/admin',
+                element: <AdminPage/>,
+            }
         ]
     },
 ]);
