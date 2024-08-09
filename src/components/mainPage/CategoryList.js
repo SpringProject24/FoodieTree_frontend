@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 import styles from './CategoryList.module.scss';
@@ -8,14 +7,10 @@ import { faWonSign, faBoxOpen, faHeart as faHeartSolid } from "@fortawesome/free
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { FAVORITESTORE_URL } from '../../config/host-config';
-import {getRefreshToken, getToken, getUserEmail} from "../../utils/authUtil";
+import { getRefreshToken, getToken, getUserEmail } from "../../utils/authUtil";
 
 // 하트 상태를 토글하고 서버에 저장하는 함수
 const toggleFavorite = async (storeId, customerId) => {
-
-    let userEmail = getUserEmail();
-    console.log("userEmail :" ,userEmail)
-
     try {
         const response = await fetch(`${FAVORITESTORE_URL}/${storeId}`, {
             method: 'POST',
@@ -37,7 +32,6 @@ const toggleFavorite = async (storeId, customerId) => {
             const text = await response.text();
             console.error('⚠️Unexpected response format:', text);
         }
-
     } catch (error) {
         console.error('⚠️Error toggling:', error);
     }
@@ -50,12 +44,11 @@ const fetchFavorites = async (customerId, setFavorites) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + getToken(),
-                'refreshToken' : getRefreshToken()
+                'Authorization': 'Bearer ' + getToken(),
+                'refreshToken': getRefreshToken(),
             },
-            body: JSON.stringify({ getUserEmail }),
         });
-        
+
         // 응답의 Content-Type을 확인하여 JSON으로 파싱할 수 있는지 확인
         const contentType = response.headers.get('Content-Type');
         if (contentType && contentType.includes('application/json')) {
@@ -70,22 +63,15 @@ const fetchFavorites = async (customerId, setFavorites) => {
             const text = await response.text();
             console.error('⚠️Unexpected response format:', text);
         }
-
     } catch (error) {
         console.error('⚠️Error fetching:', error);
     }
 };
 
-
-
-
-
 const CategoryList = ({ stores }) => {
     const { openModal } = useModal();
     const [favorites, setFavorites] = useState({});
 
-    // customerId 더미값
-    // const customerId = 'test@gmail.com';
     const customerId = getUserEmail();
 
     const handleClick = (store) => {
@@ -123,7 +109,6 @@ const CategoryList = ({ stores }) => {
                         onClick={() => handleClick(store)}
                     >
                         <div
-
                             className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`}
                             onClick={(e) => {
                                 e.stopPropagation();

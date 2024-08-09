@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import { FAVORITESTORE_URL } from '../../config/host-config';
-import {getUserEmail} from "../../utils/authUtil";
+import { getUserEmail, getToken, getRefreshToken } from "../../utils/authUtil"; // <-- 이 줄 추가
 
 // 🌿 랜덤 가게 리스트 생성
 const getRandomStores = (stores, count) => {
@@ -28,12 +28,13 @@ const extractFoodType = (category) => {
 
 // 하트 상태를 토글하고 서버에 저장하는 함수
 const toggleFavorite = async (storeId, customerId) => {
-
   try {
     const response = await fetch(`${FAVORITESTORE_URL}/${storeId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + getToken(),
+        'refreshToken': getRefreshToken()
       },
       body: JSON.stringify({ customerId }),
     });
@@ -53,8 +54,15 @@ const toggleFavorite = async (storeId, customerId) => {
 // 사용자의 모든 찜 상태 조회
 const fetchFavorites = async (customerId, setFavorites) => {
   try {
-    const response = await fetch(`${FAVORITESTORE_URL}/${customerId}`);
-    
+    const response = await fetch(`${FAVORITESTORE_URL}/${customerId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + getToken(),
+        'refreshToken': getRefreshToken()
+      },
+    });
+
     const contentType = response.headers.get('Content-Type');
     if (contentType && contentType.includes('application/json')) {
       const data = await response.json();
