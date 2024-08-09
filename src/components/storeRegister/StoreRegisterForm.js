@@ -174,6 +174,7 @@ export const storeRegisterAction = async ({request}) => {
   const token = localStorage.getItem('token');
   const refreshToken = localStorage.getItem('refreshToken');
 
+
   console.log("did i get a token info? : ",token);
 
   const response = await fetch(`${STORE_URL}/approval`, {
@@ -190,7 +191,8 @@ export const storeRegisterAction = async ({request}) => {
   if(!response.ok) {
     const errorMessage = await response.text();
     alert(errorMessage);
+    return null;
   }
 
-  return redirect('/store/approval/p')
+  return redirect('/store/approval/p');
 }
