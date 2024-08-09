@@ -19,7 +19,7 @@ import {storeRegisterAction} from "../components/storeRegister/StoreRegisterForm
 import ProductRegisterForm from "../components/storeRegister/ProductRegisterForm";
 import VerifyToken from "../components/auth/VerifyToken";
 import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSearch";
-import {verifyTokenLoader} from "./auth";
+import {verifyTokenLoader} from "../utils/authUtil";
 
 const homeRouter = [
     {
