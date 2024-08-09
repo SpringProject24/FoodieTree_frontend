@@ -10,67 +10,76 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
   border-radius: 20px;
   //border: 1px solid yellowgreen;
   font-family: $font-pretendard;
+  overflow: auto;
 
   .table-interaction {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    flex-wrap: nowrap;
     margin: 5px auto;
 
-    .date-input-container {
+    .left-interactions {
+      width: 40%;
       display: flex;
       flex-direction: row;
-      input {
-        font-size: 15px;
-        color: var(--color-gray-700);
-        width: 145px;
-        height: 33px;
-        margin: 5px;
-        border: 1px solid rgba(0,0,0,0.2);
-        border-radius: 6px;
-        padding: 5px;
+      justify-content: space-between;
 
-        &:focus-visible {
-          outline-color: #7bde9a;
+      .date-input-container {
+        display: flex;
+        flex-direction: row;
+        input {
+          font-size: 15px;
+          color: var(--color-gray-700);
+          width: 145px;
+          height: 33px;
+          margin: 5px;
+          border: 1px solid rgba(0,0,0,0.2);
+          border-radius: 6px;
+          padding: 5px;
+
+          &:focus-visible {
+            outline-color: #7bde9a;
+          }
+        }
+        span {
+          line-height: 30px;
+          padding: 5px;
         }
       }
-      span {
-        line-height: 30px;
-        padding: 5px;
-      }
-    }
-    .status-btn-container {
+      .status-btn-container {
 
-      button {
-        font-family: $font-pretendard;
-        font-size: 16px;
-        font-weight: 500;
-        color: var(--color-gray-800);
-        padding: 7px 30px;
-        background: #ebebeb;
-        border: none;
-        //box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);
-        border-radius: 8px;
-        margin: 0 5px;
-
-        &:last-child {
+        button {
+          font-family: $font-pretendard;
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--color-gray-800);
+          padding: 7px 30px;
           background: #ebebeb;
+          border: none;
+          //box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);
+          border-radius: 8px;
+          margin: 0 5px;
+
+          &:last-child {
+            background: #ebebeb;
+            &:hover {
+              color: #fff;
+              background: #ff525c;
+              box-shadow: 0 2px 8px -1px rgba(#151924, .22);
+            }
+          }
           &:hover {
             color: #fff;
-            background: #ff525c;
+            background: #10da72;
             box-shadow: 0 2px 8px -1px rgba(#151924, .22);
           }
         }
-        &:hover {
-          color: #fff;
-          background: #10da72;
-          box-shadow: 0 2px 8px -1px rgba(#151924, .22);
-        }
       }
-    }
+      }
   }
 
-  .tbl-line {
+  .table-content {
     font-family: $font-pretendard ;
     font-size: 16px;
     display: table;
@@ -89,8 +98,50 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
       }
 
       td {
-        //border: 1px solid blue;
-        display: table-cell;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        padding-left: 10px;
+
+        &.center-align {
+          justify-content: center;
+        }
+
+        &.left-align {
+          justify-content: flex-start;
+          padding-left: 5px;
+        }
+
+        img {
+          width: 38px;
+          height: 38px;
+          object-fit: cover;
+          //border: 1px solid violet;
+        }
+      }
+    }
+  }
+  .tans-page-container {
+    display: flex;
+    flex-direction: row;
+    width: 20%;
+    margin: 0 auto;
+    border: 1px solid orange;
+    justify-content: space-around;
+    align-items: center;
+    line-height: 24px;
+
+    button {
+      border: none;
+      background: transparent;
+      font-size: 24px;
+      padding: 0;
+      color: var(--color-gray-400);
+      width: 30px;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--color-gray-700);
       }
     }
   }

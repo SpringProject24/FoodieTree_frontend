@@ -4,6 +4,9 @@ const STORELISTS = '/storeLists';
 const EMAIL = '/email';
 const ADMIN = '/admin';
 
+const LOCAL_PORT = 8083; // 백엔드 로컬 서버 포트번호
+export const BACK_HOST = 'http://localhost:'+LOCAL_PORT;
+
 export const STORE_URL =  STORE;
 export const CUSTOMER_URL = CUSTOMER;
 export const STORELISTS_URL = STORELISTS;

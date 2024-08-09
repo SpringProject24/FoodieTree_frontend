@@ -7,18 +7,20 @@ import {
   useReactTable
 } from "@tanstack/react-table";
 import SearchInTable from "./SearchInTable";
-import {BiSortAlt2} from "react-icons/bi";
+import {BiSortAlt2, BiSortDown, BiSortUp} from "react-icons/bi";
 import styles from "./ApprovalTables.module.scss";
 import {ApprovalColumns} from "./ApprovalColumns";
 import DateRangePicker from "./DateRangePicker";
 import ApprovalButtons from "./ApprovalButton";
+import {FaSort, FaSortDown, FaSortUp} from "react-icons/fa";
+import TansPagination from "./TansPagination";
 
 const ApprovalTable = () => {
   const [data, setData] = useState([]);
   const columns = useMemo(() => ApprovalColumns, []);
   const [columnFilters, setColumnFilters] = useState([]);
   const [rowSelection, setRowSelection] = useState({}); // 선택한 행
-  const [startDate, setStartDate] = useState(new Date('2024-06-01'));
+  const [startDate, setStartDate] = useState(new Date('2024-07-01'));
   const [endDate, setEndDate] = useState(new Date());
 
   const table = useReactTable({
@@ -73,36 +75,45 @@ const ApprovalTable = () => {
     <div className={styles['table-section']}>
       <div className={styles['table-interaction']}>
         <SearchInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters} />
-        <DateRangePicker
-          startDate={startDate}
-          endDate={endDate}
-          dateFormat={"yyyy년 MM월 dd일"}
-          onStart={(date) => setStartDate(date)}
-          onEnd={(date) => setEndDate(date)}
-          styleName={'date-input-container'}
-        />
-        <ApprovalButtons
-          rows={rowSelection}
-          data={data}
-          onFetch={fetchApprovals}
-        />
+        <div className={styles['left-interactions']}>
+          <DateRangePicker
+            startDate={startDate}
+            endDate={endDate}
+            dateFormat={"yyyy년 MM월 dd일"}
+            onStart={(date) => setStartDate(date)}
+            onEnd={(date) => setEndDate(date)}
+            styleName={'date-input-container'}
+          />
+          <ApprovalButtons
+            rows={rowSelection}
+            data={data}
+            onFetch={fetchApprovals}
+          />
+        </div>
       </div>
-      <table width={table.getTotalSize()} className={styles['tbl-line']}>
+      <table width={table.getTotalSize()} className={styles['table-content']}>
         <thead>
         {table.getHeaderGroups().map(headerGroup =>
-          <tr key={headerGroup.id}>
+          <tr key={headerGroup.id} >
             {headerGroup.headers.map(header =>
-              <th key={header.id} width={header.getSize()}>
+              <th key={header.id}
+                  width={header.getSize()}
+                  onClick={header.column.getToggleSortingHandler()}
+                  {...header.column.columnDef.meta?.headerProps}
+              >
                 {flexRender(
                   header.column.columnDef.header,
                   header.getContext(),
                 )}
                 {
-                  header.column.getCanSort() &&
-                  <BiSortAlt2
-                    onClick={header.column.getToggleSortingHandler()}
-                  />
+                  {
+                    asc: <BiSortUp />,
+                    desc: <BiSortDown />,
+                  }[header.column.getIsSorted()]
                 }
+                {header.column.getCanSort() && !header.column.getIsSorted() ? (
+                  <BiSortAlt2 />
+                ) : null}
               </th>
             )}
           </tr>)
@@ -113,7 +124,9 @@ const ApprovalTable = () => {
           table.getRowModel().rows.map(row =>
             <tr key={row.id}>
               {row.getVisibleCells().map(cell =>
-                <td key={cell.id} width={cell.column.getSize()}>
+                <td key={cell.id} width={cell.column.getSize()}
+                    {...cell.column.columnDef.meta?.cellProps}
+                >
                   {
                     flexRender(
                       cell.column.columnDef.cell,
@@ -125,11 +138,20 @@ const ApprovalTable = () => {
         }
         </tbody>
       </table>
-        <div>
-          {table.getPageCount()> 0?
-            table.getState().pagination.pageIndex + 1 +' / '+ table.getPageCount()
-            : undefined}
-        </div>
+      <TansPagination style={styles['tans-page-container']} table={table} />
+        {/*<button*/}
+        {/*  variant="outline"*/}
+        {/*  size="sm"*/}
+        {/*  onClick={() => table.previousPage()}*/}
+        {/*  disabled={!table.getCanPreviousPage()}*/}
+        {/*>*/}
+        {/*  {'‹'}*/}
+        {/*</button>*/}
+        {/*<div>*/}
+        {/*  {table.getPageCount()> 0?*/}
+        {/*    table.getState().pagination.pageIndex + 1 +' / '+ table.getPageCount()*/}
+        {/*    : undefined}*/}
+        {/*</div>*/}
     </div>
   );
 };
