@@ -11,6 +11,7 @@ import {BiSortAlt2} from "react-icons/bi";
 import styles from "./ApprovalTables.module.scss";
 import {ApprovalColumns} from "./ApprovalColumns";
 import DateRangePicker from "./DateRangePicker";
+import ApprovalButtons from "./ApprovalButton";
 
 const ApprovalTable = () => {
   const [data, setData] = useState([]);
@@ -34,7 +35,7 @@ const ApprovalTable = () => {
     },
   });
 
-  // 기간을 기준으로 서버에 데이터 요청
+  // 기간을 기준으로 서버에 데이터 요청 및 렌더링
   useEffect(() => {
     console.log('approval useEffect 실행중!')
     const fetchApprovals = async () => {
@@ -64,25 +65,24 @@ const ApprovalTable = () => {
     }
     fetchApprovals();
   }, [startDate, endDate]);
-
+  console.log(rowSelection)
 
   return (
     <div className={styles['table-section']}>
       <div className={styles['table-interaction']}>
         <SearchInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters} />
-        <div className={styles['date-input-container']}>
-          <DateRangePicker
-            startDate={startDate}
-            endDate={endDate}
-            dateFormat={"yyyy년 MM월 dd일"}
-            onStart={(date) => setStartDate(date)}
-            onEnd={(date) => setEndDate(date)}
-          />
-        </div>
-        <div className={styles['status-btn-container']}>
-          <button className={styles['btn-approved']}>승인</button>
-          <button  className={styles['btn-rejected']}>거절</button>
-        </div>
+        <DateRangePicker
+          startDate={startDate}
+          endDate={endDate}
+          dateFormat={"yyyy년 MM월 dd일"}
+          onStart={(date) => setStartDate(date)}
+          onEnd={(date) => setEndDate(date)}
+          styleName={'date-input-container'}
+        />
+        <ApprovalButtons
+          rows={rowSelection}
+          data={data}
+        />
       </div>
       <table width={table.getTotalSize()} className={styles['tbl-line']}>
         <thead>

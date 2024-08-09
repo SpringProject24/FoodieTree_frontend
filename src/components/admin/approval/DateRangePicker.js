@@ -1,7 +1,9 @@
 import React from 'react';
 import DatePicker from "react-datepicker";
+import styles from "./ApprovalTables.module.scss";
+import {ko} from "date-fns/locale";
 
-const DateRangePicker = ({startDate, endDate, dateFormat, onStart, onEnd}) => {
+const DateRangePicker = ({startDate, endDate, dateFormat, onStart, onEnd, styleName}) => {
 
   const changeStartHandler = (date) => {
     onStart(date);
@@ -11,9 +13,9 @@ const DateRangePicker = ({startDate, endDate, dateFormat, onStart, onEnd}) => {
   }
 
   return (
-    <>
+    <div className={styles[styleName]}>
       <DatePicker
-        locale={'ko'}
+        locale={ko}
         selected={startDate}
         dateFormat={dateFormat}
         minDate={new Date('2024-06-01')} // minDate 이전 날짜 선택 불가
@@ -25,7 +27,7 @@ const DateRangePicker = ({startDate, endDate, dateFormat, onStart, onEnd}) => {
       />
       <span>{' ~ '}</span>
       <DatePicker
-        locale={'ko'}
+        locale={ko}
         selected={endDate}
         dateFormat={dateFormat}
         onChange={changeEndHandler}
@@ -35,7 +37,7 @@ const DateRangePicker = ({startDate, endDate, dateFormat, onStart, onEnd}) => {
         minDate={startDate}
         maxDate={new Date()}
       />
-    </>
+    </div>
   );
 };
 
