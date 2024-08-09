@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Profile from '../../components/store/mypage/Profile';
 import styles from './StoreMyPage.module.scss';
 import ReservationList from "../../components/store/mypage/ReservationList";
@@ -16,14 +16,14 @@ const StoreMyPage = () => {
     const [storeInfo, setStoreInfo] = useState({}); // 가게 정보 저장
     const [stats, setStats] = useState({}); // 가게 통계 정보 저장
     const [reservations, setReservations] = useState([]); // 전체 예약 목록 저장
-    const [filteredReservations, setFilteredReservations] = useState([]);
+    const [filteredReservations, setFilteredReservations] = useState([]); // 필터링된 예약 목록 저장
     const [displayReservations, setDisplayReservations] = useState([]); // 화면에 표시할 예약 목록 (무한스크롤)
     const [hasMore, setHasMore] = useState(true); // 추가 예약 목록이 있는지 여부 확인 (무한스크롤)
     const [startIndex, setStartIndex] = useState(0); // 무한 스크롤 작동 시 현재 불러온 데이터의 끝 인덱스 추적
     const [isLoading, setIsLoading] = useState(false); // 데이터를 불러오는 중인지 여부를 추적 (로딩 상태)
     const [filters, setFilters] = useState({}); // 필터 상태 저장
-    const ITEMS_PER_PAGE = 10; // 한번에 가져올 예약목록 개수 설정
     const [isFiltered, setIsFiltered] = useState(false); // 필터 적용 상태를 나타내는 값
+    const ITEMS_PER_PAGE = 10; // 한번에 가져올 예약목록 개수 설정
 
     /**
      * 현재 창의 너비를 설정하는 함수
@@ -92,7 +92,7 @@ const StoreMyPage = () => {
         window.addEventListener("resize", setInnerWidth);
         return () => {
             window.removeEventListener("resize", setInnerWidth);
-        }
+        };
     }, []);
 
     /**
@@ -152,69 +152,78 @@ const StoreMyPage = () => {
     };
 
     /**
-     * 추가 데이터를 불러오는 함수
+     * 추가 데이터를 불러오는 함수 (무한 스크롤)
      */
     const loadMore = () => {
-        console.log('isFiltered: ', isFiltered);
+        if (!hasMore || isLoading) return;
+
         setIsLoading(true);
-        // setTimeout(() => {
+        setTimeout(() => {
             const newStartIndex = startIndex + ITEMS_PER_PAGE;
-        console.log('isFiltered: ', isFiltered);
             const moreReservations = isFiltered
                 ? filteredReservations.slice(startIndex, newStartIndex)
                 : reservations.slice(startIndex, newStartIndex);
+
             setDisplayReservations(prev => [...prev, ...moreReservations]);
             setStartIndex(newStartIndex);
             setHasMore(newStartIndex < (isFiltered ? filteredReservations : reservations).length);
             setIsLoading(false);
-        console.log('isFiltered: ', isFiltered);
-        // }, 500);
+        }, 500);
     };
 
     /**
-     * 스크롤 이벤트를 처리하는 함수
+     * 스크롤 이벤트를 처리하는 함수 (무한 스크롤)
      */
     const handleWindowScroll = () => {
-        if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight - 1) return;
-        if (hasMore && !isLoading) {
+        if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight - 1) {
             loadMore();
         }
     };
 
+    /**
+     * 스크롤 이벤트를 추가하는 useEffect 훅
+     * 화면 너비가 400px 이하일 때 작동
+     */
     useEffect(() => {
         if (width <= 400) {
             window.addEventListener('scroll', handleWindowScroll);
             return () => window.removeEventListener('scroll', handleWindowScroll);
         }
-    }, [startIndex, hasMore, isLoading, width]);
+    }, [startIndex, hasMore, isLoading, width, isFiltered]);
 
     /**
      * 필터를 적용하는 함수
      */
     const handleApplyFilters = (newFilters) => {
         setFilters(newFilters);
-        console.log('isFiltered: ', isFiltered);
-        setIsFiltered(true); // 필터가 적용되었음을 표시
-        console.log('isFiltered: ', isFiltered);
-        applyFilters(newFilters, reservations);
-    };
-
-    const applyFilters = (filters, reservations) => {
-        const filtered = reservations.filter(reservation => {
-            const { startDate, endDate, status } = filters;
-
-            const withinDateRange = (!startDate || new Date(reservation.pickupTime) >= new Date(startDate)) &&
-                (!endDate || new Date(reservation.pickupTime) <= new Date(endDate));
-
-            const matchesStatus = status.length === 0 || status.includes(reservation.status);
-
-            return withinDateRange && matchesStatus;
-        });
-
+        setIsFiltered(true);
+        const filtered = reservations.filter(reservation => applyCurrentFilters(reservation, newFilters));
         setFilteredReservations(filtered);
         setDisplayReservations(filtered.slice(0, ITEMS_PER_PAGE));
         setStartIndex(ITEMS_PER_PAGE);
         setHasMore(filtered.length > ITEMS_PER_PAGE);
+    };
+
+    /**
+     * 현재 필터를 적용해 예약 목록을 필터링하는 함수
+     */
+    const applyCurrentFilters = (reservation, currentFilters = filters) => {
+        const { startDate, endDate, status = [] } = currentFilters; // status가 undefined일 경우 빈 배열로 초기화
+        const withinDateRange = (!startDate || new Date(reservation.pickupTime) >= new Date(startDate)) &&
+            (!endDate || new Date(reservation.pickupTime) <= new Date(endDate));
+        const matchesStatus = status.length === 0 || status.includes(reservation.status);
+        return withinDateRange && matchesStatus;
+    };
+
+    /**
+     * 필터를 초기화하고 원본 데이터를 불러오는 함수
+     */
+    const resetFilters = () => {
+        setIsFiltered(false);
+        setFilteredReservations([]);
+        setDisplayReservations(reservations.slice(0, ITEMS_PER_PAGE));
+        setStartIndex(ITEMS_PER_PAGE);
+        setHasMore(reservations.length > ITEMS_PER_PAGE);
     };
 
     return (
@@ -237,10 +246,11 @@ const StoreMyPage = () => {
                             width={width}
                             initialFilters={filters}
                             onApplyFilters={handleApplyFilters}
+                            onResetFilters={resetFilters} // 필터 초기화 기능 추가
                         />
                         {width > 400 && (
                             <>
-                                <ProductCount/>
+                                <ProductCount />
                                 <Calendar />
                             </>
                         )}

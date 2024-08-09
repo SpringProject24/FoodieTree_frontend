@@ -10,6 +10,9 @@ const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width, in
     const listRef = useRef();
     const [filters, setFilters] = useState(initialFilters || {});
 
+    /**
+     * 예약 항목을 클릭했을 때의 핸들러
+     */
     const handleReservationClick = async (reservation) => {
         try {
             openModal('storeReservationDetail', { reservationInfo: reservation });
@@ -18,6 +21,10 @@ const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width, in
         }
     };
 
+    /**
+     * 스크롤 이벤트를 처리하는 useEffect 훅
+     * 스크롤이 바닥에 도달하면 `loadMore` 호출
+     */
     useEffect(() => {
         const handleScroll = () => {
             if (listRef.current) {
@@ -40,7 +47,9 @@ const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width, in
         };
     }, [hasMore, isLoading, loadMore, width]);
 
-    // 필터 모달을 여는 함수
+    /**
+     * 필터 모달을 여는 함수
+     */
     const openFilterModal = () => {
         openModal('storeReservationFilter', {
             onApply: handleApplyFilters,
@@ -48,6 +57,9 @@ const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width, in
         });
     };
 
+    /**
+     * 필터를 적용했을 때의 핸들러
+     */
     const handleApplyFilters = (newFilters) => {
         setFilters(newFilters);
         onApplyFilters(newFilters);
@@ -59,7 +71,7 @@ const ReservationList = ({ reservations, isLoading, loadMore, hasMore, width, in
                 <h3 className={styles.titleText}>
                     <span>예약 내역</span>
                 </h3>
-                <FontAwesomeIcon icon={faSliders} className={styles.filter} onClick={openFilterModal}/>
+                <FontAwesomeIcon icon={faSliders} className={styles.filter} onClick={openFilterModal} />
             </div>
             <div className={`${styles.infoWrapper}`} ref={listRef}>
                 <ul className={styles.reservationList}>
