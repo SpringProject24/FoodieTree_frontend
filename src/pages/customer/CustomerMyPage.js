@@ -19,6 +19,7 @@ const CustomerMyPage = () => {
     const [show, setShow] = useState(false);
     const [customerData, setCustomerData] = useState({});
     const [reservations, setReservations] = useState([]);
+    const [filteredReservations, setFilteredReservations] = useState([]);
     const [stats, setStats] = useState({});
     const [displayReservations, setDisplayReservations] = useState([]);
     const [hasMore, setHasMore] = useState(true);
@@ -26,20 +27,35 @@ const CustomerMyPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const ITEMS_PER_PAGE = 10; // 한번에 가져올 예약목록 개수 설정
 
-    const token = localStorage.getItem('token');
-    const refreshToken = localStorage.getItem('refreshToken');
-    const tokenInfo = token ? jwtDecode(token) : null;
-    const customerId = tokenInfo ? tokenInfo.sub : null;
-
+    /**
+     * 토큰이 있으면 현재 페이지 유지
+     * 토큰이 없으면 로그인 창 리다이렉션
+     * 토큰의 usertype이 store과 같을 경우 현재 페이지 유지
+     * 토큰의 usertype이 store과 다를 경우 메인 페이지 리다이렉션
+     */
     const navigate = useNavigate();
 
     useEffect(() => {
-        checkAuthToken(navigate);
+        const fetchUser = async () => {
+            const userInfo = await checkAuthToken(navigate);
 
-        fetchCustomerData();
-        fetchReservations();
-        fetchStats();
-    }, [customerId]);
+            if (userInfo) {
+                const requiredRole = 'customer'; // 필요한 role  작성 필요
+                if (userInfo.userType !== requiredRole) {
+                    alert('접근 권한이 없습니다.');
+                    navigate('/main');
+                    return;
+                }
+
+                fetchCustomerData(userInfo.token, userInfo.refreshToken, userInfo.email);
+                fetchReservations(userInfo.token, userInfo.refreshToken, userInfo.email);
+                fetchStats(userInfo.token, userInfo.refreshToken, userInfo.email);
+            }
+        };
+
+        fetchUser();
+    }, [navigate]);
+
 
     useEffect(() => {
         window.addEventListener("resize", setInnerWidth);
@@ -53,26 +69,19 @@ const CustomerMyPage = () => {
         setWidth(window.innerWidth);
     }
 
-    const fetchCustomerData = async () => {
+    const fetchCustomerData = async (token, refreshToken, customerId) => {
         try {
-
-            if (!token || !refreshToken) {
-                throw new Error('Token or refreshToken not found in localStorage');
-            }
-
             const response = await fetch(`${BASE_URL}/customer/info?customerId=${customerId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ` + token,
                     'refreshToken': refreshToken
                 }
             });
-
             if (!response.ok) {
                 throw new Error('Failed to fetch customer info');
             }
-
             const data = await response.json();
             setCustomerData(data);
         } catch (error) {
@@ -80,14 +89,14 @@ const CustomerMyPage = () => {
         }
     };
 
-    const fetchReservations = async () => {
+    const fetchReservations = async (token, refreshToken) => {
         try {
 
             const response = await fetch(`${BASE_URL}/reservation/list` , {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ` + token,
                     'refreshToken': refreshToken
                 }
             });
@@ -96,6 +105,7 @@ const CustomerMyPage = () => {
             const data = await response.json();
             const sortedData = sortReservations(data);
             setReservations(sortedData);
+            setFilteredReservations(sortedData);
             setDisplayReservations(sortedData.slice(0, ITEMS_PER_PAGE));
             setStartIndex(ITEMS_PER_PAGE);
             setHasMore(sortedData.length > ITEMS_PER_PAGE);
@@ -104,7 +114,7 @@ const CustomerMyPage = () => {
         }
     };
 
-    const fetchStats = async () => {
+    const fetchStats = async (token, refreshToken, customerId) => {
 
         try {
             const response = await fetch(`${BASE_URL}/customer/stats?customerId=${customerId}`
@@ -112,7 +122,7 @@ const CustomerMyPage = () => {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `Bearer ` + token,
                         'refreshToken': refreshToken
                     }
                 });
@@ -176,10 +186,10 @@ const CustomerMyPage = () => {
         setIsLoading(true);
         setTimeout(() => {
             const newStartIndex = startIndex + ITEMS_PER_PAGE;
-            const moreReservations = reservations.slice(startIndex, newStartIndex);
+            const moreReservations = filteredReservations.slice(startIndex, newStartIndex);
             setDisplayReservations(prev => [...prev, ...moreReservations]);
             setStartIndex(newStartIndex);
-            setHasMore(newStartIndex < reservations.length);
+            setHasMore(newStartIndex < filteredReservations.length);
             setIsLoading(false);
         }, 500);
     };
@@ -187,11 +197,28 @@ const CustomerMyPage = () => {
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [startIndex, hasMore, isLoading]);
+    }, [startIndex, hasMore, isLoading, filteredReservations]);
 
     const showHandler = () => {
         setShow(prev => !prev);
     }
+
+    const applyFilters = (filters) => {
+        const { category, dateRange, status } = filters;
+
+        const filtered = reservations.filter(reservation => {
+            const categoryMatch = category.length === 0 || category.includes(reservation.category);
+            const statusMatch = status.length === 0 || status.includes(reservation.status);
+            const dateMatch = (!dateRange.startDate || new Date(reservation.pickupTime) >= new Date(dateRange.startDate)) &&
+                (!dateRange.endDate || new Date(reservation.pickupTime) <= new Date(dateRange.endDate));
+            return categoryMatch && statusMatch && dateMatch;
+        });
+
+        setFilteredReservations(filtered);
+        setDisplayReservations(filtered.slice(0, ITEMS_PER_PAGE));
+        setStartIndex(ITEMS_PER_PAGE);
+        setHasMore(filtered.length > ITEMS_PER_PAGE);
+    };
 
     return (
         <>
@@ -206,6 +233,7 @@ const CustomerMyPage = () => {
                             loadMore={loadMore}
                             hasMore={hasMore}
                             isLoading={isLoading}
+                            onApplyFilters={applyFilters}
                         />
 
                         {width > 400 && (
