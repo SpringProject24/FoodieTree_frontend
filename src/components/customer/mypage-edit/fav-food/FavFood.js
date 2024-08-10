@@ -35,7 +35,7 @@ const FavFood = ({ favList, set }) => {
                 <h3 className={styles["title-text"]}>
                     <span> 선호음식 </span>
                 </h3>
-                <AddFavFoodBtn/>
+                <AddFavFoodBtn favList={favList} set={set}/>
             </div>
             <div className={styles['edit-wrapper']}>
                 <ul className={styles.preferred} id="preferred-area">

@@ -4,9 +4,10 @@ import ProfileImgBtn from "./ProfileImgBtn";
 import PhoneNumber from "./PhoneNumber";
 import NickName from "./NickName";
 import FavArea from "./FavArea";
-import FavFood from "./FavFood";
+import FavFood from "./fav-food/FavFood";
 import FavStore from "./FavStore";
 import {CUSTOMER_URL} from "../../../config/host-config";
+import {authFetch} from "../../../utils/authUtil";
 
 const Edit = () => {
     const [data, setData] = useState({});
@@ -16,7 +17,7 @@ const Edit = () => {
 
     useEffect( () => {
         (async () => {
-            const res = await fetch(CUSTOMER_URL+'/info', {
+            const res = await authFetch(CUSTOMER_URL+'/info', {
                 headers: {
                     // 'Authorization' : 'Bearer ' +
                 }
