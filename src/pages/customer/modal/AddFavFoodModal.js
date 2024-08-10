@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import style from "./AddFavFoodModal.module.scss";
 import {useModal} from "../../common/ModalProvider";
+import {categoryImgList} from "../../../utils/img-handler";
 
 const categoriesInfo = [
     {name: '한식', image: "/assets/img/korean.jpg", checked: false},
@@ -52,7 +53,7 @@ const AddFavFoodModal = ({favList, addFavFoodFn}) => {
                             onClick={() => clickHandler(item)}
                         >
                             <div className={style["img-box"]}>
-                                <img src={item.image} alt=""/>
+                                <img src={categoryImgList[item.name]} alt=""/>
                             </div>
                             <span>{item.name}</span>
                         </li>

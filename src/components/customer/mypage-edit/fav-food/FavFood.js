@@ -5,6 +5,7 @@ import {faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import {CUSTOMER_URL} from "../../../../config/host-config";
 import {authFetch} from "../../../../utils/authUtil";
 import AddFavFoodBtn from "./AddFavFoodBtn";
+import {categoryImgList} from "../../../../utils/img-handler";
 
 const FavFood = ({ favList, set }) => {
 
@@ -44,7 +45,7 @@ const FavFood = ({ favList, set }) => {
                             return (
                                 <li id={idx} key={idx}>
                                     <div className={styles["img-box"]}>
-                                        <img src={item.foodImage} alt="선호음식이미지"/>
+                                        <img src={categoryImgList[item.preferredFood]} alt="선호음식이미지"/>
                                     </div>
                                     <span>{item.preferredFood}</span>
                                     <FontAwesomeIcon
