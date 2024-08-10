@@ -66,7 +66,7 @@ export const ApprovalColumns =
     },
     {
       accessorKey: 'licenseVerification',
-      header: '유효성',
+      header: '검증',
       size: 80,
       cell: (props) => <p>{props.getValue()}</p>,
       meta: {

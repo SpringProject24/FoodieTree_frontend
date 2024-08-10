@@ -1,23 +1,23 @@
 $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
+$table-width: 1580px;
 
 .table-section {
   margin: 20px auto 50px;
-  width: 1580px;
-  //width: 83%;
+  width: $table-width;
   min-height: 500px;
-  box-shadow: 2px 5px 8px 3px rgba(100,100,100,0.1);
   padding: 20px 10px;
   border-radius: 20px;
-  //border: 1px solid yellowgreen;
   font-family: $font-pretendard;
-  overflow: auto;
+  //overflow: auto;
 
   .table-interaction {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-content: baseline;
     flex-wrap: nowrap;
     margin: 5px auto;
+    //border: 1px solid deepskyblue;
 
     .left-interactions {
       width: 40%;
@@ -48,6 +48,9 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
         }
       }
       .status-btn-container {
+        //border: 1px solid rebeccapurple;
+        display: flex;
+        flex-direction: row;
 
         button {
           font-family: $font-pretendard;
@@ -58,8 +61,8 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
           background: #ebebeb;
           border: none;
           //box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);
-          border-radius: 8px;
-          margin: 0 5px;
+          border-radius: 6px;
+          margin: 3px 3px 3px 10px;
 
           &:last-child {
             background: #ebebeb;
@@ -81,10 +84,11 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
 
   .table-content {
     font-family: $font-pretendard ;
-    font-size: 16px;
+    font-size: 14px;
     display: table;
     border-collapse: collapse;
     margin: 30px 0;
+    overflow: auto;
 
     tr {
       border-bottom: 1px solid rgba(0,0,0,0.1);
@@ -95,6 +99,11 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
       color: rgb(60,60,60);
       &:nth-child(even) {
         background: #f2f4f4;
+      }
+      th {
+        font-size: 16px;
+        font-weight: 700;
+        color: #434343;
       }
 
       td {
@@ -126,10 +135,10 @@ $font-pretendard: "Pretendard Variable", Pretendard, sans-serif;
     flex-direction: row;
     width: 20%;
     margin: 0 auto;
-    border: 1px solid orange;
     justify-content: space-around;
     align-items: center;
     line-height: 24px;
+    //border: 1px solid orange;
 
     button {
       border: none;
