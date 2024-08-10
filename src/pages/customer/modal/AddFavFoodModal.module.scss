@@ -30,7 +30,7 @@ ul.fav-list {
 
     img {
       width: 100%; // 부모 요소의 너비에 맞추기
-      height: auto; // 비율 유지
+      height: 100%; // 비율 유지
       object-fit: cover;
     }
   }

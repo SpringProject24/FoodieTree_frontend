@@ -49,7 +49,7 @@ const FavFood = ({ favList, set }) => {
                                     <span>{item.preferredFood}</span>
                                     <FontAwesomeIcon
                                         className={styles.xmark} icon={faCircleXmark}
-                                        onClick={() => clickHandler("preferredFood", item.preferredFood)}
+                                        onClick={() => clickHandler("food", item.preferredFood)}
                                     />
                                 </li>
                             );

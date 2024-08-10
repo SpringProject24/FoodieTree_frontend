@@ -1,47 +1,62 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import style from "./AddFavFoodModal.module.scss";
-
-import kFood from "../../../assets/images/userMain/kFood.png";
-import cFood from "../../../assets/images/userMain/cFood.png";
-import uFood from "../../../assets/images/userMain/uFood.png";
-import jFood from "../../../assets/images/userMain/jFood.png";
-import dessert from "../../../assets/images/userMain/dessert.png";
-import cafe from "../../../assets/images/userMain/cafe.png";
-import etc from "../../../assets/images/userMain/salad.png";
 import {useModal} from "../../common/ModalProvider";
 
 const categoriesInfo = [
-    {name: '한식', image: kFood},
-    {name: '중식', image: cFood},
-    {name: '양식', image: uFood},
-    {name: '일식', image: jFood},
-    {name: '디저트', image: dessert},
-    {name: '카페', image: cafe},
-    {name: '기타', image: etc},
+    {name: '한식', image: "/assets/img/korean.jpg", checked: false},
+    {name: '중식', image: "/assets/img/chinese.jpg", checked: false},
+    {name: '양식', image: "/assets/img/western.jpg", checked: false},
+    {name: '일식', image: "/assets/img/japanese.jpg", checked: false},
+    {name: '디저트', image: "/assets/img/dessert.jpg", checked: false},
+    {name: '카페', image: "/assets/img/cafe.jpg", checked: false},
+    {name: '기타', image: "/assets/img/etc.jpg", checked: false},
 ];
 
-const AddFavFoodModal = ({ favList }) => {
-    const { closeModal } = useModal();
+const AddFavFoodModal = ({favList, addFavFoodFn}) => {
+    const [category, setCategory] = useState([]);
 
-    const closeHandler = (e) => {
-        e.preventDefault();
-        closeModal();
+    useEffect(() => {
+        console.log(favList)
+        categoriesInfo.map(e => e.checked = false);
+        categoriesInfo.map(e => {
+            if (favList.find(item => item.preferredFood === e.name)) {
+                e.checked = true;
+            }
+        });
+        setCategory([...categoriesInfo]);
+    }, [favList]);
+
+    const clickHandler = (item) => {
+        if (item.checked) return;
+        if (category.filter(e => e.checked).length === 3) {
+            alert('최대 3개까지 선택가능합니다!');
+            return;
+        }
+        setCategory(prev => prev.map(e => {
+            if (e.name === item.name)
+                e.checked = true;
+            return e;
+        }));
+        addFavFoodFn(item);
     }
     return (
         <div>
             <ul className={style["fav-list"]}>
                 {
-                    categoriesInfo.map(({ name, image}) =>
-                        <li key={name} className={(favList.length > 0 && favList.includes(name)) ? style.border : undefined }>
+                    category.map((item) =>
+                        <li
+                            key={item.name}
+                            className={item.checked ? style.border : undefined}
+                            onClick={() => clickHandler(item)}
+                        >
                             <div className={style["img-box"]}>
-                                <img src={image} alt=""/>
+                                <img src={item.image} alt=""/>
                             </div>
-                            <span>{name}</span>
+                            <span>{item.name}</span>
                         </li>
                     )
                 }
             </ul>
-            <button onClick={closeHandler}>추가하기</button>
         </div>
     );
 };
