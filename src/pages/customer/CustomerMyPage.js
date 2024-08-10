@@ -8,7 +8,7 @@ import FavoriteStore from "../../components/customer/mypage/FavoriteStore";
 import SideBarBtn from "../../components/store/mypage-edit/SideBarBtn";
 
 import { jwtDecode } from 'jwt-decode';
-import {checkAuthToken} from "../../utils/authUtil";
+import {checkAuthToken, getRefreshToken, getToken, getUserEmail, getUserRole} from "../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
 
 const BASE_URL = window.location.origin;
@@ -37,19 +37,23 @@ const CustomerMyPage = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const userInfo = await checkAuthToken(navigate);
+            const userType = getUserRole();
+            console.log("token user type (role) : ",userType);
 
-            if (userInfo) {
+            if (userType) {
                 const requiredRole = 'customer'; // 필요한 role  작성 필요
-                if (userInfo.userType !== requiredRole) {
+                if (userType !== requiredRole) {
                     alert('접근 권한이 없습니다.');
                     navigate('/main');
                     return;
                 }
 
-                fetchCustomerData(userInfo.token, userInfo.refreshToken, userInfo.email);
-                fetchReservations(userInfo.token, userInfo.refreshToken, userInfo.email);
-                fetchStats(userInfo.token, userInfo.refreshToken, userInfo.email);
+                const customerId = getUserEmail();
+                console.log('customer Id {} :', customerId);
+
+                fetchCustomerData(customerId);
+                fetchReservations();
+                fetchStats(customerId);
             }
         };
 
@@ -69,14 +73,15 @@ const CustomerMyPage = () => {
         setWidth(window.innerWidth);
     }
 
-    const fetchCustomerData = async (token, refreshToken, customerId) => {
+    const fetchCustomerData = async (customerId) => {
+
         try {
             const response = await fetch(`${BASE_URL}/customer/info?customerId=${customerId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ` + token,
-                    'refreshToken': refreshToken
+                    'Authorization': `Bearer ` + getToken(),
+                    'refreshToken': getRefreshToken()
                 }
             });
             if (!response.ok) {
@@ -89,15 +94,15 @@ const CustomerMyPage = () => {
         }
     };
 
-    const fetchReservations = async (token, refreshToken) => {
+    const fetchReservations = async () => {
         try {
 
             const response = await fetch(`${BASE_URL}/reservation/list` , {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ` + token,
-                    'refreshToken': refreshToken
+                    'Authorization': `Bearer ` + getToken(),
+                    'refreshToken': getRefreshToken()
                 }
             });
 
@@ -114,7 +119,7 @@ const CustomerMyPage = () => {
         }
     };
 
-    const fetchStats = async (token, refreshToken, customerId) => {
+    const fetchStats = async (customerId) => {
 
         try {
             const response = await fetch(`${BASE_URL}/customer/stats?customerId=${customerId}`
@@ -122,8 +127,8 @@ const CustomerMyPage = () => {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ` + token,
-                        'refreshToken': refreshToken
+                        'Authorization': `Bearer ` + getToken(),
+                        'refreshToken': getRefreshToken()
                     }
                 });
 
