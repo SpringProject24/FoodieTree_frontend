@@ -9,7 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import { FAVORITESTORE_URL } from '../../config/host-config';
-import { getUserEmail, getToken, getRefreshToken } from "../../utils/authUtil"; // <-- 이 줄 추가
+import { getUserEmail, getToken, getRefreshToken } from "../../utils/authUtil";
+import { DEFAULT_IMG, imgErrorHandler } from "../../utils/error";
 
 // 🌿 랜덤 가게 리스트 생성
 const getRandomStores = (stores, count) => {
@@ -85,7 +86,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
   const [favorites, setFavorites] = useState({});
   const { openModal } = useModal();
 
-  // customerId 더미값
+  // customerId값
   const customerId = getUserEmail();
 
   useEffect(() => {
@@ -161,7 +162,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
                 />
               </div>
-              <img src={store.storeImg} alt={store.storeName} />
+              <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} onError={imgErrorHandler}/>
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
@@ -192,7 +193,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
                 />
               </div>
-              <img src={store.storeImg} alt={store.storeName} />
+              <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} onError={imgErrorHandler}/>
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
@@ -223,7 +224,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
                 />
               </div>
-              <img src={store.storeImg} alt={store.storeName} className={styles.image} />
+              <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} className={styles.image}  onError={imgErrorHandler} />
               <span className={styles.category}>{extractFoodType(store.category)}</span>
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
