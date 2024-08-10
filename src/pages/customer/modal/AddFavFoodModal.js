@@ -14,6 +14,7 @@ const categoriesInfo = [
 
 const AddFavFoodModal = ({favList, addFavFoodFn}) => {
     const [category, setCategory] = useState([]);
+    const { closeModal } = useModal();
 
     useEffect(() => {
         console.log(favList)
@@ -30,6 +31,7 @@ const AddFavFoodModal = ({favList, addFavFoodFn}) => {
         if (item.checked) return;
         if (category.filter(e => e.checked).length === 3) {
             alert('최대 3개까지 선택가능합니다!');
+            closeModal();
             return;
         }
         setCategory(prev => prev.map(e => {
