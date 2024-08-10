@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import styles from "./Edit.module.scss";
+import styles from "../Edit.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-solid-svg-icons";
-import {CUSTOMER_URL} from "../../../config/host-config";
+import {CUSTOMER_URL} from "../../../../config/host-config";
+import {authFetch} from "../../../../utils/authUtil";
+import AddFavFoodBtn from "./AddFavFoodBtn";
 
 const FavFood = ({ favList, set }) => {
 
@@ -11,7 +13,7 @@ const FavFood = ({ favList, set }) => {
             type,
             value
         }
-        const res = await fetch(CUSTOMER_URL + `/edit`, {
+        const res = await authFetch(CUSTOMER_URL + `/edit`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
@@ -33,6 +35,7 @@ const FavFood = ({ favList, set }) => {
                 <h3 className={styles["title-text"]}>
                     <span> 선호음식 </span>
                 </h3>
+                <AddFavFoodBtn/>
             </div>
             <div className={styles['edit-wrapper']}>
                 <ul className={styles.preferred} id="preferred-area">
