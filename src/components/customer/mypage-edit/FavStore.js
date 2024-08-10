@@ -3,6 +3,7 @@ import styles from "./Edit.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import {CUSTOMER_URL} from "../../../config/host-config";
+import {DEFAULT_IMG, imgErrorHandler} from "../../../utils/error";
 
 const FavStore = ({ favList, set}) => {
     const clickHandler = async (type, {storeId, storeName}) => {
@@ -39,7 +40,7 @@ const FavStore = ({ favList, set}) => {
                         favList.map((item, idx) => (
                                 <li id={idx} key={idx}>
                                     <div className={styles["img-box"]}>
-                                        <img src={item.storeImg} alt="선호음식이미지"/>
+                                        <img src={item.storeImg || DEFAULT_IMG} alt="선호음식이미지" onError={imgErrorHandler}/>
                                     </div>
                                     <span>{item.storeName}</span>
                                     <FontAwesomeIcon
