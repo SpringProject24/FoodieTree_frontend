@@ -4,8 +4,16 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import {CUSTOMER_URL} from "../../../config/host-config";
 import {authFetch} from "../../../utils/authUtil";
+import {useModal} from "../../../pages/common/ModalProvider";
 
 const FavArea = ({ favList, set }) => {
+
+    const {openModal} = useModal();
+
+    const modalHandler = () => {
+        openModal('favAreaEdit', {type: 'customer'});
+    }
+
     const clickHandler = async (type, value) => {
         const payload = {
             type,
@@ -32,6 +40,7 @@ const FavArea = ({ favList, set }) => {
             <div className={styles.title}>
                 <h3 className={styles["title-text"]}>
                     <span> 선호지역 </span>
+                    <button onClick={modalHandler}> 추가하기 </button>
                 </h3>
             </div>
             <div className={styles['edit-wrapper']}>
