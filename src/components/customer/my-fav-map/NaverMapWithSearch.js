@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from "./NaverMapWithSearch.module.scss";
 import {authCheckLoader, authFetch, checkAuthToken, getUserEmail, getUserRole} from "../../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
+import storeInfo from "../../../pages/product/StoreInfo";
 function loadScript(src) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -81,8 +82,8 @@ const NaverMapWithSearch = ({type, productDetail}) => {
                     const item = response.v2.addresses[0];
                     const latlng = new window.naver.maps.LatLng(item.y, item.x);
 
-                    initializeMap(item.y, item.x, type); // Initialize map with store location
-                    addPlace(latlng, storeName, item.roadAddress, item.jibunAddress, 'red'); // 색상 'red' 전달
+                    initializeMap(item.y, item.x); // Initialize map with store location
+                    // addPlace(latlng, storeName, item.roadAddress, item.jibunAddress, 'red'); // 색상 'red' 전달
                     console.log('Store location:', latlng.toString());
                     console.log("marker added");
                 }
@@ -136,7 +137,14 @@ const NaverMapWithSearch = ({type, productDetail}) => {
         if(type === 'customer') {
             fetchPlacesFromServer();
         }else{
-            addPlace(new window.naver.maps.LatLng(productDetail.storeInfo.lat, productDetail.storeInfo.lng), productDetail.storeInfo.storeName, productDetail.storeInfo.storeAddress, 'red');
+            const storeInfo = {
+                id: places.length + 1,
+                title: productDetail.storeInfo.storeName,
+                latlng: new window.naver.maps.LatLng(lat, lng),
+                roadAddress: productDetail.storeInfo.storeAddress,
+                jibunAddress: productDetail.storeInfo.storeAddress
+            };
+            addMarker(storeInfo, mapInstance, infoWindowInstance, 'red');
         }
     };
 
@@ -213,7 +221,6 @@ const NaverMapWithSearch = ({type, productDetail}) => {
     };
 
     const addMarker = (place, mapInstance, infoWindowInstance, color = 'skyblue') => {
-        console.log('Adding marker!!!!!!!!!!!!!!!:', place.title)
         if (!mapInstance) {
             console.error('Map instance is not initialized');
             return;
