@@ -17,11 +17,7 @@ const Edit = () => {
 
     useEffect( () => {
         (async () => {
-            const res = await authFetch(CUSTOMER_URL+'/info', {
-                headers: {
-                    // 'Authorization' : 'Bearer ' +
-                }
-            });
+            const res = await authFetch(CUSTOMER_URL+'/info');
             if (res.ok) {
                 const data = await res.json();
                 setData(data);

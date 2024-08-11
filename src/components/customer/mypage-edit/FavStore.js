@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import {CUSTOMER_URL} from "../../../config/host-config";
 import {DEFAULT_IMG, imgErrorHandler} from "../../../utils/error";
+import {authFetch} from "../../../utils/authUtil";
 
 const FavStore = ({ favList, set}) => {
     const clickHandler = async (type, {storeId, storeName}) => {
@@ -11,7 +12,7 @@ const FavStore = ({ favList, set}) => {
             type,
             value: storeId
         }
-        const res = await fetch(CUSTOMER_URL + `/edit`, {
+        const res = await authFetch(CUSTOMER_URL + `/edit`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
