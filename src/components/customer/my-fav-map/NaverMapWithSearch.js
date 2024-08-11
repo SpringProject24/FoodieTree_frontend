@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from "./NaverMapWithSearch.module.scss";
-import {authCheckLoader, authFetch, checkAuthToken, getUserEmail, getUserRole} from "../../../utils/authUtil";
+import { authFetch, checkAuthToken} from "../../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
-import storeInfo from "../../../pages/product/StoreInfo";
 function loadScript(src) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -24,11 +23,8 @@ const NaverMapWithSearch = ({type, productDetail}) => {
     const [searchMarker, setSearchMarker] = useState(null);
     const [activeMarker, setActiveMarker] = useState(null);
     const [loading, setLoading] = useState(true);
-    // const [type, setType] = useState('store');
 
     const navigate = useNavigate();
-
-    // const type = getUserRole();
 
     useEffect(() => {
         // 로그인 하지 않았으면 메인으로 리다이렉트
