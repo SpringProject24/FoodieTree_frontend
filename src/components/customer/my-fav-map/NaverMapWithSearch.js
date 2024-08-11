@@ -45,11 +45,15 @@ const NaverMapWithSearch = ({type, productDetail}) => {
             const scriptUrl = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${ncpClientId}&submodules=geocoder`;
             loadScript(scriptUrl)
                 .then(() => {
-                    if (window.naver && window.naver.maps) {
-                        initMap(type);
-                    } else {
-                        console.error('Naver Maps API is not loaded properly');
-                    }
+                    // 반복적으로 naver.maps.Service가 로드되었는지 확인
+                    const checkNaverMaps = setInterval(() => {
+                        if (window.naver && window.naver.maps && window.naver.maps.Service) {
+                            clearInterval(checkNaverMaps);
+                            initMap(type); // 스크립트 로드 후 initMap 함수 호출
+                        } else {
+                            console.log('Naver Maps API is not fully loaded yet, retrying...');
+                        }
+                    }, 100); // 100ms마다 확인
                 })
                 .catch((error) => {
                     console.error('Failed to load Naver Map script', error);
@@ -126,10 +130,10 @@ const NaverMapWithSearch = ({type, productDetail}) => {
             if (infoWindowInstance.getMap()) {
                 infoWindowInstance.close();
             }
-            if (places.length < 10) {
+            if (places.length < 3) {
                 addPlace(e.coord);
             } else {
-                alert('최대 10개의 장소만 저장할 수 있습니다.');
+                alert('최대 3개의 장소만 저장할 수 있습니다.');
             }
         });
 
