@@ -57,6 +57,24 @@ const CustomerReservationFilterModal = ({ onApply, initialFilters }) => {
         }
     };
 
+    const handleStartDateChange = (e) => {
+        const selectedStartDate = e.target.value;
+        if (endDate && new Date(selectedStartDate) > new Date(endDate)) {
+            alert("시작 날짜는 종료 날짜 이후 일 수 없습니다.");
+        } else {
+            setStartDate(selectedStartDate);
+        }
+    };
+
+    const handleEndDateChange = (e) => {
+        const selectedEndDate = e.target.value;
+        if (startDate && new Date(selectedEndDate) < new Date(startDate)) {
+            alert("종료 날짜는 시작 날짜 이전 일 수 없습니다.");
+        } else {
+            setEndDate(selectedEndDate);
+        }
+    };
+
     // 필터 적용 버튼 클릭 시 호출되는 함수
     const handleApply = () => {
         onApply({ category, dateRange: { startDate, endDate }, status });
@@ -79,7 +97,7 @@ const CustomerReservationFilterModal = ({ onApply, initialFilters }) => {
             <div className={styles.filterGroup}>
                 <label>메뉴 종류(카테고리)</label>
                 <div className={styles.options}>
-                    {categories.map((item) => (
+                    {categories.map(item => (
                         <div
                             key={item.foodName}
                             className={`${styles.option} ${category.includes(item.foodName) ? styles.selected : ''}`}
@@ -96,20 +114,20 @@ const CustomerReservationFilterModal = ({ onApply, initialFilters }) => {
                     <input
                         type="date"
                         value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
+                        onChange={handleStartDateChange} // 시작 날짜 변경 시 검증 로직 실행
                     />
                     <span>~</span>
                     <input
                         type="date"
                         value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
+                        onChange={handleEndDateChange} // 종료 날짜 변경 시 검증 로직 실행
                     />
                 </div>
             </div>
             <div className={styles.filterGroup}>
                 <label>주문 상태</label>
                 <div className={styles.options}>
-                    {['RESERVED', 'PICKEDUP', 'CANCELED', 'NOSHOW'].map((item) => (
+                    {['RESERVED', 'PICKEDUP', 'CANCELED', 'NOSHOW'].map(item => (
                         <div
                             key={item}
                             className={`${styles.option} ${status.includes(item) ? styles.selected : ''}`}
@@ -122,7 +140,7 @@ const CustomerReservationFilterModal = ({ onApply, initialFilters }) => {
             </div>
             <div className={styles.buttons}>
                 <div className={styles.resetButton} onClick={handleReset}>
-                    <FontAwesomeIcon icon={faRotateRight} className={styles.resetIcon}/>
+                    <FontAwesomeIcon icon={faRotateRight} className={styles.resetIcon} />
                     <div className={styles.resetText}>초기화</div>
                 </div>
                 <button className={styles.applyButton} onClick={handleApply}>필터 적용하기</button>
