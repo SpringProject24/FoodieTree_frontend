@@ -55,15 +55,16 @@ const ApprovalButton = ({rows, data, onFetch}) => {
         },
         body: JSON.stringify(payload),
       })
-
       // 200 외 상태코드 처리 필요
       alert(` ✅ 요청: ${actionType === 'APPROVED' ? '스토어 등록 승인' : '스토어 등록 거절'} \n ✅ 처리 여부: ${res.ok ? '성공' : await res.text()}`)
-
-      return res.json();
+      if(!res.ok) {return null;}
+      return await res.json();
     }
     const result = fetchApproveStatus();
     // result { status: '승인', ids: [1,5,6,...] }
-    onFetch(); // 데이터 새로고침
+    if(result) {
+      onFetch(result); // 데이터 상태 업데이트
+    }
   }
 
   return (
