@@ -53,7 +53,7 @@ const FavArea = ({ favList, set }) => {
                                     <span>{item}</span>
                                     <FontAwesomeIcon
                                         className={styles.xmark} icon={faCircleXmark}
-                                        onClick={() => clickHandler("preferredArea", item)}
+                                        onClick={() => clickHandler("area", item)}
                                     />
                                 </li>
                             );
