@@ -14,7 +14,7 @@ function loadScript(src) {
 }
 
 // type: 'customer' or 'store'
-const NaverMapWithSearch = ({productDetail}) => {
+const NaverMapWithSearch = ({type, productDetail}) => {
 
     const [map, setMap] = useState(null);
     const [infoWindow, setInfoWindow] = useState(null);
@@ -26,7 +26,7 @@ const NaverMapWithSearch = ({productDetail}) => {
 
     const navigate = useNavigate();
 
-    const type = getUserRole();
+    // const type = getUserRole();
 
     useEffect(() => {
         // 로그인 하지 않았으면 메인으로 리다이렉트
