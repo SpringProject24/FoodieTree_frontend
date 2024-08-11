@@ -7,7 +7,7 @@ export const ApprovalColumns =
   [
     {
       id: 'select',
-      header: ({table}) => (
+      header: ({ table }) => (
         <input
           id="header-checkbox"
           type="checkbox"
@@ -15,7 +15,7 @@ export const ApprovalColumns =
           onChange={table.getToggleAllPageRowsSelectedHandler()} // 전체 row를 선택/해제하는 handler
         />
       ),
-      cell: ({row}) => (
+      cell: ({ row }) => (
         <input
           id={`cell-checkbox-${row.id}`}
           type="checkbox"

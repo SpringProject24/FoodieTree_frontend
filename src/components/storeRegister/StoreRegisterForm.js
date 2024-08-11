@@ -1,11 +1,13 @@
-import React from 'react';
-import {Form, redirect} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Form, redirect, useNavigate} from 'react-router-dom';
 import styles from './StoreRegisterForm.module.scss'
 import SelectBox from "./SelectBox";
 import {STORE_URL} from "../../config/host-config";
 import useFormValidation from "./useFormValidation";
 import ErrorSpan from "./ErrorSpan";
 import query from "lodash";
+import {authFetch} from "../../utils/authUtil";
+import {checkAuthToken} from "../../utils/authUtil";
 
 // select option 배열
 const OPTIONS = [
@@ -68,7 +70,6 @@ const StoreRegisterForm = () => {
 
   const { values, errors, isFormValid, changeHandler, setValues }
       = useFormValidation(initialValues, validate);
-
 
   return (
     <Form
@@ -163,19 +164,16 @@ export const storeRegisterAction = async ({request}) => {
   }
   console.log('store 페이로드: ', payload)
 
-  const token = localStorage.getItem('token');
-  const refreshToken = localStorage.getItem('refreshToken');
-
+    const token = query.get('token');
 
   console.log("did i get a token info? : ",token);
 
-  const response = await fetch(`${STORE_URL}/approval`, {
+  const response = await authFetch(`${STORE_URL}/approval`, {
 
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token,
-      'refreshToken' : refreshToken,
+      // 'Authorization': 'Bearer ' + token,
     },
     body: JSON.stringify(payload),
   });
@@ -185,6 +183,5 @@ export const storeRegisterAction = async ({request}) => {
     alert(errorMessage);
     return null;
   }
-
   return redirect('/store/approval/p');
 }
