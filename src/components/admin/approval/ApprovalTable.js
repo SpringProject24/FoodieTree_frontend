@@ -22,11 +22,11 @@ const ApprovalTable = () => {
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: setRowSelection,
-    getPaginationRowModel: getPaginationRowModel(),
+    // getCoreRowModel: getCoreRowModel(),
+    // getFilteredRowModel: getFilteredRowModel(),
+    // getSortedRowModel: getSortedRowModel(),
+    // onRowSelectionChange: setRowSelection,
+    // getPaginationRowModel: getPaginationRowModel(),
     state: {
       columnFilters,
       rowSelection,

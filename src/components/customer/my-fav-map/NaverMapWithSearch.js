@@ -267,10 +267,12 @@ const NaverMapWithSearch = ({type, productDetail}) => {
                 ].join('\n'));
                 infoWindowInstance.open(mapInstance, marker);
             }else{
-                let webLng = place.latlng.lng();
-                let webLat = place.latlng.lat();
-                let url = 'http://map.naver.com/index.nhn?enc=utf8&level=2&lng=' + webLng + '&lat=' + webLat + '&pinTitle=' + encodeURIComponent(place.title) + '&pinType=SITE';
-                window.open(url, '_blank'); // 새 창에서 URL 열기
+                if(color === 'red'){
+                    let webLng = place.latlng.lng();
+                    let webLat = place.latlng.lat();
+                    let url = 'http://map.naver.com/index.nhn?enc=utf8&level=2&lng=' + webLng + '&lat=' + webLat + '&pinTitle=' + encodeURIComponent(place.title) + '&pinType=SITE';
+                    window.open(url, '_blank'); // 새 창에서 URL 열기
+                }
             }
         });
     };
