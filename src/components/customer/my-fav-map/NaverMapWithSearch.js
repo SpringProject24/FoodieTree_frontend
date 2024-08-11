@@ -26,17 +26,17 @@ const NaverMapWithSearch = ({productDetail}) => {
 
     const navigate = useNavigate();
 
-    // 로그인 하지 않았으면 메인으로 리다이렉트
-    checkAuthToken(navigate);
-
     const type = getUserRole();
 
     useEffect(() => {
+        // 로그인 하지 않았으면 메인으로 리다이렉트
+        checkAuthToken(navigate);
+
         if (map) {
             // map이 설정된 후 실행할 코드
             fetchPlacesFromServer();
         }
-    }, [map]);
+    }, [map, navigate]);
 
     useEffect(() => {
         const ncpClientId = process.env.REACT_APP_YOUR_CLIENT_ID;
@@ -56,11 +56,9 @@ const NaverMapWithSearch = ({productDetail}) => {
         } else {
             console.error('Client ID가 설정되지 않았습니다.');
         }
-    }, [navigate]);
+    }, []);
 
     const initMap = (type) => {
-
-        console.log("initMap 작동✅ ");
 
         if (type === 'store') {
             const storeName = productDetail.storeInfo.storeName;
