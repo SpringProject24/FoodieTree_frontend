@@ -128,7 +128,7 @@ const NaverMapWithSearch = ({type, productDetail}) => {
             if (infoWindowInstance.getMap()) {
                 infoWindowInstance.close();
             }
-            if (places.length < 10) {
+            if (places.length < 3) {
                 addPlace(e.coord);
             } else {
                 // console.log('최대 3개의 장소만 저장할 수 있습니다.');
