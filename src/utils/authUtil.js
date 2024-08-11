@@ -199,7 +199,7 @@ export const authFetch = async (url, req) => {
             'refreshToken': refreshToken
         }
     }
-    if (url.includes("img")) {
+    if (url.includes("img") || url.inclues("approval/p")) {
         init = {
             ...req,
             headers: {
