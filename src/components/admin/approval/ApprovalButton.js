@@ -5,7 +5,7 @@ import {redirect} from "react-router-dom";
 
 const ApprovalButton = ({rows, data, onFetch}) => {
   // 버튼 클릭 시 승인 또는 거절 요청을 서버로 보내는 기능
-  const clickHandler = (e) => {
+  const clickHandler = async (e) => {
     e.preventDefault();
     const rowsLength = Object.keys(rows)?.length;
 
@@ -56,13 +56,16 @@ const ApprovalButton = ({rows, data, onFetch}) => {
         body: JSON.stringify(payload),
       })
       // 200 외 상태코드 처리 필요
-      alert(` ✅ 요청: ${actionType === 'APPROVED' ? '스토어 등록 승인' : '스토어 등록 거절'} \n ✅ 처리 여부: ${res.ok ? '성공' : await res.text()}`)
-      if(!res.ok) {return null;}
+      alert(` ✅ 요청: 스토어 등록 ${actionType === 'APPROVED' ? '승인' : '거절'} \n ✅ 처리 여부: ${res.ok ? '성공' : await res.text()}`)
+      if (!res.ok) {
+        return null;
+      }
       return await res.json();
     }
-    const result = fetchApproveStatus();
+    const result = await fetchApproveStatus();
+    console.log('action result', result)
     // result { status: '승인', ids: [1,5,6,...] }
-    if(result) {
+    if (result) {
       onFetch(result); // 데이터 상태 업데이트
     }
   }

@@ -67,21 +67,21 @@ const ApprovalTable = () => {
     setData(DATA.approvals);
     setStats(() => DATA.stats);
   }
-  const onFetch = (result) => {
+  const onFetch = ({result}) => {
+    const {status, ids} = result;
     setData(prevData => {
-      // result.ids를 Set으로 변환하여 빠른 검색을 지원합니다
-      const idsToUpdate = new Set(result.ids);
+      const idsToUpdate = new Set(ids);
 
       // result.status를 모든 data에 적용
       const updatedData = prevData.map(item => {
         if (idsToUpdate.has(item.id)) {
           // id가 ids에 있는 경우 status를 업데이트
-          return { ...item, status: result.status };
+          return { ...item, status: status };
         }
         // id가 ids에 없는 경우 원래의 데이터 유지
         return item;
       });
-
+      console.log('onFetch updatedData', updatedData)
       return updatedData;
     });
   }
