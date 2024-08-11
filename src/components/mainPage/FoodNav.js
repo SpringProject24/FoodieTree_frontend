@@ -11,6 +11,7 @@ import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import { FAVORITESTORE_URL } from '../../config/host-config';
 import { getUserEmail, getToken, getRefreshToken } from "../../utils/authUtil";
 import { DEFAULT_IMG, imgErrorHandler } from "../../utils/error";
+import FavAreaSelector from "./FavAreaSelector";
 
 // 🌿 랜덤 가게 리스트 생성
 const getRandomStores = (stores, count) => {
@@ -116,6 +117,11 @@ const FoodNav = ({ selectedCategory, stores }) => {
     }
   };
 
+  const handleAreaSelect = (area) => {
+    console.log('Selected Area:', area);
+    // Handle the selected area here
+  };
+
   const settings = (slidesToShow) => ({
     dots: false,
     infinite: true,
@@ -141,6 +147,8 @@ const FoodNav = ({ selectedCategory, stores }) => {
 
   return (
     <>
+      <FavAreaSelector onAreaSelect={handleAreaSelect} />
+      
       {/* 내가 찜한 가게 리스트 */}
       <div className={styles.list}>
         <h2 className={styles.title}>나의 단골 가게</h2>
