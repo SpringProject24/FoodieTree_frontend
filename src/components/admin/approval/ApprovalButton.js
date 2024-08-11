@@ -7,7 +7,8 @@ const ApprovalButton = ({rows, data, onFetch}) => {
   // 버튼 클릭 시 승인 또는 거절 요청을 서버로 보내는 기능
   const clickHandler = (e) => {
     e.preventDefault();
-    const rowsLength = Object.keys(rows).length;
+    const rowsLength = Object.keys(rows)?.length;
+
     if (rowsLength === 0) {
       alert(`행을 선택해주세요.`);
       return;
@@ -26,8 +27,7 @@ const ApprovalButton = ({rows, data, onFetch}) => {
         return;
       }
     } else {
-      approvalIdList = Object.keys(rows)
-        .map(i => data[+i].id);
+      approvalIdList = Object.keys(rows).map(i => data[+i]).map(d => d.id);
     }
 
     const isConfirm = window.confirm(
@@ -59,9 +59,10 @@ const ApprovalButton = ({rows, data, onFetch}) => {
       // 200 외 상태코드 처리 필요
       alert(` ✅ 요청: ${actionType === 'APPROVED' ? '스토어 등록 승인' : '스토어 등록 거절'} \n ✅ 처리 여부: ${res.ok ? '성공' : await res.text()}`)
 
-      return null;
+      return res.json();
     }
-    fetchApproveStatus();
+    const result = fetchApproveStatus();
+    // result { status: '승인', ids: [1,5,6,...] }
     onFetch(); // 데이터 새로고침
   }
 
