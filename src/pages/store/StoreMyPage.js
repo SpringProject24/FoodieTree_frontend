@@ -32,7 +32,7 @@ const StoreMyPage = () => {
      */
     const setInnerWidth = () => {
         setWidth(window.innerWidth);
-    }
+    };
 
     /**
      * 가게 정보를 가져오는 함수
@@ -72,7 +72,6 @@ const StoreMyPage = () => {
     const fetchReservations = async () => {
         try {
             const response = await fetch(`${BASE_URL}/store/reservations`);
-            console.log('isFiltered: ', isFiltered);
             if (!response.ok) {
                 throw new Error('Failed to fetch reservations');
             }
@@ -97,7 +96,6 @@ const StoreMyPage = () => {
         };
     }, []);
 
-
     /**
      * 토큰이 있으면 현재 페이지 유지
      * 토큰이 없으면 로그인 창 리다이렉션
@@ -109,7 +107,6 @@ const StoreMyPage = () => {
     useEffect(() => {
         const fetchUser = async () => {
             const userInfo = await checkAuthToken(navigate);
-
 
             if (userInfo) {
                 const requiredRole = 'store'; // 필요한 role  작성 필요
@@ -133,7 +130,7 @@ const StoreMyPage = () => {
      */
     const showHandler = () => {
         setShow(prev => !prev);
-    }
+    };
 
     /**
      * 예약 목록을 정렬하는 함수
@@ -232,10 +229,17 @@ const StoreMyPage = () => {
      * 현재 필터를 적용해 예약 목록을 필터링하는 함수
      */
     const applyCurrentFilters = (reservation, currentFilters = filters) => {
-        const { startDate, endDate, status = [] } = currentFilters; // status가 undefined일 경우 빈 배열로 초기화
-        const withinDateRange = (!startDate || new Date(reservation.pickupTime) >= new Date(startDate)) &&
-            (!endDate || new Date(reservation.pickupTime) <= new Date(endDate));
+        const { dateRange, status = [] } = currentFilters;
+        const { startDate, endDate } = dateRange || {};
+
+        const startDateFilter = startDate ? new Date(startDate).setHours(0, 0, 0, 0) : null;
+        const endDateFilter = endDate ? new Date(endDate).setHours(0, 0, 0, 0) : null;
+        const reservationDate = new Date(reservation.reservationTime).setHours(0, 0, 0, 0);
+        const withinDateRange = (!startDateFilter || reservationDate >= startDateFilter) &&
+            (!endDateFilter || reservationDate <= endDateFilter);
+
         const matchesStatus = status.length === 0 || status.includes(reservation.status);
+
         return withinDateRange && matchesStatus;
     };
 
