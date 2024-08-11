@@ -376,11 +376,11 @@ const NaverMapWithSearch = ({type, productDetail}) => {
             const placeToRemove = places.find(place => place.latlng && place.latlng.equals(position));
             if (placeToRemove) {
                 try {
-                    const response = await fetch('/customer/edit/area', {
+                    const response = await authFetch('/customer/edit/area', {
                         method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        // headers: {
+                        //     'Content-Type': 'application/json',
+                        // },
                         body: JSON.stringify({
                             preferredArea: placeToRemove.roadAddress || placeToRemove.jibunAddress,
                             alias: placeToRemove.title,
