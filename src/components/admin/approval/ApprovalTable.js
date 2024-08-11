@@ -6,7 +6,7 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import SearchInTable from "./SearchInTable";
+import FiltersInTable from "./FiltersInTable";
 import {BiSortAlt2, BiSortDown, BiSortUp} from "react-icons/bi";
 import styles from "./ApprovalTables.module.scss";
 import {ApprovalColumns} from "./ApprovalColumns";
@@ -78,7 +78,7 @@ const ApprovalTable = () => {
     <div className={styles['table-section']}>
       <ApprovalSummary stats={stats}/>
       <div className={styles['table-interaction']}>
-        <SearchInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters}/>
+        <FiltersInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters}/>
         <div className={styles['left-interactions']}>
           <DateRangePicker
             startDate={startDate}
