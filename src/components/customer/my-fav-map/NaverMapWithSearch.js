@@ -23,6 +23,7 @@ const NaverMapWithSearch = ({type, productDetail}) => {
     const [places, setPlaces] = useState([]);
     const [searchMarker, setSearchMarker] = useState(null);
     const [activeMarker, setActiveMarker] = useState(null);
+    const [loading, setLoading] = useState(true);
     // const [type, setType] = useState('store');
 
     const navigate = useNavigate();
@@ -64,7 +65,7 @@ const NaverMapWithSearch = ({type, productDetail}) => {
     }, []);
 
     const initMap = (type) => {
-
+        setLoading(true);
         if (type === 'store') {
             const storeName = productDetail.storeInfo.storeName;
             const storeAddress = productDetail.storeInfo.storeAddress;
@@ -87,9 +88,7 @@ const NaverMapWithSearch = ({type, productDetail}) => {
                     const latlng = new window.naver.maps.LatLng(item.y, item.x);
 
                     initializeMap(item.y, item.x); // Initialize map with store location
-                    // addPlace(latlng, storeName, item.roadAddress, item.jibunAddress, 'red'); // 색상 'red' 전달
-                    console.log('Store location:', latlng.toString());
-                    console.log("marker added");
+                    setLoading(false); // 로딩 완료
                 }
             );
         }
@@ -99,13 +98,16 @@ const NaverMapWithSearch = ({type, productDetail}) => {
                     (position) => {
                         const { latitude, longitude } = position.coords;
                         initializeMap(latitude, longitude);
+                        setLoading(false); // 로딩 완료
                     },
                     () => {
                         initializeMap(37.555183, 126.936883); // 중앙정보처리학원 신촌로176
+                        setLoading(false); // 로딩 완료
                     }
                 );
             } else {
                 initializeMap(37.555183, 126.936883); // Geolocation을 지원하지 않는 경우
+                setLoading(false); // 로딩 완료
             }
         }
     };
@@ -264,6 +266,11 @@ const NaverMapWithSearch = ({type, productDetail}) => {
                     '</div>',
                 ].join('\n'));
                 infoWindowInstance.open(mapInstance, marker);
+            }else{
+                let webLng = place.latlng.lng();
+                let webLat = place.latlng.lat();
+                let url = 'http://map.naver.com/index.nhn?enc=utf8&level=2&lng=' + webLng + '&lat=' + webLat + '&pinTitle=' + encodeURIComponent(place.title) + '&pinType=SITE';
+                window.open(url, '_blank'); // 새 창에서 URL 열기
             }
         });
     };
