@@ -91,7 +91,7 @@ const ApprovalTable = () => {
           <ApprovalButtons
             rows={rowSelection}
             data={data}
-            onFetch={fetchApprovals}
+            onFetch={setData}
           />
         </div>
       </div>
