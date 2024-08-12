@@ -6,7 +6,6 @@ import styles from './FavAreaSelector.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
-
 const FavAreaSelector = ({ onAreaSelect }) => {
   const [areas, setAreas] = useState([]);
   const [customerId, setCustomerId] = useState(null);
@@ -43,14 +42,13 @@ const FavAreaSelector = ({ onAreaSelect }) => {
         }
 
         const data = await response.json();
-        console.log('Areas data:', data);
         setAreas(data);
 
-        // Id가 작은 것을 기본값으로 설정
+        // Id가 작은 preferredArea를 기본값으로 설정
         if (data.length > 0) {
-          const lowestId = Math.min(...data.map(area => area.id));
-          setSelectedArea(lowestId);
-          onAreaSelect(lowestId);
+          const defaultArea = data[0];
+          setSelectedArea(defaultArea.preferredArea);
+          onAreaSelect(defaultArea.preferredArea); //그리고 선택된 area를 preferredArea로 설정
         }
 
       } catch (error) {
@@ -65,23 +63,23 @@ const FavAreaSelector = ({ onAreaSelect }) => {
     if (selectedArea !== null) {
       onAreaSelect(selectedArea);
     }
-  }, [selectedArea]);
+  }, [selectedArea, onAreaSelect]);
 
   const handleToggle = () => {
     setIsExpanded(prev => !prev);
   };
 
-  const handleAreaClick = (areaId) => {
-    setSelectedArea(areaId);
+  const handleAreaClick = (area) => {
+    setSelectedArea(area.preferredArea);
     setIsExpanded(false);
   };
 
-  const selectedAreaDetails = areas.find(area => area.id === selectedArea);
+  const selectedAreaDetails = areas.find(area => area.preferredArea === selectedArea);
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title} onClick={handleToggle}>
-      <FontAwesomeIcon icon={faLocationDot} /> {selectedAreaDetails ? selectedAreaDetails.preferredArea : '현재 등록된 주소'} {isExpanded ? '▲' : '▼'}
+        <FontAwesomeIcon icon={faLocationDot} /> {selectedAreaDetails ? selectedAreaDetails.preferredArea : '현재 등록된 주소'} {isExpanded ? '▲' : '▼'}
       </h2>
       {isExpanded && (
         <ul className={styles.areaList}>
@@ -89,7 +87,7 @@ const FavAreaSelector = ({ onAreaSelect }) => {
             <li
               key={area.id}
               className={styles.areaItem}
-              onClick={() => handleAreaClick(area.id)}
+              onClick={() => handleAreaClick(area)}
             >
               <span className={styles.areaName}>{area.preferredArea}</span>
               {area.alias && <span className={styles.areaAlias}>({area.alias})</span>}

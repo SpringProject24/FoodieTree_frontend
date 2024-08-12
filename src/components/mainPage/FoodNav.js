@@ -13,12 +13,6 @@ import { getUserEmail, getToken, getRefreshToken } from "../../utils/authUtil";
 import { DEFAULT_IMG, imgErrorHandler } from "../../utils/error";
 import FavAreaSelector from "./FavAreaSelector";
 
-// 🌿 랜덤 가게 리스트 생성
-const getRandomStores = (stores, count) => {
-  const shuffled = [...stores].sort(() => 0.5 - Math.random()); // stores 배열을 랜덤으로 섞기
-  return shuffled.slice(0, count); // 원하는 개수의 가게를 선택
-};
-
 // 🌿 카테고리 문자열에서 실제 foodType만 추출하는 함수
 const extractFoodType = (category) => {
   if (category && typeof category === 'string') {
@@ -83,22 +77,38 @@ const fetchFavorites = async (customerId, setFavorites) => {
 };
 
 const FoodNav = ({ selectedCategory, stores }) => {
-  const [randomStores, setRandomStores] = useState([]);
   const [favorites, setFavorites] = useState({});
+  const [filteredStores, setFilteredStores] = useState([]);
+  const [selectedArea, setSelectedArea] = useState(null);
   const { openModal } = useModal();
 
   // customerId값
   const customerId = getUserEmail();
 
   useEffect(() => {
-    setRandomStores(getRandomStores(stores, 5));
-  }, [stores]);
-
-  useEffect(() => {
     if (customerId) {
       fetchFavorites(customerId, setFavorites);
     }
   }, [customerId]);
+
+  useEffect(() => {
+    // store 정보
+    console.log('Stores:', stores);
+    // 선택된 area 정보
+    console.log('Selected Area:', selectedArea);
+
+    if (selectedArea !== null) {
+      // 선택된 area와 같은 adress를 가진 가게 리스트 필터링
+      const newFilteredStores = stores.filter(store => {
+        const address = store.address || '';
+        const isMatch = address.includes(selectedArea);
+        console.log(`Checking store ${store.storeName}: ${address} - Match: ${isMatch}`);
+        return isMatch; 
+      });
+
+      setFilteredStores(newFilteredStores);
+    }
+  }, [stores, selectedArea]);
 
   const handleClick = (store) => {
     openModal('productDetail', { productDetail: store });
@@ -117,9 +127,9 @@ const FoodNav = ({ selectedCategory, stores }) => {
     }
   };
 
-  const handleAreaSelect = (area) => {
-    console.log('Selected Area:', area);
-    // Handle the selected area here
+  const handleAreaSelect = (areaId) => {
+    // 선택된 area로 업데이트
+    setSelectedArea(areaId);
   };
 
   const settings = (slidesToShow) => ({
@@ -148,12 +158,12 @@ const FoodNav = ({ selectedCategory, stores }) => {
   return (
     <>
       <FavAreaSelector onAreaSelect={handleAreaSelect} />
-      
+
       {/* 내가 찜한 가게 리스트 */}
       <div className={styles.list}>
         <h2 className={styles.title}>나의 단골 가게</h2>
         <Slider {...settings(4)} className={styles.slider}>
-          {stores.map((store, index) => (
+          {filteredStores.map((store, index) => (
             <div
               key={index}
               onClick={() => handleClick(store)}
@@ -184,7 +194,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
       <div className={styles.list}>
         <h2 className={styles.title}>000동 근처 가게</h2>
         <Slider {...settings(4)} className={styles.slider}>
-          {stores.map((store, index) => (
+          {filteredStores.map((store, index) => (
             <div
               key={index}
               onClick={() => handleClick(store)}
@@ -215,7 +225,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
       <div className={styles.list}>
         <h2 className={styles.title}>이웃들의 추천 가게</h2>
         <Slider {...settings(5)} className={styles.slider}>
-          {randomStores.map((store, index) => (
+          {filteredStores.map((store, index) => (
             <div
               key={index}
               onClick={() => handleClick(store)}
@@ -232,7 +242,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
                 />
               </div>
-              <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} className={styles.image}  onError={imgErrorHandler} />
+              <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} className={styles.image} onError={imgErrorHandler} />
               <span className={styles.category}>{extractFoodType(store.category)}</span>
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
