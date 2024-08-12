@@ -1,3 +1,4 @@
+// FoodNav.js
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { useModal } from "../../pages/common/ModalProvider";
@@ -98,12 +99,12 @@ const FoodNav = ({ selectedCategory, stores }) => {
     console.log('Selected Area:', selectedArea);
 
     if (selectedArea !== null) {
-      // 선택된 area와 같은 adress를 가진 가게 리스트 필터링
+      // 선택된 area와 같은 address를 가진 가게 리스트 필터링
       const newFilteredStores = stores.filter(store => {
         const address = store.address || '';
         const isMatch = address.includes(selectedArea);
         console.log(`Checking store ${store.storeName}: ${address} - Match: ${isMatch}`);
-        return isMatch; 
+        return isMatch;
       });
 
       setFilteredStores(newFilteredStores);
@@ -125,11 +126,6 @@ const FoodNav = ({ selectedCategory, stores }) => {
     } catch (error) {
       console.error('⚠️Error toggling:', error);
     }
-  };
-
-  const handleAreaSelect = (areaId) => {
-    // 선택된 area로 업데이트
-    setSelectedArea(areaId);
   };
 
   const settings = (slidesToShow) => ({
@@ -157,7 +153,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
 
   return (
     <>
-      <FavAreaSelector onAreaSelect={handleAreaSelect} />
+      <FavAreaSelector onAreaSelect={setSelectedArea} />
 
       {/* 내가 찜한 가게 리스트 */}
       <div className={styles.list}>
@@ -192,7 +188,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
 
       {/* 주변 가게 리스트 */}
       <div className={styles.list}>
-        <h2 className={styles.title}>000동 근처 가게</h2>
+        <h2 className={styles.title}>{selectedArea ? `${selectedArea} 근처 가게` : '근처 가게'}</h2>
         <Slider {...settings(4)} className={styles.slider}>
           {filteredStores.map((store, index) => (
             <div
