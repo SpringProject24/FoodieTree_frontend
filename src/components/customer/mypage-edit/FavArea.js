@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import styles from "./Edit.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleXmark} from "@fortawesome/free-solid-svg-icons";
+import {faCircleXmark, faPlus} from "@fortawesome/free-solid-svg-icons";
 import {CUSTOMER_URL} from "../../../config/host-config";
+import {authFetch} from "../../../utils/authUtil";
 import {useModal} from "../../../pages/common/ModalProvider";
+import AddFavFoodBtn from "./fav-food/AddFavFoodBtn";
+import style from "./fav-food/AddFavFoodBtn.module.scss";
 
 const FavArea = ({ favList, set }) => {
 
@@ -18,7 +21,7 @@ const FavArea = ({ favList, set }) => {
             type,
             value
         }
-        const res = await fetch(CUSTOMER_URL + `/edit`, {
+        const res = await authFetch(CUSTOMER_URL + `/edit`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
@@ -39,7 +42,10 @@ const FavArea = ({ favList, set }) => {
             <div className={styles.title}>
                 <h3 className={styles["title-text"]}>
                     <span> 선호지역 </span>
-                    <button onClick={modalHandler}> 추가하기 </button>
+                    <div className={style.box} onClick={modalHandler}>
+                        <FontAwesomeIcon className={style["plus-mark"]} icon={faPlus}/>
+                    </div>
+                        {/*<button onClick={modalHandler}> 추가하기 </button>*/}
                 </h3>
             </div>
             <div className={styles['edit-wrapper']}>
@@ -52,7 +58,7 @@ const FavArea = ({ favList, set }) => {
                                     <span>{item}</span>
                                     <FontAwesomeIcon
                                         className={styles.xmark} icon={faCircleXmark}
-                                        onClick={() => clickHandler("preferredArea", item)}
+                                        onClick={() => clickHandler("area", item)}
                                     />
                                 </li>
                             );

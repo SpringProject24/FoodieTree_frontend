@@ -49,6 +49,7 @@ const ProductDetailModal = ({productDetail, onClose}) => {
 
     const {storeName, storeImg, address, openAt, closedAt, price, storeId, storeContact, productCnt} = productDetail;
 
+
     const productInfo = {
         storeInfo: {
             storeName,
@@ -60,6 +61,7 @@ const ProductDetailModal = ({productDetail, onClose}) => {
             price,
             storeId,
             remainProduct: productCnt,
+            productImg,
         },
     };
 

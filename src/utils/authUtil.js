@@ -89,7 +89,7 @@ export const verifyTokenLoader = async ({ request }) => {
         if (data.success) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('refreshToken', data.refreshToken);
-            return { email: data.email, userType: data.role };
+            return { email: data.email, userType: data.role, storeApprove: data.storeApprove };
         }
     }
 
@@ -188,3 +188,25 @@ export const checkLoggedIn = (navigate, currentPath) => {
     }
 };
 
+export const authFetch = async (url, req) => {
+    const token = localStorage.getItem("token");
+    const refreshToken = localStorage.getItem("refreshToken");
+    let init = {
+        ...req,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'refreshToken': refreshToken
+        }
+    }
+    if (url.includes("img") || url.includes("approval/p")) {
+        init = {
+            ...req,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'refreshToken': refreshToken
+            }
+        }
+    }
+    return await fetch(url , init);
+}
