@@ -3,8 +3,7 @@ import styles from './CustomerReservationList.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faCircleCheck, faSpinner, faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "../../../pages/common/ModalProvider";
-import {imgErrorHandler} from "../../../utils/error";
-import {authFetch} from "../../../utils/authUtil";
+import { imgErrorHandler } from "../../../utils/error";
 
 const BASE_URL = window.location.origin;
 
@@ -13,17 +12,6 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 400);
     const [filters, setFilters] = useState(initialFilters || {}); // 필터 유지
     const listRef = useRef(null);
-
-    // 카테고리 매핑 생성
-    const categoryMap = {
-        '한식': 'KOREAN',
-        '양식': 'WESTERN',
-        '카페': 'CAFE',
-        '일식': 'JAPANESE',
-        '디저트': 'DESSERT',
-        '중식': 'CHINESE',
-        '기타': 'ELSE'
-    };
 
     useEffect(() => {
         const handleResize = () => {
@@ -192,14 +180,16 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
 
     // 필터 적용 함수
     const handleApplyFilters = (newFilters) => {
-        const mappedCategory = newFilters.category.map(cat => categoryMap[cat]);
-
         const updatedFilters = {
-            ...newFilters,
-            category: mappedCategory
+            ...newFilters
         };
 
-        setFilters(updatedFilters);
+        // 기존 필터 상태와 병합하여 업데이트
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            ...updatedFilters
+        }));
+
         onApplyFilters(updatedFilters);
     };
 
