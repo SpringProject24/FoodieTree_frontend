@@ -1,7 +1,7 @@
 
 .logoutButton {
   // 로그아웃 버튼 스타일
-  background-color: #f44; // 버튼 배경색
+  background-color: #610e0e; // 버튼 배경색
   color: #fff; // 텍스트 색상
   border: none; // 기본 테두리 제거
   padding: 10px 20px; // 패딩 추가
@@ -9,3 +9,15 @@
   cursor: pointer; // 포인터 커서
   font-size: 16px; // 폰트 크기
 }
+
+.loginButton {
+  // 로그아웃 버튼 스타일
+  background-color: rgba(36, 39, 98, 0.5); // 버튼 배경색
+  color: #fff; // 텍스트 색상
+  border: none; // 기본 테두리 제거
+  padding: 10px 20px; // 패딩 추가
+  border-radius: 5px; // 모서리 둥글게
+  cursor: pointer; // 포인터 커서
+  font-size: 16px; // 폰트 크기
+}
+
