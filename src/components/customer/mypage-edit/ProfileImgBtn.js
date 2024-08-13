@@ -3,7 +3,8 @@ import styles from "./ProfileImgBtn.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {CUSTOMER_URL, STORE_URL} from "../../../config/host-config";
-import {imgErrorHandler} from "../../../utils/error";
+import {DEFAULT_IMG, imgErrorHandler} from "../../../utils/error";
+import {authFetch} from "../../../utils/authUtil";
 
 const ProfileImgBtn = ({ profileImg }) => {
     const inputRef = useRef();
@@ -22,7 +23,7 @@ const ProfileImgBtn = ({ profileImg }) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('customerImg', inputRef.current.files[0]);
-        const response = await fetch(CUSTOMER_URL + '/edit/img', {
+        const response = await authFetch(CUSTOMER_URL + '/edit/img', {
             method: 'POST',
             body: formData
         });
@@ -48,7 +49,7 @@ const ProfileImgBtn = ({ profileImg }) => {
             <a onClick={openFileHandler} className={styles.avatar}>
                 <FontAwesomeIcon className={styles.i} icon={faPenToSquare}/>
                 <img
-                    src={img || profileImg}
+                    src={img || (profileImg || DEFAULT_IMG)}
                     onError={imgErrorHandler}
                     alt="Customer profile image"/>
             </a>

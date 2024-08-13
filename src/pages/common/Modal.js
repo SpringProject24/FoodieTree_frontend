@@ -17,9 +17,8 @@ const AddProductAmountModal = lazy(() => import("../store/AddProductAmountModal"
 const ScheduleDetailModal = lazy(() => import("../store/ScheduleDetailModal"));
 const CustomerReservationFilterModal = lazy(() => import("../customer/CustomerReservationFilterModal"));
 const StoreReservationFilterModal = lazy(() => import("../store/StoreReservationFilterModal"));
-
+const AddFavFoodModal = lazy(() => import("../customer/modal/AddFavFoodModal"));
 const MyFavAreaEditModal = lazy(() => import("../customer/FavAreaEditModal"));
-
 
 const Modal = () => {
     const {modalState, closeModal} = useModal();
@@ -34,6 +33,12 @@ const Modal = () => {
                     setCustomStyle({width: '100%'});
                 } else {
                     setCustomStyle({width: '80%', height: '80%', margin: '140px auto'});
+                }
+            } else if (type === 'favAreaEdit') {
+                if (window.innerWidth <= 400) {
+                    setCustomStyle({width: '100%'});
+                } else {
+                    setCustomStyle({width: '750px'});
                 }
             } else {
                 setCustomStyle({});
@@ -91,16 +96,17 @@ const Modal = () => {
         case 'scheduleDetail': // 가게페이지 스케줄 상세조회 및 수정
             ModalComponent = ScheduleDetailModal;
             break;
-
-        case 'favAreaEdit': // 가게페이지 스케줄 상세조회 및 수정
+        case 'favAreaEdit': // 소비자페이지 선호지역 수정
             ModalComponent = MyFavAreaEditModal;
-
+            break;
         case 'customerReservationFilter': // 소비자페이지 예약내역 필터
             ModalComponent = CustomerReservationFilterModal;
-
             break;
         case 'storeReservationFilter': // 가게페이지 예약내역 필터
             ModalComponent = StoreReservationFilterModal;
+            break;
+        case 'addFavFood':
+            ModalComponent = AddFavFoodModal;
             break;
         default:
             ModalComponent = null;
@@ -114,7 +120,7 @@ const Modal = () => {
 
     return ReactDOM.createPortal(
         <div className={styles.modal} onClick={handleClose}>
-            <div className={styles.modalContent} style={type === 'productDetail' ? customStyle : {}}
+            <div className={styles.modalContent} style={type === 'productDetail' || 'favAreaEdit' ? customStyle : {}}
                  onClick={(e) => e.stopPropagation()}>
                 <div className={styles.close}>
                     <span><FontAwesomeIcon className={styles.closeBtn} onClick={closeModal} icon={faTimes}/></span>

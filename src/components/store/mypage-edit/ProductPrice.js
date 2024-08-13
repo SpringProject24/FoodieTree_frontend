@@ -4,17 +4,19 @@ import {faSquareCheck} from "@fortawesome/free-regular-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import styles from './Edit.module.scss';
 import {faDollarSign} from "@fortawesome/free-solid-svg-icons";
+import {authFetch} from "../../../utils/authUtil";
 
 const ProductPrice = ({value}) => {
     const [err, setErr] = useState(false);
     const selectRef = useRef();
+    const [selected, setSelected] = useState(0);
 
     const clickHandler = async () => {
         const payload = {
             type: "price",
-            value: selectRef.current.value,
+            value: selected,
         }
-        const res = await fetch(STORE_URL + '/edit', {
+        const res = await authFetch(STORE_URL + '/edit', {
             method: "PATCH",
             headers: {
                 'Content-Type': 'application/json'
@@ -29,13 +31,17 @@ const ProductPrice = ({value}) => {
             setErr(true);
         }
     }
+
+    const changeHandler = () => {
+        setSelected(selectRef.current.value);
+    }
     return (
         <div className={styles["input-wrapper"]}>
             <div className={styles.icon}>
                 <FontAwesomeIcon icon={faDollarSign}/>
             </div>
             <span>스페셜박스 가격</span>
-            <select id="price" ref={selectRef} value={value}>
+            <select id="price" ref={selectRef} value={selected || value} onChange={changeHandler}>
                 <option value="3900">3900</option>
                 <option value="5900">5900</option>
                 <option value="7900">7900</option>
