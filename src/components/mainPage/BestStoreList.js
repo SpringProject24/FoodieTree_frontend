@@ -72,10 +72,12 @@ const BestStoreList = ({ stores = [] }) => {
     }, [customerId]);
 
     // 세션 스토리지에서 selectedArea 로드
-    const selectedArea = sessionStorage.getItem('selectedArea');
+    const selectedArea = sessionStorage.getItem('selectedArea') || '';
 
-    // selectedArea에 해당하는 가게 필터링
-    const filteredStores = stores.filter(store => store.address === selectedArea);
+    // selectedArea를 포함하는 가게 필터링
+    const filteredStores = stores.filter(store => 
+        store.address && selectedArea && store.address.includes(selectedArea)
+    );
 
     const handleClick = (store) => {
         openModal('productDetail', { productDetail: store });
