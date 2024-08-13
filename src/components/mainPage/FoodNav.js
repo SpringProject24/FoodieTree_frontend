@@ -204,6 +204,12 @@ const FoodNav = ({ selectedCategory, stores }) => {
     ],
   });
 
+  // 필터링된 추천 가게 리스트 생성
+  const filteredRecommendedStores = recommendedStores.filter(store => {
+    const address = store.address || '';
+    return selectedArea ? address.includes(selectedArea) : true;
+  });
+
   return (
     <>
       <FavAreaSelector onAreaSelect={setSelectedArea} />
@@ -306,7 +312,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
       <div className={styles.list}>
         <h2 className={styles.title}>내가 좋아하는 카테고리</h2>
         <Slider {...settings(5)} className={styles.slider}>
-          {recommendedStores.map((store, index) => (
+          {filteredRecommendedStores.map((store, index) => (
             <div
               key={index}
               onClick={() => handleClick(store)}
