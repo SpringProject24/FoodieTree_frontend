@@ -8,7 +8,7 @@ import './slick-theme.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
-import { FAVORITESTORE_URL } from '../../config/host-config';
+import { FAVORITESTORE_URL, STORELISTS_URL } from '../../config/host-config';
 import { getUserEmail, getToken, getRefreshToken } from "../../utils/authUtil";
 import { DEFAULT_IMG, imgErrorHandler } from "../../utils/error";
 import FavAreaSelector from "./FavAreaSelector";
@@ -76,10 +76,36 @@ const fetchFavorites = async (customerId, setFavorites) => {
   }
 };
 
+// 나의 단골 가게 리스트를 가져오는 함수
+const fetchFavoriteAndOrderStores = async (customerId, setStores) => {
+  try {
+    const response = await fetch(`${STORELISTS_URL}/fav`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + getToken(),
+        'refreshToken': getRefreshToken()
+      },
+    });
+
+    const contentType = response.headers.get('Content-Type');
+    if (contentType && contentType.includes('application/json')) {
+      const data = await response.json();
+      setStores(data);
+    } else {
+      const text = await response.text();
+      console.error('⚠️Unexpected response format:', text);
+    }
+  } catch (error) {
+    console.error('⚠️Error fetching:', error);
+  }
+};
+
 const FoodNav = ({ selectedCategory, stores }) => {
   const [favorites, setFavorites] = useState({});
   const [filteredStores, setFilteredStores] = useState([]);
   const [selectedArea, setSelectedArea] = useState(null);
+  const [myFavoriteAndOrderStores, setMyFavoriteAndOrderStores] = useState([]);
   const { openModal } = useModal();
 
   // customerId값
@@ -88,6 +114,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
   useEffect(() => {
     if (customerId) {
       fetchFavorites(customerId, setFavorites);
+      fetchFavoriteAndOrderStores(customerId, setMyFavoriteAndOrderStores);
     }
   }, [customerId]);
 
@@ -158,7 +185,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
       <div className={styles.list}>
         <h2 className={styles.title}>나의 단골 가게</h2>
         <Slider {...settings(4)} className={styles.slider}>
-          {filteredStores.map((store, index) => (
+          {myFavoriteAndOrderStores.map((store, index) => (
             <div
               key={index}
               onClick={() => handleClick(store)}
