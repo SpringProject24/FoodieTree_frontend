@@ -33,6 +33,13 @@ export const getUserRole = () => {
     return userType;
 };
 
+// 로컬스토리지에서 닉네임(subName, nickName) 가져오기
+export const getSubName = () => {
+    const subName = localStorage.getItem("subName");
+
+    return subName;
+}
+
 /**
  * 로그아웃 기능
  * @param navigate to sign-in

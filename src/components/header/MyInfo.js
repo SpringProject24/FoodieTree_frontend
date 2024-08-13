@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser, faStore } from "@fortawesome/free-solid-svg-icons";
 import styles from "./MyInfo.module.scss";
 import { useNavigate } from "react-router-dom";
-import {getRefreshToken, getToken, getUserRole} from "../../utils/authUtil";
+import {getRefreshToken, getSubName, getToken, getUserRole} from "../../utils/authUtil";
 
 // 내 정보 들어가기
 const MyInfo = () => {
@@ -13,7 +13,6 @@ const MyInfo = () => {
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                console.log("유저 이미지 가져오기 ! ");
                 const response = await fetch(`/user/info`, {
                     method: 'GET',
                     headers: {
@@ -31,6 +30,11 @@ const MyInfo = () => {
                         localStorage.setItem('userImage', data.productImg);
                     } else if (getUserRole() === 'customer') {
                         localStorage.setItem('userImage', data.profileImage);
+                    }
+
+                    // 닉네임이 null 일 경우 저장하지 않음
+                    if (getSubName() !== null) {
+                        localStorage.setItem('subName', data.subName);
                     }
 
                     setUserInfo(data);
@@ -55,7 +59,7 @@ const MyInfo = () => {
 
     return (
         <div className={styles.myInfoContainer}>
-            <span className={styles.myInfo}>안녕하세요 {userInfo.email}님!</span>
+            <span className={styles.myInfo}> 안녕하세요 {getSubName() ? getSubName() : userInfo.email}님!</span>
             <div className={styles.myIconContainer}>
                 {getUserRole() === 'store' ? (
                     <>
@@ -66,11 +70,6 @@ const MyInfo = () => {
                             className={styles.profileImage}
                             onClick={() => handleIconClick("/store")}
                         />
-                        <FontAwesomeIcon
-                            icon={faStore}
-                            onClick={() => handleIconClick("/store")}
-                            className={styles.myIcon}
-                        />
                     </>
                 ) : getUserRole() === 'customer' ? (
                     <>
@@ -80,11 +79,6 @@ const MyInfo = () => {
                             alt="Customer Profile"
                             className={styles.profileImage}
                             onClick={() => handleIconClick("/customer")}
-                        />
-                        <FontAwesomeIcon
-                            icon={faCircleUser}
-                            onClick={() => handleIconClick("/customer")}
-                            className={styles.myIcon}
                         />
                     </>
                 ) : null}
