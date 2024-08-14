@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 임포트
 import { logoutAction } from '../utils/authUtil'; // 로그아웃 액션 임포트
-import styles from './Header.module.scss'; // 헤더 스타일 임포트
+import styles from './Header.module.scss';
+import SearchInput from "../components/search/SearchInput"; // 헤더 스타일 임포트
 
 const Header = () => {
     const navigate = useNavigate(); // navigate 훅 사용
@@ -29,6 +30,7 @@ const Header = () => {
                     Log In
                 </button>
             )}
+            <SearchInput/>
         </header>
     );
 };
