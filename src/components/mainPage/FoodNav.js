@@ -126,6 +126,12 @@ const fetchRecommendedStores = async (customerId, setRecommendedStores) => {
   }
 };
 
+// 랜덤으로 주어진 개수의 가게를 선택하는 함수
+const getRandomStores = (stores, count) => {
+  const shuffled = stores.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+};
+
 const FoodNav = ({ selectedCategory, stores }) => {
   const [favorites, setFavorites] = useState({});
   const [filteredStores, setFilteredStores] = useState([]);
@@ -170,6 +176,15 @@ const FoodNav = ({ selectedCategory, stores }) => {
     return selectedArea ? address.includes(selectedArea) : true;
   });
 
+  // 필터링된 추천 가게 리스트 생성
+  const filteredRecommendedStores = recommendedStores.filter(store => {
+    const address = store.address || '';
+    return selectedArea ? address.includes(selectedArea) : true;
+  });
+
+  // 이웃들의 추천 가게 리스트에서 selectedArea에 해당하는 가게를 랜덤으로 5개 선택
+  const randomRecommendedStores = getRandomStores(filteredRecommendedStores, 5);
+
   const handleClick = (store) => {
     openModal('productDetail', { productDetail: store });
   };
@@ -208,12 +223,6 @@ const FoodNav = ({ selectedCategory, stores }) => {
         },
       },
     ],
-  });
-
-  // 필터링된 추천 가게 리스트 생성
-  const filteredRecommendedStores = recommendedStores.filter(store => {
-    const address = store.address || '';
-    return selectedArea ? address.includes(selectedArea) : true;
   });
 
   return (
@@ -286,7 +295,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
       <div className={styles.list}>
         <h2 className={styles.title}>이웃들의 추천 가게</h2>
         <Slider {...settings(5)} className={styles.slider}>
-          {filteredRecommendedStores.map((store, index) => (
+          {randomRecommendedStores.map((store, index) => (
             <div
               key={index}
               onClick={() => handleClick(store)}
