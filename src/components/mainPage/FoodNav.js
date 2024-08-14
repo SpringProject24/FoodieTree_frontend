@@ -164,6 +164,12 @@ const FoodNav = ({ selectedCategory, stores }) => {
     }
   }, [stores, selectedArea]);
 
+  // 선택된 지역에 맞는 단골 가게 필터링
+  const filteredFavoriteStores = myFavoriteAndOrderStores.filter(store => {
+    const address = store.address || '';
+    return selectedArea ? address.includes(selectedArea) : true;
+  });
+
   const handleClick = (store) => {
     openModal('productDetail', { productDetail: store });
   };
@@ -218,7 +224,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
       <div className={styles.list}>
         <h2 className={styles.title}>나의 단골 가게</h2>
         <Slider {...settings(4)} className={styles.slider}>
-          {myFavoriteAndOrderStores.map((store, index) => (
+          {filteredFavoriteStores.map((store, index) => (
             <div
               key={index}
               onClick={() => handleClick(store)}
@@ -280,7 +286,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
       <div className={styles.list}>
         <h2 className={styles.title}>이웃들의 추천 가게</h2>
         <Slider {...settings(5)} className={styles.slider}>
-          {filteredStores.map((store, index) => (
+          {filteredRecommendedStores.map((store, index) => (
             <div
               key={index}
               onClick={() => handleClick(store)}
