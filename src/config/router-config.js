@@ -23,6 +23,7 @@ import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
 import AdminPage from "../pages/AdminPage";
 import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSearch";
 import Main from "../pages/Main";
+import ChatComponent from "../components/admin/issue/ChatComponent";
 
 const homeRouter = [
     {
@@ -113,6 +114,10 @@ export const router = createBrowserRouter([
             {
                 path: '/admin',
                 element: <AdminPage/>,
+            },
+            {
+                path: '/chat',
+                element: <ChatComponent />,
             }
         ]
     },
