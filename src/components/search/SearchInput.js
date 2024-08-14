@@ -1,5 +1,8 @@
 import React, {useRef} from 'react';
 import {useNavigate} from "react-router-dom";
+import styles from "./SearchInput.module.scss";
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const SearchInput = () => {
     const navigate = useNavigate();
@@ -13,9 +16,11 @@ const SearchInput = () => {
         }
     }
     return (
-        <div>
-            <input ref={inputRef} type="text" onKeyUp={onKeyHandler}/>
-            <button onClick={onClickHandler}>검색</button>
+        <div className={styles["input-box"]}>
+            <div>
+                <button onClick={onClickHandler}><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                <input ref={inputRef} type="text" onKeyUp={onKeyHandler}/>
+            </div>
         </div>
     );
 };
