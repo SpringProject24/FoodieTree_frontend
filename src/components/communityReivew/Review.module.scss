@@ -1,7 +1,12 @@
-.review {
-    // border: 1px solid #ddd; /* 주석 처리된 부분 */
-    // border-radius: 8px; /* 주석 처리된 부분 */
-    padding: 16px;
+.reviewCommunity {
+    width: 70%;
+    margin: 0 auto;
+  }
+  
+  .review {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
     background-color: #fff;
   }
   
@@ -11,8 +16,8 @@
   }
   
   .profilePic {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     margin-right: 16px;
   }
@@ -30,8 +35,7 @@
   .reviewImage {
     width: 100%;
     height: auto;
-    // border-radius: 8px; 
-    margin: 17px 0;
+    margin: 10px 0;
   }
   
   .reviewText {
@@ -44,14 +48,14 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
-    margin: 10px 0 60px 0;
+    margin-top: 10px;
     background-color: #f9f9f9;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   
-  .storeDetails {
+  .storeDetail {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -66,13 +70,25 @@
   .storeAddress {
     font-size: 14px;
     color: #555;
-    margin-top: 4px; 
-    text-align: left; 
+    margin-top: 4px;
+    text-align: left;
   }
   
   .favoriteIcon {
     font-size: 20px;
-    color: #f00; 
     cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .favoriteIcon:hover {
+    color: rgb(255, 0, 100); 
+  }
+  
+  .favorited {
+    color: rgb(255, 71, 114); 
+  }
+  
+  .notFavorited {
+    color: rgb(152, 152, 152); 
   }
   
