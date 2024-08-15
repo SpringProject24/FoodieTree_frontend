@@ -3,13 +3,13 @@ import {useNavigate} from "react-router-dom";
 import styles from "./SearchInput.module.scss";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {checkAuthFn} from "../../utils/authUtil";
 
 const SearchInput = () => {
     const navigate = useNavigate();
     const inputRef = useRef(null);
     const onClickHandler = () => {
-        window.location.replace(`/search?q=${inputRef.current.value}`);
-        // navigate(`/search?q=${inputRef.current.value}`)
+        checkAuthFn(() => window.location.replace(`/search?q=${inputRef.current.value}`), navigate());
     }
     const onKeyHandler = (e) => {
         if (e.keyCode === 13) {

@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import SearchList from "../../components/search/SearchList";
 import Skeleton from "../../components/search/Skeleton";
+import {checkAuthFn, checkAuthToken} from "../../utils/authUtil";
 
 const Search = () => {
     const [word, setWord] = useSearchParams();
@@ -12,6 +13,7 @@ const Search = () => {
     const [isFinish, setIsFinish] = useState(false);
     const [skeletonCnt, setSkeletonCnt] = useState(20);
     const [initLoading, setInitLoading] = useState(true)
+    const navigate = useNavigate();
 
     useEffect(() => {
         const initFetch = async () => {
@@ -22,6 +24,7 @@ const Search = () => {
             setInitLoading(false);
             setPageNo(2);
         };
+        checkAuthToken(navigate);
         initFetch();
     }, [word]);
 

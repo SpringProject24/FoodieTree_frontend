@@ -5,8 +5,8 @@ import {faBoxOpen, faWonSign} from "@fortawesome/free-solid-svg-icons";
 import {imgErrorHandler} from "../../utils/error";
 import {useModal} from "../../pages/common/ModalProvider";
 import {FAVORITESTORE_URL} from "../../config/host-config";
-import {authFetch} from "../../utils/authUtil";
-import {useSearchParams} from "react-router-dom";
+import {authFetch, checkAuthFn, getToken} from "../../utils/authUtil";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {categoryImgList} from "../../utils/img-handler";
 import FavStoreBtn from "./FavStoreBtn";
 
@@ -14,6 +14,7 @@ const SearchList = ({stores = []}) => {
     const {openModal} = useModal();
     const [favorites, setFavorites] = useState([]);
     const [keyword, setKeyword] = useSearchParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         (async () => {
@@ -29,7 +30,7 @@ const SearchList = ({stores = []}) => {
     }, []);
 
     const clickHandler = (store) => {
-        openModal('productDetail', {productDetail: store});
+        checkAuthFn(()=>openModal('productDetail', {productDetail: store}), navigate);
     };
 
     return (
