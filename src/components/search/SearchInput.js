@@ -9,7 +9,7 @@ const SearchInput = () => {
     const navigate = useNavigate();
     const inputRef = useRef(null);
     const onClickHandler = () => {
-        checkAuthFn(() => window.location.replace(`/search?q=${inputRef.current.value}`), navigate());
+        checkAuthFn(() => window.location.replace(`/search?q=${inputRef.current.value}`), navigate);
     }
     const onKeyHandler = (e) => {
         if (e.keyCode === 13) {

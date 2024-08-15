@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import LogoutLoginBtn from "../components/header/LogoutLoginBtn";
 import MyInfo from "../components/header/MyInfo";
-import SearchInput from "../components/search/SearchInput"; // 헤더 스타일 임포트
+import SearchInput from "../components/search/SearchInput";
+import {getToken} from "../utils/authUtil"; // 헤더 스타일 임포트
 
 const Header = () => {
 
@@ -11,7 +12,7 @@ const Header = () => {
             <h1>Header</h1>
             <LogoutLoginBtn />
             <MyInfo />
-            <SearchInput/>
+            {getToken() && <SearchInput/>}
         </header>
     );
 }
