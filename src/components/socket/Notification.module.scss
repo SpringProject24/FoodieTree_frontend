@@ -1,0 +1,27 @@
+.notify-icon {
+  width: 50px;
+  height: 35px;
+  border: 1px solid violet;
+  color: white;
+  font-size: 35px;
+  text-align: center;
+  line-height: 35px;
+}
+.notify-list {
+  background: #FFFFFF;
+  border: 1px solid var(--color-gray-300);
+  color: var(--color-gray-800);
+  width: 200px;
+  min-height: 50px;
+  position: relative;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+
+  li {
+    height: 50px
+  }
+}
+.close {
+  display: none;
+}
