@@ -29,13 +29,13 @@ const Search = () => {
         const observer = new IntersectionObserver(async (entries) => {
             if (!entries[0].isIntersecting || loading || isFinish) return;
             await loadSearchedStores();
-        }, {rootMargin: '-200px', threshold: 0.9});
+        }, {rootMargin: '100px', threshold: 0.1});
 
         if (skeletonRef.current) observer.observe(skeletonRef.current);
         return () => {
             if (skeletonRef.current) observer.disconnect();
         }
-    }, [loading, pageNo]);
+    }, [loading, pageNo, isFinish]);
 
     const loadSearchedStores = async () => {
         if (isFinish || loading || initLoading) return;
@@ -69,9 +69,8 @@ const Search = () => {
             {!initLoading &&
                 <>
                     <SearchList stores={storeList}/>
-                    <div ref={skeletonRef}>
-                        {loading && <Skeleton count={skeletonCnt}/>}
-                    </div>
+                    {loading && (window.innerWidth <= 400 ? <Skeleton count={1}/> : <Skeleton count={skeletonCnt}/>)}
+                    <div ref={skeletonRef}></div>
                 </>
             }
         </div>
