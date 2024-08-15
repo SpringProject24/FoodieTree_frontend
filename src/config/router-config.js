@@ -23,6 +23,7 @@ import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
 import AdminPage from "../pages/AdminPage";
 import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSearch";
 import Main from "../pages/Main";
+import CommunityReviewPage from "../pages/Community/CommunityPage";
 
 const homeRouter = [
     {
@@ -57,6 +58,10 @@ const homeRouter = [
     {
         path: '/:categoryName',
         element: <CategoriesPage/>,
+    },
+    {
+        path: '/reviewCommunity',
+        element: <CommunityReviewPage />,
     },
 ];
 const customerMyPageRouter = [

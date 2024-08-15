@@ -1,0 +1,78 @@
+.review {
+    // border: 1px solid #ddd; /* 주석 처리된 부분 */
+    // border-radius: 8px; /* 주석 처리된 부분 */
+    padding: 16px;
+    background-color: #fff;
+  }
+  
+  .reviewHeader {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profilePic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 16px;
+  }
+  
+  .reviewerInfo {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .reviewerName {
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  .reviewImage {
+    width: 100%;
+    height: auto;
+    // border-radius: 8px; 
+    margin: 17px 0;
+  }
+  
+  .reviewText {
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: left;
+  }
+  
+  .storeInfo {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 10px 0 60px 0;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .storeDetails {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  .storeName {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .storeAddress {
+    font-size: 14px;
+    color: #555;
+    margin-top: 4px; 
+    text-align: left; 
+  }
+  
+  .favoriteIcon {
+    font-size: 20px;
+    color: #f00; 
+    cursor: pointer;
+  }
+  
