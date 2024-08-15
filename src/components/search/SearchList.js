@@ -10,7 +10,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {categoryImgList} from "../../utils/img-handler";
 import FavStoreBtn from "./FavStoreBtn";
 
-const SearchList = ({stores = []}) => {
+const SearchList = ({stores = [], setStores}) => {
     const {openModal} = useModal();
     const [favorites, setFavorites] = useState([]);
     const [keyword, setKeyword] = useSearchParams();
@@ -30,8 +30,18 @@ const SearchList = ({stores = []}) => {
     }, []);
 
     const clickHandler = (store) => {
-        checkAuthFn(()=>openModal('productDetail', {productDetail: store}), navigate);
+        checkAuthFn(() => openModal('productDetail', {productDetail: store, setStoreListHandler}), navigate);
     };
+
+    const setStoreListHandler = (storeId, cnt) => {
+        setStores(prev => prev.map(e => {
+                if (e.storeId === storeId) {
+                    return {...e, restCnt: e.restCnt - cnt};
+                }
+                return e;
+            })
+        );
+    }
 
     return (
         <div className={styles.list}>
@@ -56,7 +66,7 @@ const SearchList = ({stores = []}) => {
                             <span className={styles.storePrice}><FontAwesomeIcon
                                 icon={faWonSign}/> {store.price}원</span>
                             <span className={styles.productCnt}><FontAwesomeIcon
-                                icon={faBoxOpen}/> {store.productCnt}/{store.productCnt}</span>
+                                icon={faBoxOpen}/> {store.restCnt}/{store.productCnt}</span>
                         </div>
                     ))
                 }

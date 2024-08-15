@@ -71,7 +71,7 @@ const Search = () => {
             {initLoading && <Skeleton count={skeletonCnt} init={true}/>}
             {!initLoading &&
                 <>
-                    <SearchList stores={storeList}/>
+                    <SearchList stores={storeList} setStores={setStoreList}/>
                     {loading && (window.innerWidth <= 400 ? <Skeleton count={1}/> : <Skeleton count={skeletonCnt}/>)}
                     <div ref={skeletonRef}></div>
                 </>
