@@ -1,27 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import styles from "./SearchList.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBoxOpen, faHeart as faHeartSolid, faWonSign} from "@fortawesome/free-solid-svg-icons";
-import {faHeart as faHeartRegular} from "@fortawesome/free-regular-svg-icons";
-import {DEFAULT_IMG, imgErrorHandler} from "../../utils/error";
+import {faBoxOpen, faWonSign} from "@fortawesome/free-solid-svg-icons";
+import {imgErrorHandler} from "../../utils/error";
 import {useModal} from "../../pages/common/ModalProvider";
 import {FAVORITESTORE_URL} from "../../config/host-config";
-import {authFetch, getRefreshToken, getToken} from "../../utils/authUtil";
+import {authFetch} from "../../utils/authUtil";
 import {useSearchParams} from "react-router-dom";
 import {categoryImgList} from "../../utils/img-handler";
-
-const toggleFavorite = async (storeId) => {
-    const response = await authFetch(`${FAVORITESTORE_URL}`, {
-        method: 'POST',
-        body: JSON.stringify({storeId}),
-    });
-    const data = await response.json();
-    if (response.ok) {
-        console.log(data);
-    } else {
-        console.error(data);
-    }
-};
+import FavStoreBtn from "./FavStoreBtn";
 
 const SearchList = ({stores = []}) => {
     const {openModal} = useModal();
@@ -40,17 +27,6 @@ const SearchList = ({stores = []}) => {
             }
         })();
     }, []);
-
-    const favClickHandler = async (e, storeId) => {
-        e.stopPropagation();
-        await toggleFavorite(storeId);
-        setFavorites(prev => {
-            const prevLen = prev.length;
-            const filtered = prev.filter(e => e !== storeId);
-            if (prevLen !== filtered.length) return filtered;
-            return [...prev, storeId];
-        });
-    };
 
     const clickHandler = (store) => {
         openModal('productDetail', {productDetail: store});
@@ -71,14 +47,7 @@ const SearchList = ({stores = []}) => {
                             className={`${styles.categoryItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
                             onClick={() => clickHandler(store)}
                         >
-                            <div
-                                className={`${styles.heartIcon} ${favorites.includes(store.storeId) ? styles.favorited : styles.notFavorited}`}
-                                onClick={(e) => favClickHandler(e, store.storeId)}
-                            >
-                                <FontAwesomeIcon
-                                    icon={favorites.includes(store.storeId) ? faHeartSolid : faHeartRegular}
-                                />
-                            </div>
+                            <FavStoreBtn favorites={favorites} setFavorites={setFavorites} storeId={store.storeId}/>
                             <img src={store.storeImg || categoryImgList[store.category]} alt={store.storeName}
                                  className={styles.categoryImage} onError={imgErrorHandler}/>
                             {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
