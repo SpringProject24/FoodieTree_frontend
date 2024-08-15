@@ -11,7 +11,7 @@ const Search = () => {
     const [loading, setLoading] = useState(false);
     const [isFinish, setIsFinish] = useState(false);
     const [skeletonCnt, setSkeletonCnt] = useState(20);
-    const [initLoading, setInitLoading] = useState(false)
+    const [initLoading, setInitLoading] = useState(true)
 
     useEffect(() => {
         const initFetch = async () => {
@@ -66,10 +66,14 @@ const Search = () => {
     return (
         <div>
             {initLoading && <Skeleton count={skeletonCnt} init={true}/>}
-            <SearchList stores={storeList}/>
-            <div ref={skeletonRef}>
-                {loading && <Skeleton count={skeletonCnt}/>}
-            </div>
+            {!initLoading &&
+                <>
+                    <SearchList stores={storeList}/>
+                    <div ref={skeletonRef}>
+                        {loading && <Skeleton count={skeletonCnt}/>}
+                    </div>
+                </>
+            }
         </div>
     );
 };

@@ -8,7 +8,8 @@ const SearchInput = () => {
     const navigate = useNavigate();
     const inputRef = useRef(null);
     const onClickHandler = () => {
-        navigate(`/search?q=${inputRef.current.value}`)
+        window.location.replace(`/search?q=${inputRef.current.value}`);
+        // navigate(`/search?q=${inputRef.current.value}`)
     }
     const onKeyHandler = (e) => {
         if (e.keyCode === 13) {
