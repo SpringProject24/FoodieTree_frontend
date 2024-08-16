@@ -22,6 +22,14 @@ const Header = () => {
 
 
     useEffect(() => {
+        // 로그인 한 사람 정보 가져오기
+        if(getToken()) {
+            setIsAuthenticated(true);
+        } else setIsAuthenticated(false);
+
+        console.log('Is authenticated:', isAuthenticated); // 상태 확인
+
+        // 현재위치 가져오기
         const fetchLocationAndAddress = () => {
             console.log("fetchLocationAndAddress 실행 !! ");
             getCurrentLocation()
@@ -50,7 +58,7 @@ const Header = () => {
         if (storedAddress) {
             setAddress(JSON.parse(storedAddress)); // 세션 스토리지에서 가져온 값을 JSON.parse로 변환
         }
-    }, []);
+    }, [isAuthenticated]);
 
     const showHandler = () => {
         setShow(prev => !prev);
@@ -66,10 +74,10 @@ const Header = () => {
 
             {/* 현재 위치 */}
             <div className={styles.locationPinIcon}></div>
-                <div className={styles.areaName}>{address}</div>
-                <div className={styles.dot}>・</div>
-                <div className={styles.selectedAreaCategory}>Now</div>
-                <div className={styles.selectedAreaCategoryBtn}></div>
+            <div className={styles.areaName}>{address}</div>
+            <div className={styles.dot}>・</div>
+            <div className={styles.selectedAreaCategory}>Now</div>
+            <div className={styles.selectedAreaCategoryBtn}></div>
 
 
             {/* 상점 검색 칸 */}
@@ -84,17 +92,18 @@ const Header = () => {
             </form>
 
             {/* 로그인 및 회원가입 버튼 */}
-            {/*{isAuthenticated ?*/}
-            {/*    <MyInfo /> :*/}
-            {/*    <div className={styles.loginBtnSection}>*/}
-            {/*        <button className={styles.signInBtn} onClick={() => navigate('/sign-in')}> Sign in</button>*/}
-            {/*        <div className={styles.dot}>・︎</div>*/}
-            {/*        <button className={styles.signUpBtn} onClick={() => navigate('/sign-up')}> Sign up</button>*/}
-            {/*    </div>*/}
-            {/*}*/}
-            {/*왜 내정보 안나오는지 확인*/}
-            <MyInfo/>
-        </header>
+            <div className={styles.loginBtnSection}>
+                {isAuthenticated ? (
+                    <MyInfo/>
+                ) : (
+                    <>
+                        <button className={styles.signInBtn} onClick={() => navigate('/sign-in')}> Sign in</button>
+                        <div className={styles.dot}>・</div>
+                        <button className={styles.signUpBtn} onClick={() => navigate('/sign-up')}> Sign up</button>
+                    </>
+                )}
+            </div>
+</header>
     );
 }
 
