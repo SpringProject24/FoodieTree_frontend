@@ -28,7 +28,15 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); /* 이미지가 중앙에 오도록 설정 */
-  transition: opacity 1s ease-in-out; /* 부드러운 전환 효과 */
+  transition: opacity 1s ease-in-out; /* 전환 효과 */
+}
+
+.fadeIn {
+  opacity: 1;
+}
+
+.fadeOut {
+  opacity: 0;
 }
 
 .emailTitle {
@@ -42,13 +50,29 @@
   position: absolute;
   bottom: 273px;
   left: 300px;
+  transform: translate(30%);
+  transition: 0.4s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    font-size: 40px;
+    border-bottom: 1px solid #06654E;
+  }
+}
+
+.copySuccess {
+  font-size: 18px;
+  position: absolute;
+  bottom: 250px;
+  left: 300px;
+  color: green;
 }
 
 .copyRight {
   font-size: 24px;
   position: absolute;
   bottom: -35px;
-  right: 100px;
+  right: 400px;
 }
 
 .footerLinks {
@@ -66,6 +90,8 @@
     margin-bottom: 5px; /* 링크 간 간격 설정 */
     text-decoration: none; /* 기본 밑줄 제거 */
     font-size: 24px;
+    transform: translate(2%, 2%);
+    transition: 0.2s ease-in-out;
   }
 
   a:hover {
@@ -75,13 +101,18 @@
 }
 
   .logoDiv {
+    font-family: "Archivo Narrow", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 1000;
+    font-style: normal;
+
     position: absolute;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
-    font-size: 260px;
+    font-size: 280px;
     width: 2000px;
     margin-bottom: -80px;
-    font-weight: bold;
+    letter-spacing: 20px;
   }
