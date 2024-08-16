@@ -12,7 +12,7 @@ const IssueSummary = ({stats}) => {
 
     return (
         <div className={styles['summary-container']}>
-            <h2>고객 센터</h2>
+            <h2>고객 지원</h2>
             <div className={styles['summary-pending']}>
                 <span>대기</span>
                 <span>{PENDING || 0}</span>
