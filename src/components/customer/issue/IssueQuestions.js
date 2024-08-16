@@ -10,6 +10,10 @@ const IssueQuestions = () => {
         setActiveQuestion(activeQuestion === question ? null : question);
     };
 
+    const handleIssueChatting = () => {
+        console.log('handleIssueChatting');
+    }
+
     return (
         <div className={styles.questionContainer}>
             <div>
@@ -81,16 +85,16 @@ const IssueQuestions = () => {
             </div>
 
             <div>
-                <div className={styles.questionBox}>
-                    <div onClick={() => handleQuestionClick(5)}>
+                <div className={styles.questionBox} onClick={() => handleIssueChatting}>
+                    <div>
                         그 외 문의가 있어요
                     </div>
                 </div>
-                {activeQuestion === 5 && (
-                    <div className={styles.answers}>
-                        <p>더미 답변: 그 외 문의에 대한 정보가 여기에 들어갑니다.</p>
-                    </div>
-                )}
+                {/*{activeQuestion === 5 && (*/}
+                {/*    <div className={styles.answers}>*/}
+                {/*        <p>채팅을 통해 상담사에게 직접 문의할 수 있어요</p>*/}
+                {/*    </div>*/}
+                {/*)}*/}
             </div>
         </div>
     );
