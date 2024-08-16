@@ -2,8 +2,6 @@ import React from 'react';
 import styles from './BottomPlaceOrder.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { createReservation } from './ProductReservation';
-import TestBtn from "../../components/payment/TestBtn";
 import ReservationBtn from "../../components/payment/ReservationBtn";
 
 const BottomPlaceOrder = ({ productDetail, initialCount, handleIncrease, handleDecrease, remainProduct, closeModal }) => {
