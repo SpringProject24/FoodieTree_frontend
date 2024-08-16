@@ -5,7 +5,6 @@ import ChatComponent from "./ChatComponent";
 import ChattingList from "./ChattingList";
 
 const IssueTable = () => {
-
     const stats = {
         PENDING: 2,
         SOLVED: 3,
@@ -14,7 +13,7 @@ const IssueTable = () => {
 
     return (
         <div className={styles.tableSection}>
-            <IssueSummary stats={stats}/>
+            {/*<IssueSummary stats={stats}/>*/}
             <div className={styles.chatListContainer}>
                 <ChattingList/>
                 <ChatComponent/>

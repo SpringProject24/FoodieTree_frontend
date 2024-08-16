@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-
+import styles from './ChatComponent.module.scss';
 const ChatComponent = () => {
     const [stompClient, setStompClient] = useState(null);
     const [connected, setConnected] = useState(false);
@@ -49,7 +49,7 @@ const ChatComponent = () => {
     };
 
     return (
-        <div>
+        <div className={styles.chatContainer}>
             <h2>Chat</h2>
             <div id="chatBox">
                 {messages.map((msg, index) => (
