@@ -25,6 +25,7 @@ import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSe
 import Main from "../pages/Main";
 import ChatComponent from "../components/admin/issue/ChatComponent";
 import IssueSection from "../components/admin/issue/IssueSection";
+import CustomerIssuePage from "../pages/customer/CustomerIssuePage";
 
 const homeRouter = [
     {
@@ -69,6 +70,10 @@ const customerMyPageRouter = [
     {
         path: 'edit',
         element: <CustomerMyPageEdit/>
+    },
+    {
+        path: 'issue',
+        element: <CustomerIssuePage/>
     }
 ];
 
