@@ -1,0 +1,29 @@
+.issueContainer{
+  width: 50%;
+  min-height: 70vh;
+  border-radius: 15px;
+    padding: 30px;
+  margin: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  .helpHeader{
+    font-size: 25px;
+    font-weight: 600;
+  }
+
+  .line{
+    width: 100%;
+    height: 1px;
+    background-color: rgba(66, 64, 64, 0.11);
+    margin: 22px 0;
+  }
+
+  .helpDesc{
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 21px;
+    padding-left: 7px;
+    color: #424040;
+  }
+}
