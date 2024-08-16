@@ -8,6 +8,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import MyInfo from "../components/header/MyInfo";
 import {getCurrentLocation, initializeNaverMapsForHeader, reverseGeocode} from "../utils/locationUtil";
+import SidebarModal from "../components/header/SidebarModal";
 
 // 아이콘을 라이브러리에 추가
 library.add(faMagnifyingGlass);
@@ -19,6 +20,7 @@ const Header = () => {
     const [width, setWidth] = useState(window.innerWidth);
     // 위치 가져오기
     const [address, setAddress] = useState('위치를 불러오는 중...'); // 기본 주소 상태 설정
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     useEffect(() => {
@@ -60,14 +62,15 @@ const Header = () => {
         }
     }, [isAuthenticated]);
 
-    const showHandler = () => {
-        setShow(prev => !prev);
+    const toggleModal = () => {
+        setModalVisible(prev => !prev);
     };
+
 
     return (
         <header className={styles.header}>
             {/* 햄버거 버튼 */}
-            {width > 400 && <SideBarBtn className={styles.sideBarBtn} onShow={showHandler}/>}
+            {width > 400 && <SideBarBtn onShow={toggleModal}/>}
 
             {/* 로고 */}
             <div className={styles.logoBtn}></div>
@@ -103,6 +106,8 @@ const Header = () => {
                     </>
                 )}
             </div>
+            {/* 모달 */}
+            {modalVisible && <SidebarModal onClose={toggleModal} />}
 </header>
     );
 }
