@@ -113,8 +113,12 @@ button {
 .signInBtn, .signUpBtn {
   font-size: 18px;
   color: #06654E;
+  transition: 0.3s ease-in-out;
+  cursor: pointer; /* 커서를 포인터로 변경 */
+
   &:hover {
-    border-bottom: #06654E solid 1px;
+    transform: translate(-10%, -10%);
+    border-bottom: 1px solid #06654e;
   }
 }
 
