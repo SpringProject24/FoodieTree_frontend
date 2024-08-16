@@ -70,7 +70,6 @@ export const reverseGeocode = (lat, lng) => {
             (status, response) => {
                 console.log('API 응답 데이터:', response.v2.address.jibunAddress); // 지번
                 console.log('API 응답 데이터:', response.v2.address.roadAddress); // 도로명
-                console.log("배열의 길이 화깅낳기", response.v2.address);
 
 
                 if (status !== window.naver.maps.Service.Status.OK) {

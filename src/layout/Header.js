@@ -30,8 +30,6 @@ const Header = () => {
                     // 변환된 주소를 상태로 설정
                     setAddress(address);
                     console.log('userAddress', JSON.stringify(address));
-                    // 주소를 세션 스토리지에 저장
-                    sessionStorage.setItem('fetchLocationAndAddress : userAddress !!!!!!!!!!!!!!!!!!!!!!!', JSON.stringify(address));
                 })
                 .catch(error => {
                     console.error('위치 정보 또는 주소 변환 오류:', error);
@@ -61,27 +59,23 @@ const Header = () => {
     return (
         <header className={styles.header}>
             {/* 햄버거 버튼 */}
-            {width > 400 && <SideBarBtn  className={styles.sideBarBtn} onShow={showHandler} />}
+            {width > 400 && <SideBarBtn className={styles.sideBarBtn} onShow={showHandler}/>}
 
             {/* 로고 */}
             <div className={styles.logoBtn}></div>
 
             {/* 현재 위치 */}
-            <div className={styles.locationPinIcon}>
-                {/*{currentLocation ? (*/}
-                {/*    `위치: ${currentLocation.lat.toFixed(2)}, ${currentLocation.lng.toFixed(2)}`*/}
-                {/*) : '현재 위치를 확인할 수 없어요.'}*/}
-                <h1>{address}</h1>
-            </div>
+            <div className={styles.locationPinIcon}></div>
+                <div className={styles.areaName}>{address}</div>
+                <div className={styles.dot}>・</div>
+                <div className={styles.selectedAreaCategory}>Now</div>
+                <div className={styles.selectedAreaCategoryBtn}></div>
+
 
             {/* 상점 검색 칸 */}
-            <div className={styles.searchBtn} onClick={() => navigate('/search')}>
-                <FontAwesomeIcon icon="magnifying-glass" />
-            </div>
-
             <form className={styles.searchStoreSection}>
                 <button className={styles.magnifyClickBtn}>
-                    <FontAwesomeIcon icon="fa-solid fa-search" className={styles.magnifyIcon} />
+                    <FontAwesomeIcon icon="magnifying-glass" className={styles.magnifyIcon}/>
                 </button>
                 <input
                     type="text"
