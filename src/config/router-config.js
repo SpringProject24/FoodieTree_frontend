@@ -115,10 +115,6 @@ export const router = createBrowserRouter([
                 path: '/admin',
                 element: <AdminPage/>,
             },
-            {
-                path: '/chat',
-                element: <ChatComponent />,
-            }
         ]
     },
 ]);
