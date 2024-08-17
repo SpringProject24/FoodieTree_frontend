@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import {MdNotifications} from "react-icons/md";
 import styles from './Notification.module.scss';
+import {IoNotificationsOutline} from "react-icons/io5";
 
 const Notification = ({email, role}) => {
   const [stompClient, setStompClient] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [hasNewMessage, setHasNewMessage] = useState(false);
 
   console.log('이메일 ', email, role);
   let customerId = null;
@@ -35,6 +36,7 @@ const Notification = ({email, role}) => {
             console.log('Received message : ', message);
             const notification = JSON.parse(message.body); // 메시지가 JSON이라면 파싱 필요
             setNotifications(prev => [...prev, notification]);
+            setHasNewMessage(true);
           });
         } else if (role === 'store') {
           // 가게 알림 구독
@@ -42,6 +44,7 @@ const Notification = ({email, role}) => {
             console.log('Received message for store: ', message);
             const notification = JSON.parse(message.body); // 메시지가 JSON이라면 파싱 필요
             setNotifications(prev => [...prev, notification]);
+            setHasNewMessage(true);
           });
         }
 
@@ -62,15 +65,21 @@ const Notification = ({email, role}) => {
     };
   }, [customerId, storeId]);
 
+  const toggleAlerts = () => {
+    setIsOpen(!isOpen);
+    setHasNewMessage(false);
+  }
+
   console.log('알림상태 ', notifications)
   console.log('토글상태 ', isOpen)
 
   return (
     <div>
-      <div className={styles['notify-icon']} onClick={() => setIsOpen(!isOpen)}>
-        <MdNotifications />
+      <div className={`${styles['notify-icon']} ${hasNewMessage && styles.new}`} onClick={toggleAlerts}>
+        <IoNotificationsOutline />
       </div>
-      <ul className={`${styles['notify-list']} ${isOpen ? '' : styles.close}`}>
+      <ul className={`${styles['notify-list']} ${isOpen && styles.close}`}>
+        <li>알림 {notifications.length}건</li>
         {notifications.map((notification, index) => (
           <li key={index}>{notification.content}</li>
         ))}

@@ -60,8 +60,8 @@ const MyInfo = () => {
 
     return (
         <div className={styles.myInfoContainer}>
-            <span className={styles.myInfo}> 안녕하세요 {getSubName() ? getSubName() : userInfo.email}님!</span>
             <Notification email={userInfo.email} role={getUserRole()} />
+            <span className={styles.myInfo}> 안녕하세요 {getSubName() ? getSubName() : userInfo.email}님!</span>
             <div className={styles.myIconContainer}>
                 {getUserRole() === 'store' ? (
                     <>

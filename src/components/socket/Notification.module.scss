@@ -10,18 +10,47 @@
 .notify-list {
   background: #FFFFFF;
   border: 1px solid var(--color-gray-300);
-  color: var(--color-gray-800);
-  width: 200px;
-  min-height: 50px;
+  border-radius: 10px;
+  color: black;
+  width: 360px;
+  min-height: 45px;
   position: relative;
-  top: 10px;
+  top: 5px;
   left: 10px;
   z-index: 1;
+  //padding: 3px;
+  box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.3);
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
 
   li {
-    height: 50px
+    height: 45px;
+    border-bottom: 1px solid var(--color-gray-300);
+    //border: 1px solid blue;
+    padding: 15px 10px;
+    font-size: 16px;
+    margin: auto;
+
+    &:first-child {
+      font-size: 18px;
+    }
   }
 }
 .close {
   display: none;
+}
+.new {
+  &:after {
+    content: '●';
+    color: orangered;
+    font-size: 14px;
+    position: relative;
+    top: -28px;
+    right: 7px;
+    animation: blink-effect 1s step-end 3;
+  }
+}
+@keyframes blink-effect {
+  50% {
+    opacity: 0;
+  }
 }
