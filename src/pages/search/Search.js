@@ -18,9 +18,10 @@ const Search = () => {
     useEffect(() => {
         const initFetch = async () => {
             setInitLoading(true);
-            const { result, totalCnt } = await fetchSearch(1);
-            setStoreList(result);
-            setIsFinish(result.length >= totalCnt);
+            const data = await fetchSearch(1);
+            if (data === null) return ;
+            setStoreList(data.result);
+            setIsFinish(data.result.length >= data.totalCnt);
             setInitLoading(false);
             setPageNo(2);
         };
@@ -61,7 +62,8 @@ const Search = () => {
         const response = await fetch(`/search?pageNo=${pageNo}&keyword=${word.get('q')}`);
         if (!response.ok) {
             console.error("잠시 후 다시 이용해주세요");
-            return;
+            alert("잠시 후 다시 이용해주세요");
+            return null;
         }
         return await response.json();
     }
