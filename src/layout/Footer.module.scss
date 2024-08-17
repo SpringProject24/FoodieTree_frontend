@@ -1,12 +1,14 @@
 .footer {
   display: flex;
-  justify-content: space-between; /* 양 끝으로 배치 */
-  align-items: center; /* 수직 중앙 정렬 */
-  padding: 0 130px; /* 좌우 패딩 */
-  height: 1080px; /* 헤더 높이 */
-  width: 1920px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 130px;
+  height: 1080px;
+  width: 100%; /* 너비를 100%로 설정 */
+  max-width: 1920px; /* 최대 너비를 1920px로 제한 */
   background-color: #F5F5DD;
-  position: relative; /* 자식 요소의 위치 조정을 위해 relative로 설정 */
+  position: relative;
+  margin: 0 auto; /* 중앙 정렬 */
 }
 
 .pictureDiv {
@@ -100,19 +102,21 @@
   }
 }
 
-  .logoDiv {
-    font-family: "Archivo Narrow", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 1000;
-    font-style: normal;
+.logoDiv {
+  font-family: "Archivo Narrow", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 1000;
+  font-style: normal;
 
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-    font-size: 280px;
-    width: 2000px;
-    margin-bottom: -80px;
-    letter-spacing: 20px;
-  }
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: 280px;
+  width: 100%;
+  max-width: 1920px;
+  margin-bottom: -80px;
+  letter-spacing: 20px;
+  text-align: center;
+}
