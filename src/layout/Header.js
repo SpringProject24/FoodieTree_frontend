@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LogoutLoginBtn from "../components/header/LogoutLoginBtn";
-import MyInfo from "../components/header/MyInfo";
-import {getUserRole} from "../utils/authUtil"; // 헤더 스타일 임포트
+import MyInfo from "../components/header/MyInfo"; // 헤더 스타일 임포트
 
 const Header = () => {
 
