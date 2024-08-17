@@ -17,10 +17,11 @@
     align-items: flex-start; 
 }
 
+// 별점 기능
 .formGroup {
     width: 100%;
-    margin-bottom: 20px;
-    text-align: center; /* 가운데 정렬 추가 */
+    margin-bottom: 30px;
+    text-align: center;
     overflow: hidden; 
 }
 
@@ -44,7 +45,7 @@
 .input:focus,
 .textarea:focus {
     background: #fff;
-    border-color: #007bff;
+    border-color: #3b8c75;
     outline: none;
 }
 
@@ -60,14 +61,13 @@
 
 .previewImage {
     margin-top: 20px;
-    width: 500px; /* 수정된 너비 */
-    height: 500px; /* 수정된 높이 */
+    width: 500px; 
+    height: 500px; 
     object-fit: cover;
     border-radius: 10px;
     border: 1px solid #ddd;
     display: block;
-    margin-left: auto; /* 가운데 정렬 */
-    margin-right: auto; /* 가운데 정렬 */
+    margin-left: auto;
 }
 
 .submitButton {

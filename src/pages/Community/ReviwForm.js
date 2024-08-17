@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import styles from './ReviewForm.module.scss';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
 
 const ReviewForm = ({ onSubmit }) => {
   const [author, setAuthor] = useState('');
   const [image, setImage] = useState(null);
   const [content, setContent] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [rating, setRating] = useState(0); // 별점 상태 추가
 
   // 더미 데이터: 가게 이름과 가게 사진
   const [storeName] = useState('김밥천국');
@@ -62,19 +65,7 @@ const ReviewForm = ({ onSubmit }) => {
     <div className={styles.reviewCard}>
       <form className={styles.reviewForm} onSubmit={handleSubmit}>
 
-        {/* <div className={styles.formGroup}>
-          <label htmlFor="author" className={styles.label}>Customer ID (자동 입력되도록)</label>
-          <input
-            type="text"
-            id="author"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            className={styles.input}
-            placeholder="이름을 입력하세요"
-            required
-          />
-        </div> */}
-
+        {/* 가게 정보 섹션 */}
         <div className={styles.formStoreInfo}>
           <img src={storeImage} alt={storeName} className={styles.storeImage} />
           <div className={styles.storeDetails}>
@@ -83,6 +74,20 @@ const ReviewForm = ({ onSubmit }) => {
           </div>
         </div>
 
+        {/* 별점 입력 섹션 */}
+        <div className={styles.formGroup}>
+        <p className={styles.title}>가게에 별점을 매겨주세요!</p>
+        <Rating
+            name="store-rating"
+            size="large"
+            value={rating}
+            onChange={(event, newRating) => {
+              setRating(newRating);
+            }}
+          />
+        </div>
+
+        {/* 키워드 선택 섹션 */}
         <div className={styles.keywordSection}>
           <p className={styles.title}>이 가게에 어울리는 키워드를 선택해주세요!</p>
           <div className={styles.keywordContainer}>
@@ -98,6 +103,7 @@ const ReviewForm = ({ onSubmit }) => {
           </div>
         </div>
 
+        {/* 사진 업로드 섹션 */}
         <div className={styles.formGroup}>
           <label htmlFor="image" className={styles.title}>사진 업로드</label>
           <input
@@ -110,6 +116,7 @@ const ReviewForm = ({ onSubmit }) => {
           {image && <img src={image} alt="미리보기" className={styles.previewImage} />}
         </div>
 
+        {/* 리뷰 내용 입력 섹션 */}
         <div className={styles.formGroup}>
           <label htmlFor="content" className={styles.title}>리뷰 내용</label>
           <textarea
