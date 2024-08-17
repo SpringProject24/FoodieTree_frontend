@@ -11,13 +11,14 @@ import styles from './ChattingList.module.scss';
 import FiltersInTable from "../approval/FiltersInTable";
 import TansTable from "../approval/TansTable";
 import TansPagination from "../approval/TansPagination";
-import {IssueColumns} from "./IssueColumns";
+import { IssueColumns } from "./IssueColumns";
 import IssueSummary from "./IssueSummary";
-
+import {useModal} from "../../../pages/common/ModalProvider";
 
 const ChattingList = () => {
+    const { openModal } = useModal();
     const [data, setData] = useState([]);
-    const columns = useMemo(() => IssueColumns, []);
+    const columns = useMemo(() => IssueColumns(openModal), [openModal]); // openModal을 prop으로 전달
     const [columnFilters, setColumnFilters] = useState([]);
     const [rowSelection, setRowSelection] = useState({}); // 선택한 행
     const [stats, setStats] = useState({});
@@ -37,7 +38,7 @@ const ChattingList = () => {
     });
 
     const fetchChatList = async () => {
-        console.log('fetchChatList 실행중!');
+        console.log('이슈 목록들 불러오기 실행 중!!');
 
         const res = await fetch('/issue', {
             method: 'GET',
@@ -56,7 +57,6 @@ const ChattingList = () => {
         const DATA = await res.json();
         console.log('DATA:', DATA)
         setData(DATA);
-        // setStats(DATA.stats)
     };
 
     useEffect(() => {

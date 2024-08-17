@@ -16,7 +16,7 @@ const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm}) =>
 
     const issuePageHandler = () => {
         closeModal();
-        navigate('/customer/issue');
+        navigate('/customer/issue' ,{ state: { reservationDetail } });
     }
 
     let tag = '';

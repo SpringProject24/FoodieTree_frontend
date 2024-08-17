@@ -6,7 +6,6 @@ const IssueSection = () => {
     return (
         <>
             <IssueTable/>
-            {/*<ChatComponent/>*/}
         </>
     );
 };

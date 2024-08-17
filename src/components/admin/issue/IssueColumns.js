@@ -1,8 +1,8 @@
 import React from "react";
 
 const centerFlex = {style: {justifyContent: 'center', paddingLeft: '0'}};
+export const IssueColumns = (openModal) => [
 
-export const IssueColumns = [
     {
         accessorKey: 'customerId',
         header: 'ID',
@@ -37,6 +37,32 @@ export const IssueColumns = [
         header: 'Created At',
         cell: (props) => <p>{formatDate(props.getValue())}</p>,
         size: 150,
+        meta: {
+            cellProps: centerFlex,
+        },
+    },
+    {
+        id: 'moveToChat',
+        header: 'Action',
+        cell: (props) => {
+
+            const status = props.row.original.issueCompleteAt; // Assuming `issueCompleteAt` is null or falsy when incomplete
+
+            const handleMoveToChat = () => {
+                const issueId = props.row.original.issueId; // Replace with the correct identifier for your issue
+                openModal('adminIssueChatting', {issueId});
+                console.log('Move to Chat Room', issueId);
+            };
+
+            return (
+                !status && (
+                    <button onClick={handleMoveToChat}>
+                        Move to Chat Room
+                    </button>
+                )
+            );
+        },
+        size: 100,
         meta: {
             cellProps: centerFlex,
         },

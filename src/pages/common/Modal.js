@@ -4,7 +4,6 @@ import {useModal} from "./ModalProvider";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus, faTimes} from "@fortawesome/free-solid-svg-icons";
 import ReactDOM from "react-dom";
-import BottomPlaceOrder from "../product/BottomPlaceOrder";
 
 // 동적 import => 필요한 시점에만 로드 가능 (성능 개선)
 const EmailVerificationModal = lazy(() => import("./EmailVerificationModal"));
@@ -19,6 +18,8 @@ const CustomerReservationFilterModal = lazy(() => import("../customer/CustomerRe
 const StoreReservationFilterModal = lazy(() => import("../store/StoreReservationFilterModal"));
 const AddFavFoodModal = lazy(() => import("../customer/modal/AddFavFoodModal"));
 const MyFavAreaEditModal = lazy(() => import("../customer/FavAreaEditModal"));
+const CustomerIssueChattingModal = lazy(() => import("../../components/customer/issue/CustomerIssueChattingModal"));
+const AdminIssueChattingModal = lazy(() => import("../../components/admin/issue/AdminIssueChattingModal"));
 
 const Modal = () => {
     const {modalState, closeModal} = useModal();
@@ -40,7 +41,10 @@ const Modal = () => {
                 } else {
                     setCustomStyle({width: '750px'});
                 }
-            } else {
+            } else if (type === 'customerIssueChatting' || type === 'adminIssueChatting') {
+                setCustomStyle({bottom: '0', height: '78%'})
+            }
+            else {
                 setCustomStyle({});
             }
             setIsMobile(window.innerWidth <= 400); // 추가
@@ -108,6 +112,12 @@ const Modal = () => {
         case 'addFavFood':
             ModalComponent = AddFavFoodModal;
             break;
+        case 'customerIssueChatting':
+            ModalComponent = CustomerIssueChattingModal;
+            break;
+        case 'adminIssueChatting':
+            ModalComponent = AdminIssueChattingModal;
+            break;
         default:
             ModalComponent = null;
     }
@@ -120,7 +130,7 @@ const Modal = () => {
 
     return ReactDOM.createPortal(
         <div className={styles.modal} onClick={handleClose}>
-            <div className={styles.modalContent} style={type === 'productDetail' || 'favAreaEdit' ? customStyle : {}}
+            <div className={styles.modalContent} style={type === 'productDetail' || 'favAreaEdit' || 'customerIssueChatting' || 'adminIssueChatting'? customStyle : {}}
                  onClick={(e) => e.stopPropagation()}>
                 <div className={styles.close}>
                     <span><FontAwesomeIcon className={styles.closeBtn} onClick={closeModal} icon={faTimes}/></span>
@@ -133,16 +143,6 @@ const Modal = () => {
                     )}
                 </div>
                 <div className={styles.modalFooter}>
-                    {/*{type === 'productDetail' && isMobile && (*/}
-                    {/*    <BottomPlaceOrder*/}
-                    {/*        makeReservation={props.makeReservation}*/}
-                    {/*        productDetail={props.productDetail}*/}
-                    {/*        initialCount={props.initialCount}*/}
-                    {/*        handleIncrease={props.handleIncrease}*/}
-                    {/*        handleDecrease={props.handleDecrease}*/}
-                    {/*        remainProduct={props.productDetail?.storeInfo?.remainProduct || 0}*/}
-                    {/*    />*/}
-                    {/*)}*/}
                 </div>
             </div>
         </div>,

@@ -2,16 +2,52 @@ import React, {useState} from 'react';
 import styles from './IssueQuestions.module.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDown, faAngleUp} from "@fortawesome/free-solid-svg-icons";
+import {useModal} from "../../../pages/common/ModalProvider";
+import {getRefreshToken, getToken, getUserEmail} from "../../../utils/authUtil";
 
-const IssueQuestions = () => {
+const IssueQuestions = ({reservationDetail}) => {
     const [activeQuestion, setActiveQuestion] = useState(null);
-
+    const {openModal} = useModal();
     const handleQuestionClick = (question) => {
         setActiveQuestion(activeQuestion === question ? null : question);
     };
 
+    console.log('reservationDetail:!!!!', reservationDetail);
+
+
     const handleIssueChatting = () => {
         console.log('handleIssueChatting');
+        // 이슈 테이블에 이슈 추가 post 요청
+        // makeIssue();
+        openModal('customerIssueChatting', {issueId: 7});
+    }
+
+    const makeIssue = async () => {
+        try {
+            const res = await fetch('/issue', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + getToken(),
+                    'refreshToken': getRefreshToken()
+                },
+                body: JSON.stringify({
+                    customerId: getUserEmail(),
+                    issueCategory: 'ETC',
+                }),
+            });
+
+            if (!res.ok) {
+                const errorMessage = await res.text();
+                alert(errorMessage);
+                return null;
+            }
+
+            const DATA = await res.json();
+            console.log('DATA:', DATA)
+        }catch (e) {
+            console.error('Error:', e);
+        }
     }
 
     return (
@@ -85,16 +121,11 @@ const IssueQuestions = () => {
             </div>
 
             <div>
-                <div className={styles.questionBox} onClick={() => handleIssueChatting}>
+                <div className={styles.questionBox} onClick={handleIssueChatting}>
                     <div>
                         그 외 문의가 있어요
                     </div>
                 </div>
-                {/*{activeQuestion === 5 && (*/}
-                {/*    <div className={styles.answers}>*/}
-                {/*        <p>채팅을 통해 상담사에게 직접 문의할 수 있어요</p>*/}
-                {/*    </div>*/}
-                {/*)}*/}
             </div>
         </div>
     );

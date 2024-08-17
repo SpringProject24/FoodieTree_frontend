@@ -2,24 +2,28 @@ import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import styles from './ChatComponent.module.scss';
-const ChatComponent = () => {
+
+const ChatComponent = ({ issueId, type }) => {
     const [stompClient, setStompClient] = useState(null);
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState('');
 
     useEffect(() => {
-        // Use the correct port for the WebSocket connection
         const socket = new SockJS('http://localhost:8083/chat');
         const stompClient = Stomp.over(() => socket);
 
         stompClient.connect({}, (frame) => {
-            console.log('Connected: ' + frame);
+            console.log('Connected:', frame);
             setConnected(true);
 
-            stompClient.subscribe('/topic/messages', (message) => {
-                showMessage(JSON.parse(message.body));
+            // Subscribe to the correct topic
+            stompClient.subscribe(`/topic/messages/${issueId}`, (message) => {
+                const parsedMessage = JSON.parse(message.body);
+                console.log('Received message:', parsedMessage);
+                showMessage(parsedMessage);
             });
+
         }, (error) => {
             console.error('Connection error:', error);
             setConnected(false);
@@ -30,7 +34,7 @@ const ChatComponent = () => {
         return () => {
             if (stompClient) stompClient.disconnect();
         };
-    }, []);
+    }, [issueId]);
 
     const showMessage = (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
@@ -40,8 +44,10 @@ const ChatComponent = () => {
         if (connected && stompClient && messageInput.trim() !== '') {
             const chatMessage = {
                 content: messageInput,
+                issueId: issueId,
             };
-            stompClient.send("/app/sendMessage", {}, JSON.stringify(chatMessage));
+            console.log('Sending message:', chatMessage);
+            stompClient.send(`/app/sendMessage/${issueId}`, {}, JSON.stringify(chatMessage));
             setMessageInput('');
         } else {
             console.error('STOMP client is not connected or message is empty.');
