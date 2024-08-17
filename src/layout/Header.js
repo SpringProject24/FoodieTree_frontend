@@ -43,7 +43,7 @@ const Header = () => {
                 })
                 .catch(error => {
                     console.error('위치 정보 또는 주소 변환 오류:', error);
-                    setAddress('주소 변환 실패');
+                    setAddress('위치를 가져오는데 실패했습니다.');
                 });
         };
 
@@ -66,6 +66,9 @@ const Header = () => {
         setModalVisible(prev => !prev);
     };
 
+    const handleClick = () => {
+        navigate('/reviewMain');
+    }
 
     return (
         <header className={styles.header}>
@@ -93,6 +96,8 @@ const Header = () => {
                     placeholder="여기에 음식점 혹은 위치를 검색해보세요."
                 />
             </form>
+            {/*리뷰 커뮤니티 메인*/}
+            <div className={styles.reviewMainIcon} onClick={handleClick}></div>
 
             {/* 로그인 및 회원가입 버튼 */}
             <div className={styles.loginBtnSection}>

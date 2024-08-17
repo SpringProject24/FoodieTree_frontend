@@ -62,6 +62,32 @@ export const getSubName = () => {
     return subName;
 }
 
+export const getUserAddress = () => {
+    const userAddress = sessionStorage.getItem("userAddress");
+    if(!userAddress) {
+        return "(새로고침 하여 위치를 불러와 주세요)";
+    }
+    return userAddress;
+}
+
+export const extractArea = () => {
+    const address = getUserAddress();
+
+    // 패턴: '구', '동', '읍', '면' 단어가 포함된 곳에서 멈춤
+    const regex = /([가-힣]+(구|동|읍|면))/;
+    const match = address.match(regex);
+
+    // 매칭된 구, 동, 읍, 면이 있으면 반환, 없으면 전체 주소 반환
+    return match ? match[1] : address;
+}
+
+// 예시
+const fullAddress1 = "서울특별시 마포구 노고산동";
+const fullAddress2 = "강릉시 입암동 이안아파트";
+
+console.log(extractArea(fullAddress1)); // 출력: "마포구"
+console.log(extractArea(fullAddress2)); // 출력: "입암동"
+
 /**
  * 로그아웃 기능
  * @param navigate to sign-in
