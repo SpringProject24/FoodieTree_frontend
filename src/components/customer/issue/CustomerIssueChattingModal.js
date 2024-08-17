@@ -1,10 +1,11 @@
 import React from 'react';
 import ChatComponent from "../../admin/issue/ChatComponent";
+import CustomerIssueChat from "./CustomerIssueChat";
 
 const CustomerIssueChattingModal = ({issueId}) => {
     return (
         <div>
-            <ChatComponent issueId={issueId} type={'customer'}/>
+            <CustomerIssueChat issueId={issueId}/>
         </div>
     );
 };

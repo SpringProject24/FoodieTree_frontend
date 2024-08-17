@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import styles from './ChatComponent.module.scss';
@@ -8,6 +8,7 @@ const ChatComponent = ({ issueId, type }) => {
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState('');
+    const chatBoxRef = useRef(null);
 
     useEffect(() => {
         const socket = new SockJS('http://localhost:8083/chat');
@@ -17,7 +18,6 @@ const ChatComponent = ({ issueId, type }) => {
             console.log('Connected:', frame);
             setConnected(true);
 
-            // Subscribe to the correct topic
             stompClient.subscribe(`/topic/messages/${issueId}`, (message) => {
                 const parsedMessage = JSON.parse(message.body);
                 console.log('Received message:', parsedMessage);
@@ -36,15 +36,24 @@ const ChatComponent = ({ issueId, type }) => {
         };
     }, [issueId]);
 
+    useEffect(() => {
+        // 새로운 메시지가 추가될 때마다 스크롤을 아래로 이동시킵니다.
+        if (chatBoxRef.current) {
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        }
+    }, [messages]);
+
     const showMessage = (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
     };
 
     const sendMessage = () => {
         if (connected && stompClient && messageInput.trim() !== '') {
+            console.log("type:", type);
             const chatMessage = {
                 content: messageInput,
                 issueId: issueId,
+                sender: type // 'admin' 또는 'customer'
             };
             console.log('Sending message:', chatMessage);
             stompClient.send(`/app/sendMessage/${issueId}`, {}, JSON.stringify(chatMessage));
@@ -57,9 +66,17 @@ const ChatComponent = ({ issueId, type }) => {
     return (
         <div className={styles.chatContainer}>
             <h2>Chat</h2>
-            <div id="chatBox">
+            <div id="chatBox" ref={chatBoxRef}>
                 {messages.map((msg, index) => (
-                    <div key={index}>{msg.content}</div>
+                    <div
+                        key={index}
+                        className={`${styles.message} ${
+                            msg.sender === type ? styles.myMessage : styles.otherMessage
+                        }`}
+                    >
+                        {msg.sender === 'customer' ? 'Customer: ' : 'Admin: '}
+                        {msg.content}
+                    </div>
                 ))}
             </div>
             <input
