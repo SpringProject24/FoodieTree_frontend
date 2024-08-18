@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './CommunityMainPage.module.scss';
-import {extractArea, getUserAddress} from "../../utils/authUtil";
+import { extractArea } from "../../utils/authUtil";
 
 const defaultReviews = [
     {
@@ -10,6 +10,7 @@ const defaultReviews = [
         reviewText: '처음 마셔보는 차를 설명과 함께 마셔서 좋은 경험이었어요 홍시랑 먹는 산딸기막국수도 새롭고 맛있었어요 또 오고싶은 곳입니다Highly recommend it.',
         store: 'Sunny Cafe',
         storeAddress: '123 Green Street, Newtown',
+        storeImage: '/mnt/data/C37C4DC6-F223-46FB-B43D-B7B25EE26AF7.png',  // Assuming this is the store image you uploaded
         favorites: true,
     },
     {
@@ -17,9 +18,10 @@ const defaultReviews = [
         name: 'Jane customerId',
         reviewImage: 'https://via.placeholder.com/300',
         reviewText: 'Not bad, but could be improved.',
-        store: 'Sunny Cafe',
-        storeAddress: '123 Green Street, Newtown',
-        favorites: true,
+        store: 'Cafe Delight',
+        storeAddress: '456 Blue Avenue, Uptown',
+        storeImage: '/your/path/to/anotherStoreImage.png',  // Replace with correct path
+        favorites: false,
     },
     // 추가적인 더미 리뷰 데이터
 ];
@@ -67,11 +69,14 @@ const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = d
                 <div className={styles.reviewGrid}>
                     {reviews && reviews.map((review, index) => (
                         <div key={index} className={styles.reviewItem}>
-                            #{review.name}: {review.reviewText}
+                            <img src={review.storeImage} alt={review.store} className={styles.storeImage} />
+                            <div className={styles.overlay}>
+                                <p className={styles.storeName}>#{review.store}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
-                <button className={styles.viewMoreButton}>${userArea} 최신리뷰 보러가기!</button>
+                <button className={styles.viewMoreButton}>{userArea} 최신리뷰 보러가기!</button>
             </section>
 
             {/* Review Writing Section */}
