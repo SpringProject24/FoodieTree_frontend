@@ -73,20 +73,13 @@ export const getUserAddress = () => {
 export const extractArea = () => {
     const address = getUserAddress();
 
-    // 패턴: '구', '동', '읍', '면' 단어가 포함된 곳에서 멈춤
-    const regex = /([가-힣]+(구|동|읍|면))/;
+    // 패턴: '시'와 '구', '동', '읍', '면' 단어가 포함된 곳까지 매칭
+    const regex = /([가-힣]+시)?\s*([가-힣]+(구|동|읍|면))/;
     const match = address.match(regex);
 
-    // 매칭된 구, 동, 읍, 면이 있으면 반환, 없으면 전체 주소 반환
-    return match ? match[1] : address;
+    // 매칭된 시, 구, 동, 읍, 면이 있으면 반환, 없으면 전체 주소 반환
+    return match ? match[0].trim() : address;
 }
-
-// 예시
-const fullAddress1 = "서울특별시 마포구 노고산동";
-const fullAddress2 = "강릉시 입암동 이안아파트";
-
-console.log(extractArea(fullAddress1)); // 출력: "마포구"
-console.log(extractArea(fullAddress2)); // 출력: "입암동"
 
 /**
  * 로그아웃 기능
