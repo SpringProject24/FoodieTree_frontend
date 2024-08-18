@@ -1,4 +1,4 @@
-import xReact from 'react';
+import xReact, {useState} from 'react';
 import styles from './CommunityMainPage.module.scss';
 import { extractArea } from "../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
@@ -49,7 +49,8 @@ const defaultReviews = [
 
 const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = defaultReviews, latestReviews }) => {
 
-    const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수 가져오기
+    const navigate = useNavigate();
+    const [reviewCount, setReviewCount] = useState();
 
     const handleReviewPageButtonClick = () => {
         navigate('/reviewCommunity');
@@ -65,27 +66,39 @@ const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = d
         <div className={styles.container}>
             {/* Header Section */}
             <section className={styles.highSection}>
-                <h1>우리의 리뷰가 <strong>나무가 되어</strong> 지구를 살려요!</h1>
+                <h1>우리의 리뷰가 </h1>
+                <div className={styles.highlights}></div>
+                <strong>나무가 되어</strong>
+                <h2>지구를 살려요!</h2>
+
             </section>
 
             {/* Tree Planting Section */}
             <section className={styles.treePlanting}>
                 <h2>🌳 {userArea}에서 심어진 나무</h2>
+                <div className={styles.seoulMap}></div>
                 <div className={styles.treeInfo}>
-                    {/*<img src="/path/to/map-image.jpg" alt="Mapo Trees Planted" className={styles.mapImage} />*/}
                     <div className={styles.treeStats}>
                         <div className={styles.statItem}>
-                            <span className={styles.statNumber}>{treesPlanted}</span>
+
+                            {/*동네 내부에 해당 하는 리뷰 하나 = 나무 한그루 */}
+                            <span className={styles.statNumber}>{reviews.length}</span>
                             <span className={styles.statLabel}>그루</span>
                         </div>
+
+                            {/*동네 내부에 리뷰가 작성된 상점 */}
                         <div className={styles.statItem}>
-                            <span className={styles.statNumber}>{stores}</span>
+                            <span className={styles.statNumber}>{stores} 2</span>
                             <span className={styles.statLabel}>STORES</span>
                         </div>
+
+                            {/*동네 내부의 상점에서 작성한 리뷰의 총 사용자 수 (중복 포함 안됨)*/}
                         <div className={styles.statItem}>
-                            <span className={styles.statNumber}>{users}</span>
+                            <span className={styles.statNumber}>{users} 3</span>
                             <span className={styles.statLabel}>USERS</span>
                         </div>
+
+                            {/*동네에서 작성된 총 리뷰 수 */}
                         <div className={styles.statItem}>
                             <span className={styles.statNumber}>{reviews.length}</span>
                             <span className={styles.statLabel}>REVIEWS</span>

@@ -1,5 +1,4 @@
 .container {
-  padding: 20px;
   background-color: #f5f5f5;
 }
 
@@ -7,31 +6,50 @@
   text-align: center;
   margin-bottom: 40px;
   height: 300px;
+  background-color: #F0FFE1;
 }
 
 .highSection h1 {
-  margin: 0 auto;
+  color: #383838;
   font-size: 40px;
-  font-weight: 300;
+  font-weight: 500;
+  position: relative;
+  top: 80px;
+  right: 440px;
+}
+
+.highSection h2 {
+  color: #383838;
+  font-size: 40px;
+  font-weight: 500;
+  position: relative;
+  top: 30px;
+  right: 180px;
 }
 
 .highSection strong {
+  color: #383838;
   font-size: 52px;
-  font-weight: 700;
-  color: #4caf50;
+  font-weight: 900;
+  position: relative;
+  top: 70px;
+  right: 430px;
+}
+
+.highSection .highlights {
+  background-color: #AFD485;
+  position: relative;
+  width: 260px;
+  height: 30px;
+  left: 400px;
+  top: 110px;
+
 }
 
 .treePlanting {
-  background-image: url("../../assets/commutiny-img/seoulmap.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 900px;
   max-width: 1200px;
-  height: 500px;
+  height: 600px;
   padding: 20px;
   box-sizing: border-box;
   margin: 30px auto; /* Center the section */
@@ -46,11 +64,25 @@
   text-align: left;
 }
 
+.seoulMap {
+  position: relative;
+  bottom: 20px;
+  width: 500px;
+  height: 500px;
+  background-image: url("../../assets/commutiny-img/seoulmap.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 
 .treeInfo {
   display: flex;
   justify-content: center;
-  width: 100%;
+  width: 300px;
+  position: relative;
+  bottom: 400px;
+  left: 480px;
 }
 
 .mapImage {
@@ -61,7 +93,6 @@
 .treeStats {
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
 }
 
 .statItem {
@@ -71,13 +102,13 @@
 }
 
 .statNumber {
-  font-size: 32px;
+  font-size: 50px;
   color: #4caf50;
   margin-right: 5px;
 }
 
 .statLabel {
-  font-size: 14px;
+  font-size: 30px;
   color: #666;
 }
 
@@ -151,7 +182,7 @@
   flex-direction: column;
   width: 100%;
   max-width: 900px;
-  margin: 0 auto; /* Center the section */
+  margin: 30px auto; /* Center the section */
 }
 
 .writeReview h3 {
@@ -171,7 +202,7 @@
   width: 100%;
   max-width: 900px;
   height: 500px;
-  margin: 30px auto; /* Center the review box */
+  margin-bottom: 50px;
 }
 
 .writeReviewButton {
