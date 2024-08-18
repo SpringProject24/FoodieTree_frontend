@@ -48,7 +48,7 @@ export const getUserRole = () => {
             return null;
         }
     }
-    return null;
+    return token;
 };
 /**
  * 로컬 스토리지에서 닉네임(subName, nickName) 가져오기

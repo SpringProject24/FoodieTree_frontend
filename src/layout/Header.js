@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getToken, getRefreshToken } from '../utils/authUtil';
+import {getToken, getRefreshToken, extractArea} from '../utils/authUtil';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SideBarBtn from "../components/store/mypage-edit/SideBarBtn";
@@ -71,6 +71,8 @@ const Header = () => {
         navigate('/reviewMain');
     }
 
+    let userArea = extractArea();
+
     return (
         <header className={styles.header}>
             {/* 햄버거 버튼 */}
@@ -81,14 +83,14 @@ const Header = () => {
 
             {/* 현재 위치 */}
             <div className={styles.locationPinIcon}></div>
-            <div className={styles.areaName}>{address}</div>
+            <div className={styles.areaName}>{userArea}</div>
             <div className={styles.dot}>・</div>
             <div className={styles.selectedAreaCategory}>Now</div>
             <div className={styles.selectedAreaCategoryBtn}></div>
 
 
             {/* 상점 검색 칸 */}
-
+            {/*로그인을 하지 않아도 검색칸은 보이되, 로그인이 필요한 서비스 안내하기*/}
             {
                 getToken() &&
                 <div className={styles.searchStoreSection}>

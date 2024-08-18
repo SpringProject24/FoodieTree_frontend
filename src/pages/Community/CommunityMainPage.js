@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './CommunityMainPage.module.scss';
-import {getUserAddress} from "../../utils/authUtil";
+import {extractArea, getUserAddress} from "../../utils/authUtil";
 
 const defaultReviews = [
     {
@@ -26,7 +26,7 @@ const defaultReviews = [
 
 const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = defaultReviews, latestReviews }) => {
 
-    let userAddress = getUserAddress();
+    let userArea = extractArea();
 
     return (
         <div className={styles.container}>
@@ -37,7 +37,7 @@ const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = d
 
             {/* Tree Planting Section */}
             <section className={styles.treePlanting}>
-                <h2>🌳 {userAddress}에서 심어진 나무</h2>
+                <h2>🌳 {userArea}에서 심어진 나무</h2>
                 <div className={styles.treeInfo}>
                     {/*<img src="/path/to/map-image.jpg" alt="Mapo Trees Planted" className={styles.mapImage} />*/}
                     <div className={styles.treeStats}>
@@ -63,7 +63,7 @@ const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = d
 
             {/* Latest Reviews Section */}
             <section className={styles.latestReviews}>
-                <h3>요즘 뜨는 {userAddress} 최신 리뷰</h3>
+                <h3>요즘 뜨는 {userArea} 최신 리뷰</h3>
                 <div className={styles.reviewGrid}>
                     {reviews && reviews.map((review, index) => (
                         <div key={index} className={styles.reviewItem}>
@@ -71,7 +71,7 @@ const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = d
                         </div>
                     ))}
                 </div>
-                <button className={styles.viewMoreButton}>${userAddress} 최신리뷰 보러가기!</button>
+                <button className={styles.viewMoreButton}>${userArea} 최신리뷰 보러가기!</button>
             </section>
 
             {/* Review Writing Section */}
