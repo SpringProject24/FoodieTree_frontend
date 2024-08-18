@@ -1,8 +1,29 @@
-import React from 'react';
+import xReact from 'react';
 import styles from './CommunityMainPage.module.scss';
 import { extractArea } from "../../utils/authUtil";
+import {useNavigate} from "react-router-dom";
 
 const defaultReviews = [
+    {
+        profilePic: 'https://via.placeholder.com/50',
+        name: 'customerId',
+        reviewImage: 'https://via.placeholder.com/300',
+        reviewText: '처음 마셔보는 차를 설명과 함께 마셔서 좋은 경험이었어요 홍시랑 먹는 산딸기막국수도 새롭고 맛있었어요 또 오고싶은 곳입니다Highly recommend it.',
+        store: 'Sunny Cafe',
+        storeAddress: '123 Green Street, Newtown',
+        storeImage: '/mnt/data/C37C4DC6-F223-46FB-B43D-B7B25EE26AF7.png',  // Assuming this is the store image you uploaded
+        favorites: true,
+    },
+    {
+        profilePic: 'https://via.placeholder.com/50',
+        name: 'Jane customerId',
+        reviewImage: 'https://via.placeholder.com/300',
+        reviewText: 'Not bad, but could be improved.',
+        store: 'Cafe Delight',
+        storeAddress: '456 Blue Avenue, Uptown',
+        storeImage: '/your/path/to/anotherStoreImage.png',  // Replace with correct path
+        favorites: false,
+    },
     {
         profilePic: 'https://via.placeholder.com/50',
         name: 'customerId',
@@ -28,14 +49,24 @@ const defaultReviews = [
 
 const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = defaultReviews, latestReviews }) => {
 
+    const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수 가져오기
+
+    const handleReviewPageButtonClick = () => {
+        navigate('/reviewCommunity');
+    };
+
+    const handleWriteReviewButtonClick = () => {
+        navigate('/reviewForm');
+    };
+
     let userArea = extractArea();
 
     return (
         <div className={styles.container}>
             {/* Header Section */}
-            <header className={styles.header}>
+            <section className={styles.highSection}>
                 <h1>우리의 리뷰가 <strong>나무가 되어</strong> 지구를 살려요!</h1>
-            </header>
+            </section>
 
             {/* Tree Planting Section */}
             <section className={styles.treePlanting}>
@@ -76,7 +107,7 @@ const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = d
                         </div>
                     ))}
                 </div>
-                <button className={styles.viewMoreButton}>{userArea} 최신리뷰 보러가기!</button>
+                <button className={styles.viewMoreButton} onClick={handleReviewPageButtonClick}>{userArea} 최신리뷰 보러가기!</button>
             </section>
 
             {/* Review Writing Section */}
@@ -84,7 +115,7 @@ const CommunityMainPage = ({ treesPlanted, topGroups, stores, users, reviews = d
                 <h3>작성해야 할 리뷰</h3>
                 <div className={styles.reviewBox}>
                     <p>여기에 작성해야 할 리뷰 정보를 표시하세요</p>
-                    <button className={styles.writeReviewButton}>리뷰 참여하기</button>
+                    <button className={styles.writeReviewButton} onClick={handleWriteReviewButtonClick}>리뷰 참여하기</button>
                 </div>
             </section>
         </div>

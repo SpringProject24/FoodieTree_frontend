@@ -3,36 +3,54 @@
   background-color: #f5f5f5;
 }
 
-.header {
+.highSection {
   text-align: center;
   margin-bottom: 40px;
+  height: 300px;
 }
 
-.header h1 {
-  font-size: 24px;
+.highSection h1 {
+  margin: 0 auto;
+  font-size: 40px;
   font-weight: 300;
 }
 
-.header strong {
+.highSection strong {
+  font-size: 52px;
   font-weight: 700;
   color: #4caf50;
 }
 
 .treePlanting {
+  background-image: url("../../assets/commutiny-img/seoulmap.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 40px;
+  width: 900px;
+  max-width: 1200px;
+  height: 500px;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 30px auto; /* Center the section */
 }
 
 .treePlanting h2 {
-  font-size: 18px;
+  font-size: 30px;
+  font-weight: 600;
   margin-bottom: 20px;
+  margin-top: 50px;
+  width: 100%;
+  text-align: left;
 }
+
 
 .treeInfo {
   display: flex;
-  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .mapImage {
@@ -64,18 +82,31 @@
 }
 
 .latestReviews {
-  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 900px;
+  margin: 30px auto; /* Center the section */
 }
 
 .latestReviews h3 {
-  font-size: 20px;
+  font-size: 30px;
+  font-weight: 600;
   margin-bottom: 20px;
+  margin-top: 50px;
+  width: 100%;
+  text-align: left;
 }
 
 .reviewGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
+  max-width: 900px;
+  width: 100%;
+  justify-items: center;
 }
 
 .reviewItem {
@@ -83,40 +114,73 @@
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  height: 250px;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.reviewItem:nth-child(odd) {
+  align-items: flex-end;
+}
+
+.reviewItem:nth-child(even) {
+  align-items: flex-start;
 }
 
 .viewMoreButton {
+  font-size: 18px;
+  font-weight: 500;
   display: block;
   margin: 20px auto;
   padding: 10px 20px;
-  background-color: #4caf50;
+  background-color: #50B498;
   color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
+  width: 900px;
 }
 
 .writeReview {
-  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto; /* Center the section */
 }
 
 .writeReview h3 {
-  font-size: 20px;
+  font-size: 30px;
+  font-weight: 600;
   margin-bottom: 20px;
+  margin-top: 50px;
+  width: 100%;
+  text-align: left;
 }
 
 .reviewBox {
-  background-color: #d0f0c0;
+  background-color: #CCF5D2;
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  width: 100%;
+  max-width: 900px;
+  height: 500px;
+  margin: 30px auto; /* Center the review box */
 }
 
 .writeReviewButton {
+  font-size: 18px;
+  font-weight: 500;
   display: inline-block;
-  margin-top: 20px;
+  margin-top: 370px;
   padding: 10px 20px;
-  background-color: #4caf50;
+  background-color: #50B498;
   color: white;
   border: none;
   border-radius: 20px;
