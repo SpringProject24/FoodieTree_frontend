@@ -3,6 +3,7 @@ import styles from "../../pages/product/BottomPlaceOrder.module.scss";
 import {authFetch} from "../../utils/authUtil";
 import {useModal} from "../../pages/common/ModalProvider";
 import * as PortOne from "@portone/browser-sdk/v2";
+import {createReservationFetch} from "./payment";
 
 const ReservationBtn = ({ tar : {remainProduct, productDetail, initialCount }}) => {
     const { closeModal } = useModal();
@@ -14,30 +15,14 @@ const ReservationBtn = ({ tar : {remainProduct, productDetail, initialCount }}) 
             return;
         }
 
-        const BASE_URL = window.location.hostname;
-        const response = await PortOne.requestPayment({
-            // Store ID 설정
-            storeId: process.env.REACT_APP_PAYMENT_STORE_ID,
-            // 채널 키 설정
-            channelKey: process.env.REACT_APP_KAKAOPAY_CHANNEL_KEY,
-            paymentId: `payment-${crypto.randomUUID()}`,
-            orderName: `${productDetail.storeInfo.storeName}의 스페셜팩!`,
-            totalAmount: `${productDetail.storeInfo.price * initialCount || 3900}`,
-            currency: "CURRENCY_KRW",
-            payMethod: "EASY_PAY",
-            redirectUrl: `http://${BASE_URL}:3000/main`,
-            bypass: {
-                kakaopay: {
-                    custom_message: "지구를 지키는 'FoodieTree'입니다"
-                }
-            }
-        });
+        const paymentId = `payment-`
+        createReservationFetch(storeId, initialCount, )
 
-        console.log(response);
-        const paymentId = response.paymentId;
+
+
 
         try {
-            const response = await authFetch(`/reservation/create-reservation`, {
+            const response = await authFetch(`/reservation`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
