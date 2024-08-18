@@ -74,11 +74,11 @@ const Notification = ({email, role}) => {
   console.log('토글상태 ', isOpen)
 
   return (
-    <div>
+    <div className={styles['notify-container']}>
       <div className={`${styles['notify-icon']} ${hasNewMessage && styles.new}`} onClick={toggleAlerts}>
         <IoNotificationsOutline />
       </div>
-      <ul className={`${styles['notify-list']} ${isOpen && styles.close}`}>
+      <ul className={`${styles['notify-list']} ${!isOpen && styles.close}`}>
         <li>알림 {notifications.length}건</li>
         {notifications.slice().reverse().map((notification, index) => (
           <li key={index} onClick={() => window.location.href = `/${role}`}>
