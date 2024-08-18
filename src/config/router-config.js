@@ -23,7 +23,8 @@ import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
 import AdminPage from "../pages/AdminPage";
 import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSearch";
 import Main from "../pages/Main";
-import ChatComponent from "../components/admin/issue/ChatComponent";
+import Search from "../pages/search/Search";
+
 
 const homeRouter = [
     {
@@ -59,6 +60,10 @@ const homeRouter = [
         path: '/:categoryName',
         element: <CategoriesPage/>,
     },
+    {
+        path: '/search',
+        element: <Search/>
+    }
 ];
 const customerMyPageRouter = [
     {
