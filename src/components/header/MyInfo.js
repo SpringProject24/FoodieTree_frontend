@@ -61,7 +61,9 @@ const MyInfo = () => {
     return (
         <div className={styles.myInfoContainer}>
             <Notification email={userInfo.email} role={getUserRole()} />
-            <span className={styles.myInfo}> 안녕하세요 {getSubName() ? getSubName() : userInfo.email}님!</span>
+            <span className={styles.myInfo}>
+                {/*안녕하세요 {getSubName() ? getSubName() : userInfo.email}님!*/}
+            </span>
             <div className={styles.myIconContainer}>
                 {getUserRole() === 'store' ? (
                     <>
@@ -76,6 +78,7 @@ const MyInfo = () => {
                 ) : getUserRole() === 'customer' ? (
                     <>
                         {/* Customer 아이콘과 프로필 이미지 */}
+
                         <img
                             src={userInfo.profileImage}
                             alt="Customer Profile"
