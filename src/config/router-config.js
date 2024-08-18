@@ -23,6 +23,8 @@ import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
 import AdminPage from "../pages/AdminPage";
 import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSearch";
 import Main from "../pages/Main";
+import ProtectedRouter from "../pages/auth/ProtectedRouter";
+import CustomerMyPageOutlet from "../pages/customer/CustomerMyPageOutlet";
 
 const homeRouter = [
     {
@@ -103,16 +105,29 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/store',
-                element: <StoreMyPageOutlet/>,
+                element: (
+                    <ProtectedRouter>
+                        <StoreMyPageOutlet/>
+                    </ProtectedRouter>
+                ),
                 children: storeRouter
             },
             {
                 path: '/customer',
+                element: (
+                    <ProtectedRouter>
+                        <CustomerMyPageOutlet/>
+                    </ProtectedRouter>
+                ),
                 children: customerMyPageRouter
             },
             {
                 path: '/admin',
-                element: <AdminPage/>,
+                element: (
+                    <ProtectedRouter>
+                        <AdminPage/>
+                    </ProtectedRouter>
+                )
             }
         ]
     },
