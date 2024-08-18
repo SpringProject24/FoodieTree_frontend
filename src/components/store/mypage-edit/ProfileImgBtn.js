@@ -36,7 +36,7 @@ const ProfileImgBtn = ({value}) => {
             body: formData
         });
         if (response.ok) {
-            alert("가게 이미지가 성공적으로 업데이트 되었습니다.");
+            alert("프로필 이미지가 성공적으로 업데이트 되었습니다.");
             setIsShow(false);
         } else {
             const errMsg = await response.text();
