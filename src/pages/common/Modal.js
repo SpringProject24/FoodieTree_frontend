@@ -25,6 +25,7 @@ const Modal = () => {
     const {modalState, closeModal} = useModal();
     const {isOpen, type, props} = modalState;
     const [customStyle, setCustomStyle] = useState({width: '100%'});
+    const [customInnerContentStyle , setCustomInnerContentStyle] = useState({}); // 추가
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 400); // 추가
 
     useEffect(() => {
@@ -42,7 +43,8 @@ const Modal = () => {
                     setCustomStyle({width: '750px'});
                 }
             } else if (type === 'customerIssueChatting' || type === 'adminIssueChatting') {
-                setCustomStyle({bottom: '0', height: '78%'})
+                setCustomStyle({bottom: '0', height: '78%' , overflowY: 'none'})
+                setCustomInnerContentStyle({height: '764px', marginBottom: '50px', padding: '0'})
             }
             else {
                 setCustomStyle({});
@@ -133,9 +135,10 @@ const Modal = () => {
             <div className={styles.modalContent} style={type === 'productDetail' || 'favAreaEdit' || 'customerIssueChatting' || 'adminIssueChatting'? customStyle : {}}
                  onClick={(e) => e.stopPropagation()}>
                 <div className={styles.close}>
+                    {((type === 'customerIssueChatting') || (type ==='adminIssueChatting')) ? <span>customer support</span> : ''}
                     <span><FontAwesomeIcon className={styles.closeBtn} onClick={closeModal} icon={faTimes}/></span>
                 </div>
-                <div className={styles.modalInnerContent}>
+                <div className={styles.modalInnerContent} style={(type === 'customerIssueChatting' || 'adminIssueChatting') ? customInnerContentStyle : {}}>
                     {ModalComponent && (
                         <Suspense fallback={<div>Loading...</div>}>
                             <ModalComponent {...props}/>

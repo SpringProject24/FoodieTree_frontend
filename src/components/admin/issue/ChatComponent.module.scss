@@ -1,49 +1,67 @@
-/* ChatComponent.module.scss */
 .chatContainer {
   display: flex;
   flex-direction: column;
-  width: 100%;
   height: 100%;
-  max-height: 500px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
-  background-color: #f9f9f9;
+  overflow: hidden;
 }
 
-#chatBox {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+.chatBoxHeader {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  flex-shrink: 0; /* 고정 */
+}
+
+.chatBoxBody {
+  flex-grow: 1; /* 가변 영역 */
   overflow-y: auto;
-  margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: white;
+  background-color: #f1f1f1;
 }
 
-.message {
+.chatBoxFooter {
+  background-color: #f8f9fa;
   padding: 10px;
-  margin: 5px;
-  border-radius: 10px;
-  max-width: 60%;
-  display: inline-block;
-  clear: both;
+  display: flex;
+  flex-shrink: 0; /* 고정 */
+  border-top: 1px solid #ccc;
+}
+
+.chatBoxFooter input {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+.chatBoxFooter button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
 }
 
 .myMessage {
   background-color: #d1e7dd;
-  align-self: flex-end;
   text-align: right;
   float: right;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .otherMessage {
   background-color: #f8d7da;
-  align-self: flex-start;
   text-align: left;
   float: left;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 10px;
 }
 input[type="text"] {
   width: 100%;

@@ -65,8 +65,10 @@ const ChatComponent = ({ issueId, type }) => {
 
     return (
         <div className={styles.chatContainer}>
-            <h2>Chat</h2>
-            <div id="chatBox" ref={chatBoxRef}>
+            {/*<div className={styles.chatBoxHeader}>*/}
+            {/*    <h2>Chat Header</h2>*/}
+            {/*</div>*/}
+            <div id="chatBox" ref={chatBoxRef} className={styles.chatBoxBody}>
                 {messages.map((msg, index) => (
                     <div
                         key={index}
@@ -79,13 +81,15 @@ const ChatComponent = ({ issueId, type }) => {
                     </div>
                 ))}
             </div>
-            <input
-                type="text"
-                value={messageInput}
-                onChange={(e) => setMessageInput(e.target.value)}
-                placeholder="Type your message..."
-            />
-            <button onClick={sendMessage} disabled={!connected}>Send</button>
+            <div className={styles.chatBoxFooter}>
+                <input
+                    type="text"
+                    value={messageInput}
+                    onChange={(e) => setMessageInput(e.target.value)}
+                    placeholder="Type your message..."
+                />
+                <button onClick={sendMessage} disabled={!connected}>Send</button>
+            </div>
         </div>
     );
 };

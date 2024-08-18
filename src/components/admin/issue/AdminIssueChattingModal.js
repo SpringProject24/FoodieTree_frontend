@@ -3,9 +3,7 @@ import AdminIssueChat from "./AdminIssueChat";
 
 const AdminIssueChattingModal = ({issueId}) => {
     return (
-        <div>
             <AdminIssueChat issueId={issueId}/>
-        </div>
     );
 };
 

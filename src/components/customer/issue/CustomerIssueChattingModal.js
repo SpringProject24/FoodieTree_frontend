@@ -4,9 +4,7 @@ import CustomerIssueChat from "./CustomerIssueChat";
 
 const CustomerIssueChattingModal = ({issueId}) => {
     return (
-        <div>
             <CustomerIssueChat issueId={issueId}/>
-        </div>
     );
 };
 
