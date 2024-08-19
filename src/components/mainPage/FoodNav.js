@@ -135,13 +135,22 @@ const getRandomStores = (stores, count) => {
 const FoodNav = ({ selectedCategory, stores }) => {
   const [favorites, setFavorites] = useState({});
   const [filteredStores, setFilteredStores] = useState([]);
-  const [selectedArea, setSelectedArea] = useState(null);
+  const [selectedArea, setSelectedArea] = useState('');
   const [myFavoriteAndOrderStores, setMyFavoriteAndOrderStores] = useState([]);
   const [recommendedStores, setRecommendedStores] = useState([]);
   const { openModal } = useModal();
 
   // customerId값
   const customerId = getUserEmail();
+
+  useEffect(() => {
+    // selectedArea를 sessionStorage에서 가져옵니다.
+    const areaFromStorage = sessionStorage.getItem('selectedArea') || '';
+    
+  }, []);
+  // onChange = () => {
+  //   setSelectedArea(areaFromStorage);
+  // }
 
   useEffect(() => {
     if (customerId) {
@@ -227,7 +236,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
 
   return (
     <>
-      <FavAreaSelector onAreaSelect={setSelectedArea} />
+      {/* <FavAreaSelector onAreaSelect={setSelectedArea} /> */}
 
       {/* 내가 찜한 가게 리스트 */}
       <div className={styles.list}>

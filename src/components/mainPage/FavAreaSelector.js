@@ -19,6 +19,14 @@ const FavAreaSelector = ({ onAreaSelect }) => {
   const [selectedArea, setSelectedArea] = useState(null);
 
   useEffect(() => {
+    // 세션 스토리지에서 selectedArea를 가져옵니다.
+    const storedArea = sessionStorage.getItem('selectedArea');
+    if (storedArea) {
+      setSelectedArea(storedArea);
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchCustomerId = async () => {
       try {
         const id = await getUserEmail();
@@ -50,26 +58,29 @@ const FavAreaSelector = ({ onAreaSelect }) => {
         const data = await response.json();
         setAreas(data);
 
-        if (data.length > 0) {
+        // 세션 스토리지에서 selectedArea를 가져옵니다.
+        const storedArea = sessionStorage.getItem('selectedArea');
+
+        // 사용자가 저장한 지역이 없으면 현재 위치로 설정
+        if (!storedArea && data.length > 0) {
           const defaultArea = extractGu(data[0].preferredArea);
           setSelectedArea(defaultArea);
           sessionStorage.setItem('selectedArea', defaultArea);
-          console.log('Default area saved to sessionStorage:', defaultArea);
-        } else {
-          // 사용자가 favArea에 아무것도 저장하지 않은 경우 현재 위치를 불러오기
+        } else if (!storedArea && data.length === 0) {
           getCurrentLocation()
             .then(({ lat, lng }) => reverseGeocode(lat, lng))
             .then(address => {
               const guArea = extractGu(address);
               setSelectedArea(guArea);
               sessionStorage.setItem('selectedArea', guArea);
-              console.log('Current location saved to sessionStorage:', guArea);
             })
             .catch(error => {
               console.error('Error fetching current location:', error);
             });
+        } else {
+          // storedArea가 있을 경우, 해당 지역으로 설정
+          setSelectedArea(storedArea);
         }
-
       } catch (error) {
         console.error('Error fetching areas:', error);
       }
@@ -82,7 +93,6 @@ const FavAreaSelector = ({ onAreaSelect }) => {
     if (selectedArea !== null) {
       onAreaSelect(selectedArea);
       sessionStorage.setItem('selectedArea', selectedArea);
-      console.log('Selected area saved to sessionStorage:', selectedArea);
     }
   }, [selectedArea, onAreaSelect]);
 
