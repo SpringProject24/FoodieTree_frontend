@@ -187,8 +187,8 @@ button {
   .logoBtn {
     height: 50px;
     width: 50px;
-    margin-left: 10px;
-    margin-bottom: 10px; /* 아래쪽에 여백 추가 */
+    margin-left: 50px;
+    margin-bottom: 5px; /* 아래쪽에 여백 추가 */
   }
 
   .locationPinIcon {
@@ -217,11 +217,10 @@ button {
   }
 
   .searchStoreSection {
-    width: 100%;
+    width: 120px;
     margin: 10px 0;
     padding: 0 10px;
     max-width: 100%;
-    margin-left: 0;
     background-color: rgba(6, 101, 78, 0.5); /* 투명도 증가 */
   }
 

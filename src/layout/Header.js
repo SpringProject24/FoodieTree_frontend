@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import {getToken, getRefreshToken, extractArea} from '../utils/authUtil';
+import {getToken, getRefreshToken, extractArea, getUserRole} from '../utils/authUtil';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SideBarBtn from "../components/store/mypage-edit/SideBarBtn";
@@ -12,6 +12,7 @@ import SidebarModal from "../components/header/SidebarModal";
 import SearchInput from "../components/search/SearchInput";
 import SideBar from "../components/store/mypage-edit/SideBar";
 import Edit from "../components/store/mypage-edit/Edit";
+import Notification from "../components/socket/Notification";
 
 // 아이콘을 라이브러리에 추가
 library.add(faMagnifyingGlass);
@@ -84,9 +85,9 @@ const Header = () => {
         <header className={styles.header}>
                 {/* 햄버거 버튼 */}
                  {width <= 400 && <SideBarBtn onShow={showHandler}/>}
-                {/*<div className={styles.container}>*/}
-                {/*    <SideBar isShow={show}/>*/}
-                {/*</div>*/}
+                <div className={styles.container}>
+                    <SideBar isShow={show}/>
+                </div>
 
 
                 {/* 로고 */}

@@ -31,7 +31,7 @@ const MyInfo = () => {
                         localStorage.setItem('userImage', data.productImg);
                     } else if (getUserRole() === 'customer') {
                         localStorage.setItem('userImage', data.profileImage);
-                    } else if (getUserRole() === 'store') {
+                    } else if (getUserRole() === 'admin') {
                         localStorage.setItem('userImage', data.profileImage);
                     }
 
@@ -61,8 +61,11 @@ const MyInfo = () => {
     }
 
     return (
+        <>
+        {/*알림창*/}
+    <Notification email={userInfo.email} role={getUserRole()} />
         <div className={styles.myInfoContainer}>
-            <Notification email={userInfo.email} role={getUserRole()} />
+
             <span className={styles.myInfo}>
                 {/*안녕하세요 {getSubName() ? getSubName() : userInfo.email}님!*/}
             </span>
@@ -103,6 +106,7 @@ const MyInfo = () => {
                 ) : null}
             </div>
         </div>
+        </>
     );
 };
 
