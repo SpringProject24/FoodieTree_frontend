@@ -8,7 +8,7 @@ import FavoriteStore from "../../components/customer/mypage/FavoriteStore";
 import SideBarBtn from "../../components/store/mypage-edit/SideBarBtn";
 
 import { jwtDecode } from 'jwt-decode';
-import {authFetch, checkAuthToken} from "../../utils/authUtil";
+import {authFetch, checkAuthToken, getUserRole} from "../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
 
 const BASE_URL = window.location.origin;
@@ -40,8 +40,8 @@ const CustomerMyPage = () => {
             const userInfo = await checkAuthToken(navigate);
 
             if (userInfo) {
-                const requiredRole = 'customer'; // 필요한 role  작성 필요
-                if (userInfo.userType !== requiredRole) {
+                const requiredRoles = ['customer', 'admin']; // 필요한 역할 목록
+                if (!requiredRoles.includes(userInfo.userType)) {
                     alert('접근 권한이 없습니다.');
                     navigate('/main');
                     return;
