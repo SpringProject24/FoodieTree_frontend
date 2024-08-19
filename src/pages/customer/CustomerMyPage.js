@@ -178,6 +178,7 @@ const CustomerMyPage = () => {
     };
 
     const loadMore = () => {
+        if (!hasMore || isLoading) return;
         setIsLoading(true);
         setTimeout(() => {
             const newStartIndex = startIndex + ITEMS_PER_PAGE;
