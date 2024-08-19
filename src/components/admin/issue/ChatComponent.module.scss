@@ -19,6 +19,9 @@
   overflow-y: auto;
   padding: 10px;
   background-color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 }
 
 .chatBoxFooter {
@@ -53,6 +56,7 @@
   margin: 5px;
   padding: 10px;
   border-radius: 10px;
+  width: fit-content;
 }
 
 .otherMessage {
@@ -62,6 +66,7 @@
   margin: 5px;
   padding: 10px;
   border-radius: 10px;
+  width: fit-content;
 }
 input[type="text"] {
   width: 100%;
