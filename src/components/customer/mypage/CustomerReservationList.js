@@ -7,7 +7,7 @@ import {DEFAULT_IMG, imgErrorHandler} from "../../../utils/error";
 
 const BASE_URL = window.location.origin;
 
-const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading, loadMore, hasMore, initialFilters, onApplyFilters }) => {
+const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading, loadMore, hasMore, initialFilters, onApplyFilters, onFetchReservations }) => {
     const { openModal } = useModal();
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 400);
     const [filters, setFilters] = useState(initialFilters || {}); // 필터 유지
@@ -90,9 +90,12 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
 
             // 예약 취소 성공 시 예약 목록 갱신
             const updatedReservations = reservations.map(reservation =>
-                reservation.reservationId === reservationId ? { ...reservation, status: 'CANCELED', cancelReservationAtF: formatDate(new Date().toISOString()) } : reservation
+                reservation.reservationId === reservationId
+                    ? { ...reservation, status: 'CANCELED', cancelReservationAtF: formatDate(new Date().toISOString()) }
+                    : reservation
             );
             onUpdateReservations(updatedReservations);
+            await onFetchReservations();
         } catch (error) {
             console.error('Error canceling reservation:', error);
         }
