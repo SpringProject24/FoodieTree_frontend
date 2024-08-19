@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { getUserEmail, getToken, getRefreshToken } from '../../utils/authUtil';
 import { FAVORITESTORE_URL } from '../../config/host-config';
+import { getCurrentLocation, reverseGeocode } from '../../utils/locationUtil';
 import styles from './FavAreaSelector.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+
+// "구" 단위까지 자르는 함수
+const extractGu = (address) => {
+  const match = address.match(/^[^\d]*[가-힣]+구/);
+  return match ? match[0] : address;
+};
 
 const FavAreaSelector = ({ onAreaSelect }) => {
   const [areas, setAreas] = useState([]);
   const [customerId, setCustomerId] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedArea, setSelectedArea] = useState(null);
-
-  useEffect(() => {
-    // 세션 스토리지 저장
-    const storedArea = sessionStorage.getItem('selectedArea');
-    if (storedArea) {
-      console.log('Loaded from sessionStorage:', storedArea);
-      setSelectedArea(storedArea);
-    }
-  }, []);
 
   useEffect(() => {
     const fetchCustomerId = async () => {
@@ -52,17 +50,24 @@ const FavAreaSelector = ({ onAreaSelect }) => {
         const data = await response.json();
         setAreas(data);
 
-        // 세션 스토리지에 storedArea가 저장되어 있는지 확인
-        // 없다면 0번째 preferredArea 
-        const storedArea = sessionStorage.getItem('selectedArea');
-        if (storedArea) {
-          setSelectedArea(storedArea);
-          console.log('Default area from sessionStorage:', storedArea);
-        } else if (data.length > 0) {
-          const defaultArea = data[0].preferredArea;
+        if (data.length > 0) {
+          const defaultArea = extractGu(data[0].preferredArea);
           setSelectedArea(defaultArea);
           sessionStorage.setItem('selectedArea', defaultArea);
           console.log('Default area saved to sessionStorage:', defaultArea);
+        } else {
+          // 사용자가 favArea에 아무것도 저장하지 않은 경우 현재 위치를 불러오기
+          getCurrentLocation()
+            .then(({ lat, lng }) => reverseGeocode(lat, lng))
+            .then(address => {
+              const guArea = extractGu(address);
+              setSelectedArea(guArea);
+              sessionStorage.setItem('selectedArea', guArea);
+              console.log('Current location saved to sessionStorage:', guArea);
+            })
+            .catch(error => {
+              console.error('Error fetching current location:', error);
+            });
         }
 
       } catch (error) {
@@ -76,7 +81,6 @@ const FavAreaSelector = ({ onAreaSelect }) => {
   useEffect(() => {
     if (selectedArea !== null) {
       onAreaSelect(selectedArea);
-      // 선택된 세션스토리지 업데이트
       sessionStorage.setItem('selectedArea', selectedArea);
       console.log('Selected area saved to sessionStorage:', selectedArea);
     }
@@ -87,16 +91,17 @@ const FavAreaSelector = ({ onAreaSelect }) => {
   };
 
   const handleAreaClick = (area) => {
-    setSelectedArea(area.preferredArea);
+    const guArea = extractGu(area.preferredArea);
+    setSelectedArea(guArea);
     setIsExpanded(false);
   };
 
-  const selectedAreaDetails = areas.find(area => area.preferredArea === selectedArea);
+  const selectedAreaDetails = areas.find(area => extractGu(area.preferredArea) === selectedArea);
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title} onClick={handleToggle}>
-        <FontAwesomeIcon icon={faLocationDot} /> {selectedAreaDetails ? selectedAreaDetails.preferredArea : '현재 등록된 주소'} {isExpanded ? '▲' : '▼'}
+        <FontAwesomeIcon icon={faLocationDot} /> {selectedAreaDetails ? selectedAreaDetails.preferredArea : selectedArea} {isExpanded ? '▲' : '▼'}
       </h2>
       {isExpanded && (
         <ul className={styles.areaList}>
@@ -106,7 +111,7 @@ const FavAreaSelector = ({ onAreaSelect }) => {
               className={styles.areaItem}
               onClick={() => handleAreaClick(area)}
             >
-              <span className={styles.areaName}>{area.preferredArea}</span>
+              <span className={styles.areaName}>{extractGu(area.preferredArea)}</span>
               {area.alias && <span className={styles.areaAlias}>({area.alias})</span>}
             </li>
           ))}
