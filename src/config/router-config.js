@@ -23,6 +23,10 @@ import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
 import AdminPage from "../pages/AdminPage";
 import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSearch";
 import Main from "../pages/Main";
+import CommunityReviewPage from "../pages/Community/CommunityPage";
+import ReviewForm from "../pages/Community/ReviwForm";
+import CommunityMainPage from "../pages/Community/CommunityMainPage";
+import Search from "../pages/search/Search";
 import ProtectedRouter from "../pages/auth/ProtectedRouter";
 import CustomerMyPageOutlet from "../pages/customer/CustomerMyPageOutlet";
 
@@ -60,6 +64,22 @@ const homeRouter = [
         path: '/:categoryName',
         element: <CategoriesPage/>,
     },
+    {
+        path: '/reviewCommunity',
+        element: <CommunityReviewPage />,
+    },
+    {
+        path: '/reviewForm',
+        element: <ReviewForm />,
+    },
+    {
+        path: '/reviewMain',
+        element: <CommunityMainPage />,
+    },
+    {
+        path: '/search',
+        element: <Search/>,
+    }
 ];
 const customerMyPageRouter = [
     {

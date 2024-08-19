@@ -4,6 +4,7 @@ import { faCircleUser, faStore } from "@fortawesome/free-solid-svg-icons";
 import styles from "./MyInfo.module.scss";
 import { useNavigate } from "react-router-dom";
 import {getRefreshToken, getSubName, getToken, getUserRole} from "../../utils/authUtil";
+import Notification from "../socket/Notification";
 
 // 내 정보 들어가기
 const MyInfo = () => {
@@ -59,7 +60,10 @@ const MyInfo = () => {
 
     return (
         <div className={styles.myInfoContainer}>
-            <span className={styles.myInfo}> 안녕하세요 {getSubName() ? getSubName() : userInfo.email}님!</span>
+            <Notification email={userInfo.email} role={getUserRole()} />
+            <span className={styles.myInfo}>
+                {/*안녕하세요 {getSubName() ? getSubName() : userInfo.email}님!*/}
+            </span>
             <div className={styles.myIconContainer}>
                 {getUserRole() === 'store' ? (
                     <>
@@ -74,6 +78,7 @@ const MyInfo = () => {
                 ) : getUserRole() === 'customer' ? (
                     <>
                         {/* Customer 아이콘과 프로필 이미지 */}
+
                         <img
                             src={userInfo.profileImage}
                             alt="Customer Profile"
