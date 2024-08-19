@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ReviewForm.module.scss';
 import Rating from '@mui/material/Rating';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 
 const ReviewForm = ({ onSubmit }) => {
   const [author, setAuthor] = useState('');
