@@ -76,7 +76,7 @@ const homeRouter = [
     },
     {
         path: '/search',
-        element: <Search/>
+        element: <Search/>,
     }
 ];
 const customerMyPageRouter = [
@@ -133,7 +133,7 @@ export const router = createBrowserRouter([
             {
                 path: '/admin',
                 element: <AdminPage/>,
-            }
+            },
         ]
     },
 ]);
