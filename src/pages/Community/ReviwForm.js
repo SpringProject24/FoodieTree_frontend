@@ -37,7 +37,7 @@ const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const rId = queryParams.get('r');
-  console.log('알림에서 전달된 예약Id ', rId)
+  console.log('알림에서 전달된 예약Id ', rId);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -66,7 +66,7 @@ const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
     const convertedHashtags = convertToEnumHashtags(selectedKeywords);
 
     const reviewData = {
-      reservationId: reservationId,
+      reservationId: rId,
       customerId: customerId,
       storeImg: storeImg,
       reviewScore: rating,
