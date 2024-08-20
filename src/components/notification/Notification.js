@@ -27,13 +27,13 @@ const Notification = ({email, role}) => {
   }
   const fetchNotifications = async () => {
     try {
-      const response = await authFetch(`/notification`, {
+      const res = await authFetch(`/notification`, {
         method: 'GET',
       });
-      if (!response.ok) {
+      if (!res.ok) {
         console.error('실패 fetch notifications');
       }
-      const data = await response.json();
+      const data = await res.json();
       console.log('fetchNotifications data 결과 ', data)
       setNotifications(data);
       if(data.some(d => d.read == null)) {
@@ -77,8 +77,7 @@ const Notification = ({email, role}) => {
         setStompClient(client);
       }, (error) => {
         console.error('WebSocket connection error:', error);
-        // 5초 후에 다시 연결 시도
-        setTimeout(connectWebSocket, 5000);
+        setTimeout(connectWebSocket, 3000);
       });
     };
 
@@ -120,13 +119,13 @@ const Notification = ({email, role}) => {
     const reservationId = targetId[0];
     if(!read) {
       try {
-        const response = await authFetch(`/notification/${id}/read`, {
+        const res = await authFetch(`/notification/${id}/read`, {
           method: 'PATCH',
         });
-        if (response.ok) {
+        if (res.ok) {
           setNotifications(prev =>
             prev.map(n =>
-              n.id === id ? { ...n, isRead: true } : n
+              n.id === id ? { ...n, read: true } : n
             )
           );
         }
@@ -137,9 +136,11 @@ const Notification = ({email, role}) => {
     if(type.includes('REVIEW')) {
       try {
         const res = await authFetch(`/review/check/${reservationId}`, {method: 'GET'});
-        const flag = await res.json();
-        console.log(flag)
-        flag ? navigate('/reviewCommunity') : navigate(`/reviewForm/${reservationId}`)
+        if (res.ok) {
+          const flag = await res.json();
+          console.log('개별 알림 flag', flag)
+          flag ? navigate('/reviewCommunity') : navigate(`/reviewForm/${reservationId}`)
+        }
       } catch (error) {
         console.error('리뷰 작성 여부 확인 중 오류 발생! ', error);
       }
@@ -150,12 +151,27 @@ const Notification = ({email, role}) => {
   // 모든 알림 읽음 처리
   const readAllHandler = async () => {
     const payload = {
-      ids: notifications.filter(n=>n.read == null).map(n=>n.id)
+      ids: notifications.filter(n=>n.read === false).map(n=>n.id)
     }
-    const res = await authFetch('/notification/all', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
+    console.log('전체 알림 payload : ', payload)
+    try {
+      const res = await authFetch('/notification/all', {
+        method: 'PATCH',
+        body: JSON.stringify(payload),
+      })
+      if(res.ok) {
+        const flag = await res.json();
+        console.log('모든 알림 flag', flag);
+        setNotifications(prev =>
+          prev.map(n =>
+            payload.ids.includes(n.id) ? { ...n, read: true } : n
+          )
+        );
+        setHasNewMessage(false);
+      }
+    } catch (e) {
+      console.log('모든 알림 읽음 처리 중 오류 발생!');
+    }
   }
 
   return (
@@ -169,7 +185,11 @@ const Notification = ({email, role}) => {
           <button className={styles['read-all-btn']} onClick={readAllHandler}>전체 읽음</button>
         </li>
         {notifications?.slice().reverse().map((n, index) => (
-          <li key={index} onClick={() => notificationClickHandler(n)}>
+          <li
+            key={index}
+            className={`${n.read && styles.read}`}
+            onClick={() => notificationClickHandler(n)}
+          >
             <span className={getClassNameByType(n.type)}>{n.label}</span>
             {n.content}
             <GoArrowRight />
