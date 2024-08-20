@@ -69,3 +69,12 @@
     opacity: 0;
   }
 }
+
+// header 알림아이콘 반응형 크기
+@media (max-width: 400px) {
+
+  .notify-icon {
+    position: absolute;
+    right: 10px;
+  }
+}

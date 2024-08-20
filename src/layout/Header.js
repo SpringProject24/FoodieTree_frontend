@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {getToken, getRefreshToken, extractArea} from '../utils/authUtil';
+import {Link, useNavigate} from 'react-router-dom';
+import {getToken, getRefreshToken, extractArea, getUserRole} from '../utils/authUtil';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SideBarBtn from "../components/store/mypage-edit/SideBarBtn";
@@ -10,6 +10,9 @@ import MyInfo from "../components/header/MyInfo";
 import {getCurrentLocation, initializeNaverMapsForHeader, reverseGeocode} from "../utils/locationUtil";
 import SidebarModal from "../components/header/SidebarModal";
 import SearchInput from "../components/search/SearchInput";
+import SideBar from "../components/store/mypage-edit/SideBar";
+import Edit from "../components/store/mypage-edit/Edit";
+import Notification from "../components/socket/Notification";
 
 // 아이콘을 라이브러리에 추가
 library.add(faMagnifyingGlass);
@@ -73,54 +76,62 @@ const Header = () => {
 
     let userArea = extractArea();
 
+    // 햄버거 버튼 기존 기능 되도록 수정
+    const showHandler = () => {
+        setShow(prev => !prev);
+    }
+
     return (
         <header className={styles.header}>
-            {/* 햄버거 버튼 */}
-            {width > 400 && <SideBarBtn onShow={toggleModal}/>}
-
-            {/* 로고 */}
-            <div className={styles.logoBtn}></div>
-
-            {/* 현재 위치 */}
-            <div className={styles.locationPinIcon}></div>
-            <div className={styles.areaName}>{userArea}</div>
-            <div className={styles.dot}>・</div>
-            <div className={styles.selectedAreaCategory}>Now</div>
-            <div className={styles.selectedAreaCategoryBtn}></div>
-
-
-            {/* 상점 검색 칸 */}
-            {/*로그인을 하지 않아도 검색칸은 보이되, 로그인이 필요한 서비스 안내하기*/}
-            {
-                getToken() &&
-                <div className={styles.searchStoreSection}>
-                    <button className={styles.magnifyClickBtn}>
-                        <FontAwesomeIcon icon="magnifying-glass" className={styles.magnifyIcon}/>
-                    </button>
-                    <SearchInput/>
+                {/* 햄버거 버튼 */}
+                 {width <= 400 && <SideBarBtn onShow={showHandler}/>}
+                <div className={styles.container}>
+                    <SideBar isShow={show}/>
                 </div>
-            }
-
-            {/*리뷰 커뮤니티 메인*/}
-            <div className={styles.reviewMainIcon} onClick={handleClick}></div>
 
 
-            {/* 로그인 및 회원가입 버튼 */}
-            <div className={styles.loginBtnSection}>
-                {isAuthenticated ? (
-                    <MyInfo/>
-                ) : (
-                    <>
-                        <button className={styles.signInBtn} onClick={() => navigate('/sign-in')}> Sign in</button>
-                        <div className={styles.dot}>・</div>
-                        <button className={styles.signUpBtn} onClick={() => navigate('/sign-up')}> Sign up</button>
-                    </>
-                )}
-            </div>
-            {/* 모달 */}
-            {modalVisible && <SidebarModal onClose={toggleModal} />}
-</header>
-    );
+                {/* 로고 */}
+                <Link to={"/main"} className={styles.logoBtn}></Link>
+
+                {/* 현재 위치 */}
+                <div className={styles.locationPinIcon}></div>
+                <div className={styles.areaName}>{userArea}</div>
+                <div className={styles.dot}>・</div>
+                <div className={styles.selectedAreaCategory}>Now</div>
+                <div className={styles.selectedAreaCategoryBtn}></div>
+
+
+                {/* 상점 검색 칸 */}
+                {/*로그인을 하지 않으면 검색창이 사라짐*/}
+                {
+                    getToken() &&
+                    <div className={styles.searchStoreSection}>
+                        <button className={styles.magnifyClickBtn}>
+                            <FontAwesomeIcon icon="magnifying-glass" className={styles.magnifyIcon}/>
+                        </button>
+                        <SearchInput/>
+                    </div>
+                }
+
+                {/*리뷰 커뮤니티 메인*/}
+                <div className={styles.reviewMainIcon} onClick={handleClick}></div>
+
+                {/* 로그인 및 회원가입 버튼 */}
+                <div className={styles.loginBtnSection}>
+                    {isAuthenticated ? (
+                        <MyInfo/>
+                    ) : (
+                        <>
+                            <button className={styles.signInBtn} onClick={() => navigate('/sign-in')}> Sign in</button>
+                            <div className={styles.dot}>・</div>
+                            <button className={styles.signUpBtn} onClick={() => navigate('/sign-up')}> Sign up</button>
+                        </>
+                    )}
+                </div>
+                {/* 모달 */}
+                {modalVisible && <SidebarModal onClose={toggleModal}/>}
+        </header>
+);
 }
 
 export default Header;

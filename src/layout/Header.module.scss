@@ -19,6 +19,11 @@ button {
   max-width: 1920px; /* 최대 너비를 1920px로 제한 */
   margin: 0 auto; /* 중앙 정렬 */
   background-color: #F5F5DD;
+
+  position: fixed;  /* 화면에 고정 */
+  top: 0;           /* 화면 상단에 위치 */
+  left: 0;          /* 왼쪽에 고정 */
+  z-index: 1000;    /* 다른 요소 위에 위치 */
 }
 
 /* 로고 버튼 */
@@ -29,6 +34,7 @@ button {
   background-size: contain;
   background-repeat: no-repeat;
   margin-left: 70px;
+  cursor: pointer;
 }
 
 /* 현재 위치 버튼 스타일 */
@@ -149,4 +155,103 @@ button {
 .dot {
   margin-top: 5px;
   margin-left: 10px;
+}
+
+// 햄버거 버튼 반응형 기능 안됨으로 인한 css 추가
+.container {
+  width: 80%;
+  margin: 20px auto 0;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  display: flex;
+  background: white;
+}
+
+@media (max-width: 400px) {
+  .container {
+    width: 100%;
+    border: none;
+    margin-top: 0;
+  }
+}
+
+// 반응형 헤더
+@media (max-width: 400px) {
+  .header {
+    flex-direction: row; /* 요소들을 가로로 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    padding: 10px;
+    height: 60px;
+  }
+
+  .logoBtn {
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    margin-left: 60px;
+  }
+
+  .locationPinIcon {
+    //position: absolute;
+    //height: 32px;  /* 크기를 줄이지 않음 */
+    //width: 32px;
+    //margin-left: 10px;
+    display: none;
+  }
+
+  .selectedAreaCategoryBtn {
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    margin-left: 5px;
+    margin-top: 0;
+    left: 200px;
+  }
+
+  // 각종 기능은 드롭다운모달로 볼 수있게 설정?
+  .reviewMainIcon {
+    //position: absolute;
+    //right: 5px;
+    //height: 40px;  /* 크기를 줄이지 않음 */
+    //width: 40px;
+    //margin-left: 10px;
+    display: none;
+  }
+
+  //반응형일시 현재위치 렌더링 안함, 드롭다운으로 볼 수 있게 설정해보기.
+  .areaName {
+    display: none;
+  }
+
+  .selectedAreaCategory {
+    font-size: 16px;
+    margin-left: 5px;
+    margin-bottom: 0; /* 아래쪽 여백 제거 */
+  }
+
+  .searchStoreSection {
+    width: 120px;
+    padding: 0 10px;
+    background-color: rgba(6, 101, 78, 0.5); /* 투명도 증가 */
+    margin-left: 0; /* or 조정된 값으로 변경 */
+  }
+
+  .loginBtnSection {
+    display: flex;
+    flex-direction: row; /* 버튼들을 가로로 정렬 */
+    gap: 5px;
+    margin-left: auto; /* 오른쪽으로 밀기 */
+    margin-top: 0;
+  }
+
+  .signInBtn, .signUpBtn {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .dot {
+    margin-left: 0;
+    margin-top: 0;
+    display: none; /* 점 제거 */
+  }
 }
