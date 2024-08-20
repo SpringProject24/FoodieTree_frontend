@@ -63,7 +63,8 @@ const MyInfo = () => {
     return (
         <>
         {/*알림창*/}
-    <Notification email={userInfo.email} role={getUserRole()} />
+        <Notification email={userInfo.email} role={getUserRole()} />
+
         <div className={styles.myInfoContainer}>
 
             <span className={styles.myInfo}>
