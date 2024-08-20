@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ReviewForm.module.scss';
 import Rating from '@mui/material/Rating';
+import {useLocation} from "react-router-dom";
 // import Typography from '@mui/material/Typography';
 
 const ReviewForm = ({ onSubmit }) => {
@@ -9,6 +10,11 @@ const ReviewForm = ({ onSubmit }) => {
   const [content, setContent] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [rating, setRating] = useState(0); // 별점 상태 추가
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const reservationId = queryParams.get('r');
+  console.log('알림에서 전달된 예약Id ', reservationId)
 
   // 더미 데이터: 가게 이름과 가게 사진
   const [storeName] = useState('김밥천국');
