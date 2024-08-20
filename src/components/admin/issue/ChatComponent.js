@@ -104,10 +104,22 @@ const ChatComponent = ({ issueId, type }) => {
                 <h2>Customer Support</h2>
                 <div className={styles.loading}>
                     Customer support team is on their way...
+                    잠시만 기다려주세요!
                 </div>
             </div>
         );
     }
+
+    const solveIssueHandler = () => {
+        alert("이슈가 해결되어 채팅 내용이 저장됩니다.");
+        console.log("solveeeeeed");
+    }
+
+    const quitIssueHandler = () => {
+        alert("채팅을 종료합니다.");
+        console.log("quitttttt")
+    }
+
 
     // 3. 관리자가 채팅을 시작하면 실시간 채팅을 보여줍니다.
     return (
@@ -134,6 +146,21 @@ const ChatComponent = ({ issueId, type }) => {
                     disabled={type === 'customer' && !adminStarted} // 관리자가 시작하지 않으면 고객은 메시지 입력 불가
                 />
                 <button onClick={() => sendMessage()} disabled={!connected || (type === 'customer' && !adminStarted)}>Send</button>
+            </div>
+            <div className={styles.chatButtonBox}>
+                {
+                    type === 'admin' &&
+                        <div>
+                            <button onClick={solveIssueHandler}>
+                                해결 완료
+                            </button>
+                        </div>
+                }
+                <div>
+                    <button onClick={quitIssueHandler}>
+                        채팅 끝내기
+                    </button>
+                </div>
             </div>
         </div>
     );

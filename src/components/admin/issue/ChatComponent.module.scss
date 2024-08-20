@@ -3,6 +3,15 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+
+  .chatButtonBox {
+    position: absolute;
+    bottom: 25px;
+    left: 100px;
+    display: flex;
+    width: 60%;
+    justify-content: space-evenly;
+  }
 }
 
 .chatBoxHeader {
@@ -88,3 +97,4 @@ button {
 button:disabled {
   background-color: #ccc;
 }
+
