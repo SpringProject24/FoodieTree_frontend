@@ -5,7 +5,7 @@ export const IssueColumns = (openModal) => [
 
     {
         accessorKey: 'customerId',
-        header: 'ID',
+        header: '고객 ID',
         cell: (props) => <p>{props.getValue()}</p>,
         size: 50,
         meta: {
@@ -14,7 +14,7 @@ export const IssueColumns = (openModal) => [
     },
     {
         accessorKey: 'issueCategory',
-        header: 'Category',
+        header: '문의 유형',
         cell: (props) => <p>{props.getValue()}</p>,
         size: 100,
         meta: {
@@ -22,10 +22,10 @@ export const IssueColumns = (openModal) => [
         },
     },
     {
-        accessorKey: 'issueCompleteAt',
-        header: 'Status',
+        accessorKey: 'status',
+        header: '해결 여부',
         cell: (props) => (
-            <p>{props.getValue() ? 'SOLVED' : 'Incomplete'}</p>
+            <p>{props.getValue()}</p>
         ),
         size: 100,
         meta: {
@@ -34,7 +34,7 @@ export const IssueColumns = (openModal) => [
     },
     {
         accessorKey: 'makeIssueAt',
-        header: 'Created At',
+        header: '등록일',
         cell: (props) => <p>{formatDate(props.getValue())}</p>,
         size: 150,
         meta: {
@@ -43,7 +43,7 @@ export const IssueColumns = (openModal) => [
     },
     {
         id: 'moveToChat',
-        header: 'Action',
+        header: '채팅내역 및 채팅방 이동',
         cell: (props) => {
 
             const status = props.row.original.issueCompleteAt; // Assuming `issueCompleteAt` is null or falsy when incomplete
