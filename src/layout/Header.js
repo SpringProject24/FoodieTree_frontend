@@ -88,7 +88,6 @@ const Header = () => {
             <div className={styles.selectedAreaCategory}>Now</div>
             <div className={styles.selectedAreaCategoryBtn}></div>
 
-
             {/* 상점 검색 칸 */}
             {/*로그인을 하지 않아도 검색칸은 보이되, 로그인이 필요한 서비스 안내하기*/}
             {

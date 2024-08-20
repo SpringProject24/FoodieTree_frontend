@@ -27,3 +27,15 @@
   cursor: pointer;
   border: #03684e solid;
 }
+
+.admin {
+  position: absolute;
+  top: 55px;
+  font-size: 12px;
+}
+
+@media (max-width: 400px) {
+  .myInfo, .myIconContainer {
+    display: none;
+  }
+}
