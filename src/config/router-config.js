@@ -23,8 +23,12 @@ import MyFavMap from "../components/customer/my-fav-map/MyFavMap";
 import AdminPage from "../pages/AdminPage";
 import NaverMapWithSearch from "../components/customer/my-fav-map/NaverMapWithSearch";
 import Main from "../pages/Main";
+import CommunityReviewPage from "../pages/Community/CommunityPage";
+import ReviewForm from "../pages/Community/ReviwForm";
+import CommunityMainPage from "../pages/Community/CommunityMainPage";
 import Search from "../pages/search/Search";
-
+import ProtectedRouter from "../pages/auth/ProtectedRouter";
+import CustomerMyPageOutlet from "../pages/customer/CustomerMyPageOutlet";
 
 const homeRouter = [
     {
@@ -61,8 +65,20 @@ const homeRouter = [
         element: <CategoriesPage/>,
     },
     {
+        path: '/reviewCommunity',
+        element: <CommunityReviewPage />,
+    },
+    {
+        path: '/reviewForm',
+        element: <ReviewForm />,
+    },
+    {
+        path: '/reviewMain',
+        element: <CommunityMainPage />,
+    },
+    {
         path: '/search',
-        element: <Search/>
+        element: <Search/>,
     }
 ];
 const customerMyPageRouter = [
@@ -109,17 +125,30 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/store',
-                element: <StoreMyPageOutlet/>,
+                element: (
+                    <ProtectedRouter>
+                        <StoreMyPageOutlet/>
+                    </ProtectedRouter>
+                ),
                 children: storeRouter
             },
             {
                 path: '/customer',
+                element: (
+                    <ProtectedRouter>
+                        <CustomerMyPageOutlet/>
+                    </ProtectedRouter>
+                ),
                 children: customerMyPageRouter
             },
             {
                 path: '/admin',
-                element: <AdminPage/>,
-            },
+                element: (
+                    <ProtectedRouter>
+                        <AdminPage/>
+                    </ProtectedRouter>
+                )
+            }
         ]
     },
 ]);

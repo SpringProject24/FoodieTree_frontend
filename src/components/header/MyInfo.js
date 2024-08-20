@@ -4,7 +4,7 @@ import { faCircleUser, faStore } from "@fortawesome/free-solid-svg-icons";
 import styles from "./MyInfo.module.scss";
 import { useNavigate } from "react-router-dom";
 import {getRefreshToken, getSubName, getToken, getUserRole} from "../../utils/authUtil";
-import Notification from "../socket/Notification";
+import Notification from "../notification/Notification";
 
 // 내 정보 들어가기
 const MyInfo = () => {
@@ -30,6 +30,8 @@ const MyInfo = () => {
                     if (getUserRole() === 'store') {
                         localStorage.setItem('userImage', data.productImg);
                     } else if (getUserRole() === 'customer') {
+                        localStorage.setItem('userImage', data.profileImage);
+                    } else if (getUserRole() === 'store') {
                         localStorage.setItem('userImage', data.profileImage);
                     }
 
@@ -85,6 +87,18 @@ const MyInfo = () => {
                             className={styles.profileImage}
                             onClick={() => handleIconClick("/customer")}
                         />
+                    </>
+                ) : getUserRole() === 'admin' ? (
+                    <>
+                        {/* Admin 아이콘과 프로필 이미지 */}
+
+                        <img
+                            src={userInfo.profileImage}
+                            alt="Customer Profile"
+                            className={styles.profileImage}
+                            onClick={() => handleIconClick("/customer")}
+                        />
+                        <span className={styles.admin}>ADMIN</span>
                     </>
                 ) : null}
             </div>
