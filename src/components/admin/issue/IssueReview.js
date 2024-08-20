@@ -1,6 +1,6 @@
 import React from 'react';
-
-const IssueReview = ({issueDetail, reservationDetail}) => {
+import styles from './IssueReview.module.scss';
+const IssueReview = ({issueDetail, reservationDetail, issuePhotos}) => {
 
     return (
         <div>
@@ -15,6 +15,19 @@ const IssueReview = ({issueDetail, reservationDetail}) => {
             <h2>reservationId: {reservationDetail.reservationId}</h2>
             <div>고객 id: {reservationDetail.customerId}</div>
             <div>상품 id: {reservationDetail.productId}</div>
+
+            <div> -------- 사진 ----------</div>
+            <div className={styles.photoGallery}>
+                {issuePhotos.map((photo) => (
+                    <div key={photo.issuePhotoId} className={styles.photoItem}>
+                        <img
+                            src={photo.issuePhoto}
+                            alt={`Issue photo ${photo.issuePhotoId}`}
+                            className={styles.photoImage}
+                        />
+                    </div>
+                ))}
+            </div>
 
         </div>
     );

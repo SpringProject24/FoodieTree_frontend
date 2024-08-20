@@ -88,7 +88,27 @@ export const IssueColumns = (openModal) => [
                         }
                         const reservationDetail = await response.json();
 
-                        openModal('adminIssueReview', {issueId, issueDetail, reservationDetail});
+                        try {
+                            const resp = await fetch(ISSUE_URL + `/photo/${issueId}`);
+
+                            if (!resp.ok) {
+                                const errorMessage = await resp.text();
+                                alert(errorMessage);
+                                return null;
+                            }
+
+                            const issuePhotos = await resp.json();
+                            console.log("issuePhotosss "+JSON.stringify(issuePhotos));
+
+                            openModal('adminIssueReview', {issueId, issueDetail, reservationDetail, issuePhotos});
+
+                        }catch (e) {
+                            console.error('Error fetching photo data:', e);
+                            alert('Failed to fetch photo data.');
+                        }
+
+
+
 
                     }catch (e) {
                         console.error('Error fetching reservation data:', e);

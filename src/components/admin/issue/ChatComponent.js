@@ -127,6 +127,17 @@ const ChatComponent = ({ issueId, type }) => {
         }
     };
 
+    const fetchBase64Image = async (url) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    };
+
     const sendFiles = async () => {
         if (selectedFiles.length === 0) {
             console.error('No files selected.');
@@ -150,9 +161,10 @@ const ChatComponent = ({ issueId, type }) => {
             }
 
             const fileUrls = await response.json();
-            for (const url of fileUrls) {
+            const base64Images = await Promise.all(fileUrls.map(fetchBase64Image));
+            for (const base64Image of base64Images) {
                 sendMessage({
-                    content: `Image uploaded: ${url}`,
+                    content: base64Image,
                     sender: type
                 });
             }
