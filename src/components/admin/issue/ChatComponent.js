@@ -10,6 +10,7 @@ const ChatComponent = ({issueId, type}) => {
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState('');
+    const [selectedFiles, setSelectedFiles] = useState([]); // 여러 파일 선택 가능하도록 변경
     const [categorySelected, setCategorySelected] = useState(false);
     const [adminStarted, setAdminStarted] = useState(false); // 관리자가 채팅 시작 여부
     const chatBoxRef = useRef(null);
@@ -56,8 +57,8 @@ const ChatComponent = ({issueId, type}) => {
     };
 
     const updateIssueCategory = async (selectedCategory, issueId) => {
-        try{
-            const response = await fetch(ISSUE_URL + `/category`, {
+        try {
+            await fetch(ISSUE_URL + `/category`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,15 +67,15 @@ const ChatComponent = ({issueId, type}) => {
                     issueId: issueId,
                     issueCategory: selectedCategory,
                 }),
-            })
+            });
         } catch (e) {
             console.error('Error:', e);
         }
-    }
+    };
 
     const handleCategorySelect = (selectedCategory) => {
         setCategorySelected(true);
-        console.log("selectedCATEGORYYYYYY: "+selectedCategory)
+        console.log("selectedCATEGORYYYYYY: "+selectedCategory);
         updateIssueCategory(selectedCategory, issueId).then(r => {
             sendMessage({
                 content: `Issue Category Selected: ${selectedCategory}`,
@@ -103,6 +104,46 @@ const ChatComponent = ({issueId, type}) => {
             if (!messageOverride) setMessageInput('');
         } else {
             console.error('STOMP client is not connected.');
+        }
+    };
+
+    const handleFileChange = (event) => {
+        setSelectedFiles(event.target.files); // 여러 파일 선택 가능하도록 변경
+    };
+
+    const sendFiles = async () => {
+        if (selectedFiles.length === 0) {
+            console.error('No files selected.');
+            return;
+        }
+
+        const formData = new FormData();
+        for (const file of selectedFiles) {
+            formData.append('files', file);
+        }
+        formData.append('issueId', issueId);
+
+        try {
+            const response = await fetch(ISSUE_URL + '/uploadPhoto', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to upload images.');
+            }
+
+            const fileUrls = await response.json();
+            for (const url of fileUrls) {
+                sendMessage({
+                    content: `Image uploaded: ${url}`,
+                    sender: type
+                });
+            }
+
+            setSelectedFiles([]); // 파일 선택 초기화
+        } catch (error) {
+            console.error('Error uploading files:', error);
         }
     };
 
@@ -135,23 +176,22 @@ const ChatComponent = ({issueId, type}) => {
     };
 
     const solveIssueHandler = () => {
-        let done = "solved";
+        const done = "solved";
         saveChatToDatabase(done).then(() => {
             alert("이슈가 해결되어 채팅 내용이 저장됩니다.");
             console.log("Issue solved and chat saved.");
             closeModal();
         });
-    }
+    };
 
     const quitIssueHandler = () => {
-
-        let done = "cancel";
+        const done = "cancel";
         saveChatToDatabase(done).then(() => {
             alert("채팅을 종료합니다.");
             console.log("Chat ended and saved.");
             closeModal();
         });
-    }
+    };
 
     if (!categorySelected && type === 'customer') {
         return (
@@ -206,6 +246,14 @@ const ChatComponent = ({issueId, type}) => {
                 <button onClick={() => sendMessage()}
                         disabled={!connected || (type === 'customer' && !adminStarted)}>Send
                 </button>
+            </div>
+            <div className={styles.fileUpload}>
+                <input
+                    type="file"
+                    multiple
+                    onChange={handleFileChange}
+                />
+                <button onClick={sendFiles} disabled={!connected || (type === 'customer' && !adminStarted)}>Upload Image(s)</button>
             </div>
             <div className={styles.chatButtonBox}>
                 <div>
