@@ -147,8 +147,15 @@ const Notification = ({email, role}) => {
       navigate(`/${role}`);
     }
   };
-  const readAllHandler = () => {
-
+  // 모든 알림 읽음 처리
+  const readAllHandler = async () => {
+    const payload = {
+      ids: notifications.filter(n=>n.read == null).map(n=>n.id)
+    }
+    const res = await authFetch('/notification/all', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
   }
 
   return (
@@ -159,7 +166,7 @@ const Notification = ({email, role}) => {
       <ul className={`${styles['notify-list']} ${!isOpen && styles.close}`}>
         <li>
           <span>알림 {notifications.length}건</span>
-          <button onClick={readAllHandler}>전체 읽음</button>
+          <button className={styles['read-all-btn']} onClick={readAllHandler}>전체 읽음</button>
         </li>
         {notifications?.slice().reverse().map((n, index) => (
           <li key={index} onClick={() => notificationClickHandler(n)}>
