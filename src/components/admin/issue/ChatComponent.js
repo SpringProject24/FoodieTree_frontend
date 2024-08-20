@@ -15,8 +15,8 @@ const ChatComponent = ({issueId, type}) => {
     const [adminStarted, setAdminStarted] = useState(false); // 관리자가 채팅 시작 여부
     const chatBoxRef = useRef(null);
     const {closeModal} = useModal();
+    const [previewImages, setPreviewImages] = useState([]); // 미리보기 이미지 상태 추가
 
-    console.log("chatComponent issueId: ", issueId);
     useEffect(() => {
         const socket = new SockJS('http://172.30.1.73:3000/chat');
         const stompClient = Stomp.over(() => socket);
@@ -84,6 +84,16 @@ const ChatComponent = ({issueId, type}) => {
         });
     };
 
+    const handleFileChange = (event) => {
+        const files = event.target.files;
+        const fileArray = Array.from(files);
+
+        setSelectedFiles(fileArray);
+
+        const previewUrls = fileArray.map(file => URL.createObjectURL(file));
+        setPreviewImages(previewUrls);
+    };
+
     const sendMessage = (messageOverride = null) => {
         const messageToSend = messageOverride || {
             content: messageInput ? messageInput.trim() : '',
@@ -105,10 +115,6 @@ const ChatComponent = ({issueId, type}) => {
         } else {
             console.error('STOMP client is not connected.');
         }
-    };
-
-    const handleFileChange = (event) => {
-        setSelectedFiles(event.target.files); // 여러 파일 선택 가능하도록 변경
     };
 
     const sendFiles = async () => {
@@ -142,6 +148,7 @@ const ChatComponent = ({issueId, type}) => {
             }
 
             setSelectedFiles([]); // 파일 선택 초기화
+            setPreviewImages([]); // 미리보기 이미지 초기화
         } catch (error) {
             console.error('Error uploading files:', error);
         }
@@ -253,7 +260,19 @@ const ChatComponent = ({issueId, type}) => {
                     multiple
                     onChange={handleFileChange}
                 />
-                <button onClick={sendFiles} disabled={!connected || (type === 'customer' && !adminStarted)}>Upload Image(s)</button>
+                <button onClick={sendFiles} disabled={!connected || (type === 'customer' && !adminStarted)}>Upload
+                    Image(s)
+                </button>
+            </div>
+            <div className={styles.imagePreviewContainer}>
+                {previewImages.map((image, index) => (
+                    <img
+                        key={index}
+                        src={image}
+                        alt={`preview-${index}`}
+                        className={styles.previewImage}
+                    />
+                ))}
             </div>
             <div className={styles.chatButtonBox}>
                 <div>
