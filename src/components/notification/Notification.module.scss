@@ -87,3 +87,9 @@
  background: #fec0c0;
   border-color: #fca2a2;
 }
+
+@media (max-width: 400px) {
+  .notify-icon {
+    position: inherit;
+  }
+}
