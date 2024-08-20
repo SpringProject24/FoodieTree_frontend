@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
+import {Stomp} from '@stomp/stompjs';
 import styles from './ChatComponent.module.scss';
 
-const ChatComponent = ({ issueId, type }) => {
+const ChatComponent = ({issueId, type}) => {
     const [stompClient, setStompClient] = useState(null);
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
@@ -145,17 +145,17 @@ const ChatComponent = ({ issueId, type }) => {
                     placeholder="Type your message..."
                     disabled={type === 'customer' && !adminStarted} // 관리자가 시작하지 않으면 고객은 메시지 입력 불가
                 />
-                <button onClick={() => sendMessage()} disabled={!connected || (type === 'customer' && !adminStarted)}>Send</button>
+                <button onClick={() => sendMessage()}
+                        disabled={!connected || (type === 'customer' && !adminStarted)}>Send
+                </button>
             </div>
             <div className={styles.chatButtonBox}>
-                {
-                    type === 'admin' &&
-                        <div>
-                            <button onClick={solveIssueHandler}>
-                                해결 완료
-                            </button>
-                        </div>
-                }
+                <div>
+                    <button onClick={solveIssueHandler}>
+                        해결 완료
+                    </button>
+                </div>
+                
                 <div>
                     <button onClick={quitIssueHandler}>
                         채팅 끝내기
