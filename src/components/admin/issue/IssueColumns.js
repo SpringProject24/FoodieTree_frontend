@@ -46,7 +46,7 @@ export const IssueColumns = (openModal) => [
         header: '채팅내역 및 채팅방 이동',
         cell: (props) => {
 
-            const status = props.row.original.issueCompleteAt; // Assuming `issueCompleteAt` is null or falsy when incomplete
+            const status = props.row.original.status; // Assuming `issueCompleteAt` is null or falsy when incomplete
 
             const handleMoveToChat = () => {
                 const issueId = props.row.original.issueId; // Replace with the correct identifier for your issue
@@ -61,7 +61,7 @@ export const IssueColumns = (openModal) => [
             }
 
             return (
-                status ? (
+                status!=="PENDING" ? (
                     <button onClick={handleIssueReview}>
                         이슈 조회하기
                     </button>
