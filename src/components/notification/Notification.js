@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import SockJS from 'sockjs-client';
 import {Stomp} from '@stomp/stompjs';
 import styles from './Notification.module.scss';
@@ -15,7 +15,7 @@ const Notification = ({email, role}) => {
   const location = useLocation(); // Use useLocation to detect route changes
   const BASE_URL = window.location.origin;
   const navigate = useNavigate();
-  console.log('BASE_URL 값 ', BASE_URL)
+  const notifyRef = useRef(null);
 
   console.log('이메일 ', email, role);
   let customerId = null;
@@ -36,11 +36,13 @@ const Notification = ({email, role}) => {
       const data = await response.json();
       console.log('fetchNotifications data 결과 ', data)
       setNotifications(data);
+      if(data.some(d => d.read == null)) {
+        setHasNewMessage(true);
+      }
     } catch (error) {
       console.error('알림 목록 fetch Error :', error);
     }
   };
-
   // REST API로 알림 목록 fetch (링크 이동 시 리렌더링)
   useEffect(() => {
     console.log("fetch 알림 리스트 useEffect 실행!")
@@ -88,6 +90,18 @@ const Notification = ({email, role}) => {
       }
     };
   }, [customerId, storeId]);
+  // 알림 목록 외부 클릭 시 닫히도록 설정
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notifyRef.current && !notifyRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [notifyRef]);
 
   const toggleAlerts = () => {
     setIsOpen(!isOpen);
@@ -122,8 +136,9 @@ const Notification = ({email, role}) => {
     }
     if(type.includes('REVIEW')) {
       try {
-        const res = await authFetch(`/check/review/${reservationId}`, {method: 'GET'});
+        const res = await authFetch(`/review/check/${reservationId}`, {method: 'GET'});
         const flag = await res.json();
+        console.log(flag)
         flag ? navigate('/reviewCommunity') : navigate(`/reviewForm/${reservationId}`)
       } catch (error) {
         console.error('리뷰 작성 여부 확인 중 오류 발생! ', error);
@@ -132,14 +147,20 @@ const Notification = ({email, role}) => {
       navigate(`/${role}`);
     }
   };
+  const readAllHandler = () => {
+
+  }
 
   return (
-    <div className={styles['notify-container']}>
+    <div className={styles['notify-container']} ref={notifyRef} >
       <div className={`${styles['notify-icon']} ${hasNewMessage && styles.new}`} onClick={toggleAlerts}>
         <IoNotificationsOutline/>
       </div>
       <ul className={`${styles['notify-list']} ${!isOpen && styles.close}`}>
-        <li>알림 {notifications.length}건</li>
+        <li>
+          <span>알림 {notifications.length}건</span>
+          <button onClick={readAllHandler}>전체 읽음</button>
+        </li>
         {notifications?.slice().reverse().map((n, index) => (
           <li key={index} onClick={() => notificationClickHandler(n)}>
             <span className={getClassNameByType(n.type)}>{n.label}</span>
