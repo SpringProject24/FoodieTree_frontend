@@ -1,6 +1,6 @@
 .chatListContainer{
   width: 50%;
-  outline: solid;
+  border-right: 1px solid rgba(80, 80, 80, 0.24);
 
   .tableInteraction{
     display: flex;
@@ -19,5 +19,9 @@
     justify-content: space-around;
     align-items: center;
     line-height: 24px;
+  }
+
+  .tansTable{
+    width: 740px;
   }
 }

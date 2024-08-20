@@ -4,12 +4,11 @@ const BASE_URL = window.location.origin;
 
 const centerFlex = {style: {justifyContent: 'center', paddingLeft: '0'}};
 export const IssueColumns = (openModal) => [
-
     {
         accessorKey: 'customerId',
         header: '고객 ID',
         cell: (props) => <p>{props.getValue()}</p>,
-        size: 50,
+        size: 120,
         meta: {
             cellProps: centerFlex,
         },
@@ -18,7 +17,7 @@ export const IssueColumns = (openModal) => [
         accessorKey: 'issueCategory',
         header: '문의 유형',
         cell: (props) => <p>{props.getValue()}</p>,
-        size: 100,
+        size: 150,
         meta: {
             cellProps: centerFlex,
         },
@@ -29,7 +28,7 @@ export const IssueColumns = (openModal) => [
         cell: (props) => (
             <p>{props.getValue()}</p>
         ),
-        size: 100,
+        size: 150,
         meta: {
             cellProps: centerFlex,
         },
@@ -108,17 +107,17 @@ export const IssueColumns = (openModal) => [
 
             return (
                 status !== "PENDING" ? (
-                    <button onClick={handleIssueReview}>
+                    <button style={{margin:'8px' , background: 'lightgrey', color: 'black', width: '110px'}} onClick={handleIssueReview}>
                         이슈 조회하기
                     </button>
                 ) : (
-                    <button onClick={handleMoveToChat}>
+                    <button style={{margin:'8px', width: '110px'}} onClick={handleMoveToChat}>
                         채팅방으로 이동
                     </button>
                 )
             );
         },
-        size: 100,
+        size: 170,
         meta: {
             cellProps: centerFlex,
         },
@@ -144,9 +143,7 @@ const formatDate = (dateTimeStr) => {
     const hours = formatNumber(inputDateTime.getHours());
     const minutes = formatNumber(inputDateTime.getMinutes());
 
-    if (!isToday) {  // 오늘 날짜인 경우 시간만 포맷팅
-        return `${hours}:${minutes}`;
-    } else if (isThisYear) {  // 올해인 경우 월일과 시간 포맷팅
+     if (isThisYear) {  // 올해인 경우 월일과 시간 포맷팅
         return `${month}-${day} ${hours}:${minutes}`;
     } else {  // 그 외의 경우 연월일과 시간 포맷팅
         return `${year}-${month}-${day} ${hours}:${minutes}`;

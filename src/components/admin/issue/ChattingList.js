@@ -68,9 +68,9 @@ const ChattingList = () => {
         <div className={styles.chatListContainer}>
             <IssueSummary stats={stats} />
             <div className={styles.tableInteraction}>
-                <FiltersInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters} />
+                {/*<FiltersInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters} />*/}
             </div>
-            <TansTable style={{width:"100%"}} table={table} />
+            <TansTable style={styles.tansTable} table={table} />
             <TansPagination style={styles.tansPageContainer} table={table} />
         </div>
     );
