@@ -156,12 +156,12 @@ const ChatComponent = ({issueId, type}) => {
     if (!categorySelected && type === 'customer') {
         return (
             <div className={styles.chatContainer}>
-                <h2>Select an Issue Category</h2>
+                <h2 className={styles.chatTitle}>문의 유형을 선택해주세요!</h2>
                 <div className={styles.categorySelection}>
-                    <button onClick={() => handleCategorySelect('상품')}>상품</button>
-                    <button onClick={() => handleCategorySelect('업체')}>업체</button>
-                    <button onClick={() => handleCategorySelect('시스템')}>시스템</button>
-                    <button onClick={() => handleCategorySelect('기타')}>기타</button>
+                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('상품')}>상품 관련 문의에요</button>
+                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('업체')}>업체 관련 문의에요</button>
+                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('시스템')}>시스템 관련 문의에요</button>
+                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('기타')}>그 외의 문의에요</button>
                 </div>
             </div>
         );
@@ -173,6 +173,7 @@ const ChatComponent = ({issueId, type}) => {
                 <h2>Customer Support</h2>
                 <div className={styles.loading}>
                     Customer support team is on their way...
+                    <br/>
                     잠시만 기다려주세요!
                 </div>
             </div>

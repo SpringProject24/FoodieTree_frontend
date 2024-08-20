@@ -12,6 +12,34 @@
     width: 60%;
     justify-content: space-evenly;
   }
+
+  .chatTitle{
+    margin-top: 77px;
+    font-size: 19px;
+    font-weight: 600;
+  }
+
+  .categorySelection{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 45%;
+    justify-content: space-evenly;
+
+    .categoryBtn{
+      padding: 16px 10px;
+      width: 49%;
+      background-color: #a6caf3;
+      color: #1f1d1f;
+      font-size: 16px;
+    }
+
+    .categoryBtn:hover{
+      background-color: #007bff;
+      color: white;
+    }
+
+  }
 }
 
 .chatBoxHeader {
@@ -100,5 +128,13 @@ button {
 
 button:disabled {
   background-color: #ccc;
+}
+
+@media (max-width: 400px){
+    .chatContainer {
+        .chatButtonBox {
+
+        }
+    }
 }
 

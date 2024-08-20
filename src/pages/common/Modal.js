@@ -44,7 +44,7 @@ const Modal = () => {
                     setCustomStyle({width: '750px'});
                 }
             } else if (type === 'customerIssueChatting' || type === 'adminIssueChatting') {
-                setCustomStyle({bottom: '0', height: '78%', overflowY: 'none'})
+                setCustomStyle({bottom: '0px', height: '78%', overflowY: 'none'})
                 setCustomInnerContentStyle({height: '764px', marginBottom: '50px', padding: '0'})
             } else {
                 setCustomStyle({});
