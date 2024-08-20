@@ -101,28 +101,35 @@ const Notification = ({email, role}) => {
   }
   // 하나의 알림 클릭 시 읽음 처리
   const notificationClickHandler = async (notification) => {
-    const {id, type, targetId} = notification;
+    const {id, type, targetId, read} = notification;
     console.log('클릭한 알림의 id ', id)
-    console.log('클릭한 알림의 targetId ', targetId[0])
-    // 알림 읽음 처리 API 호출
-    try {
-      const response = await authFetch(`/notification/${id}/read`, {
-        method: 'PATCH',
-      });
-      if (response.ok) {
-        setNotifications(prev =>
-          prev.map(n =>
-            n.id === id ? { ...n, isRead: true } : n
-          )
-        );
+    const reservationId = targetId[0];
+    if(!read) {
+      try {
+        const response = await authFetch(`/notification/${id}/read`, {
+          method: 'PATCH',
+        });
+        if (response.ok) {
+          setNotifications(prev =>
+            prev.map(n =>
+              n.id === id ? { ...n, isRead: true } : n
+            )
+          );
+        }
+      } catch (error) {
+        console.error('알림 읽음 처리 중 오류 발생:', error);
       }
-      if(type.includes('REVIEW')) {
-        navigate(`/reviewForm?r=${targetId[0]}`)
-      } else {
-        navigate(`/${role}`);
+    }
+    if(type.includes('REVIEW')) {
+      try {
+        const res = await authFetch(`/check/review/${reservationId}`, {method: 'GET'});
+        const flag = await res.json();
+        flag ? navigate('/reviewCommunity') : navigate(`/reviewForm/${reservationId}`)
+      } catch (error) {
+        console.error('리뷰 작성 여부 확인 중 오류 발생! ', error);
       }
-    } catch (error) {
-      console.error('알림 읽음 처리 중 오류 발생:', error);
+    } else {
+      navigate(`/${role}`);
     }
   };
 

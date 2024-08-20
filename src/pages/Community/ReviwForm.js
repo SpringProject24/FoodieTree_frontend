@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ReviewForm.module.scss';
 import Rating from '@mui/material/Rating';
-import {useLocation} from "react-router-dom";
+import {useParams} from "react-router-dom";
 
 // 해시태그를 백엔드에서 기대하는 Enum으로 매핑
 const hashtagMapping = {
@@ -34,9 +34,7 @@ const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [rating, setRating] = useState(0); // 별점 상태 추가
 
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const rId = queryParams.get('r');
+  const { rId } = useParams(); // 경로에서 id를 가져옴
   console.log('알림에서 전달된 예약Id ', rId)
 
   const handleImageChange = (e) => {
