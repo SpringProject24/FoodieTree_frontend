@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import SockJS from 'sockjs-client';
 import {Stomp} from '@stomp/stompjs';
 import styles from './ChatComponent.module.scss';
+import {ISSUE_URL} from "../../../config/host-config";
+import {useModal} from "../../../pages/common/ModalProvider";
 
 const ChatComponent = ({issueId, type}) => {
     const [stompClient, setStompClient] = useState(null);
@@ -11,9 +13,11 @@ const ChatComponent = ({issueId, type}) => {
     const [categorySelected, setCategorySelected] = useState(false);
     const [adminStarted, setAdminStarted] = useState(false); // 관리자가 채팅 시작 여부
     const chatBoxRef = useRef(null);
+    const {closeModal} = useModal();
 
+    console.log("chatComponent issueId: ", issueId);
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8083/chat');
+        const socket = new SockJS('http://172.30.1.73:3000/chat');
         const stompClient = Stomp.over(() => socket);
 
         stompClient.connect({}, (frame) => {
@@ -51,11 +55,31 @@ const ChatComponent = ({issueId, type}) => {
         setMessages((prevMessages) => [...prevMessages, message]);
     };
 
+    const updateIssueCategory = async (selectedCategory, issueId) => {
+        try{
+            const response = await fetch(ISSUE_URL + `/category`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    issueId: issueId,
+                    issueCategory: selectedCategory,
+                }),
+            })
+        } catch (e) {
+            console.error('Error:', e);
+        }
+    }
+
     const handleCategorySelect = (selectedCategory) => {
         setCategorySelected(true);
-        sendMessage({
-            content: `Issue Category Selected: ${selectedCategory}`,
-            sender: type
+        console.log("selectedCATEGORYYYYYY: "+selectedCategory)
+        updateIssueCategory(selectedCategory, issueId).then(r => {
+            sendMessage({
+                content: `Issue Category Selected: ${selectedCategory}`,
+                sender: type
+            });
         });
     };
 
@@ -66,7 +90,6 @@ const ChatComponent = ({issueId, type}) => {
             sender: type // 'admin' 또는 'customer'
         };
 
-        // Debugging: Log the message before sending
         console.log('Message to Send:', messageToSend);
 
         if (!messageToSend.content || messageToSend.content.trim() === '') {
@@ -83,21 +106,67 @@ const ChatComponent = ({issueId, type}) => {
         }
     };
 
-    // 1. 고객이 이슈 카테고리를 선택해야 합니다.
+    const saveChatToDatabase = async (done) => {
+        const fullChatText = messages.map(msg => `${msg.sender === 'customer' ? 'Customer' : 'Admin'}: ${msg.content}`).join('\n');
+
+        try {
+            const response = await fetch(ISSUE_URL + `/saveText`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    issueId: issueId,
+                    issueText: fullChatText,
+                    done: done,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save chat to the database.');
+            }
+
+            alert('Chat saved successfully.');
+
+        } catch (e) {
+            console.error('Error saving chat:', e);
+            alert('Failed to save chat.');
+        }
+    };
+
+    const solveIssueHandler = () => {
+        let done = "solved";
+        saveChatToDatabase(done).then(() => {
+            alert("이슈가 해결되어 채팅 내용이 저장됩니다.");
+            console.log("Issue solved and chat saved.");
+            closeModal();
+        });
+    }
+
+    const quitIssueHandler = () => {
+
+        let done = "cancel";
+        saveChatToDatabase(done).then(() => {
+            alert("채팅을 종료합니다.");
+            console.log("Chat ended and saved.");
+            closeModal();
+        });
+    }
+
     if (!categorySelected && type === 'customer') {
         return (
             <div className={styles.chatContainer}>
                 <h2>Select an Issue Category</h2>
                 <div className={styles.categorySelection}>
-                    <button onClick={() => handleCategorySelect('Billing')}>Billing</button>
-                    <button onClick={() => handleCategorySelect('Technical Support')}>Technical Support</button>
-                    <button onClick={() => handleCategorySelect('General Inquiry')}>General Inquiry</button>
+                    <button onClick={() => handleCategorySelect('상품')}>상품</button>
+                    <button onClick={() => handleCategorySelect('업체')}>업체</button>
+                    <button onClick={() => handleCategorySelect('시스템')}>시스템</button>
+                    <button onClick={() => handleCategorySelect('기타')}>기타</button>
                 </div>
             </div>
         );
     }
 
-    // 2. 고객이 카테고리를 선택한 후, 관리자가 참여할 때까지 대기합니다.
     if (!adminStarted && type === 'customer') {
         return (
             <div className={styles.chatContainer}>
@@ -110,18 +179,6 @@ const ChatComponent = ({issueId, type}) => {
         );
     }
 
-    const solveIssueHandler = () => {
-        alert("이슈가 해결되어 채팅 내용이 저장됩니다.");
-        console.log("solveeeeeed");
-    }
-
-    const quitIssueHandler = () => {
-        alert("채팅을 종료합니다.");
-        console.log("quitttttt")
-    }
-
-
-    // 3. 관리자가 채팅을 시작하면 실시간 채팅을 보여줍니다.
     return (
         <div className={styles.chatContainer}>
             <div className={styles.chatBoxBody} ref={chatBoxRef}>

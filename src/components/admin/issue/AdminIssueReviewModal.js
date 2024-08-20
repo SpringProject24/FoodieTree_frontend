@@ -1,11 +1,11 @@
 import React from 'react';
 import IssueReview from "./IssueReview";
 
-const AdminIssueReviewModal = () => {
+const AdminIssueReviewModal = ({issueId, issueDetail, reservationDetail}) => {
 
     return (
         <>
-            <IssueReview/>
+            <IssueReview issueId={issueId} issueDetail={issueDetail} reservationDetail={reservationDetail}/>
         </>
     );
 };

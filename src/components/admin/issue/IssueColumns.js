@@ -1,4 +1,6 @@
 import React from "react";
+import {ISSUE_URL} from "../../../config/host-config";
+const BASE_URL = window.location.origin;
 
 const centerFlex = {style: {justifyContent: 'center', paddingLeft: '0'}};
 export const IssueColumns = (openModal) => [
@@ -54,18 +56,62 @@ export const IssueColumns = (openModal) => [
                 console.log('Move to Chat Room', issueId);
             };
 
-            const handleIssueReview = () => {
+            const handleIssueReview = async () => {
                 const issueId = props.row.original.issueId; // Replace with the correct identifier for your issue
-                openModal('adminIssueReview', {issueId});
+
+                try{
+                    const res = await fetch(`${ISSUE_URL}/detail?issueId=${issueId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Cache-Control': 'no-cache',
+                        },
+                    });
+
+                    if (!res.ok) {
+                        const errorMessage = await res.text();
+                        alert(errorMessage);
+                        return null;
+                    }
+
+                    const issueDetail = await res.json();
+                    console.log('Issue Data:', issueDetail);
+
+                    const reservationId = issueDetail.reservationId;
+                    console.log('Reservation ID:', reservationId);
+                    try{
+                        const response = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
+
+                        if (!res.ok) {
+                            const errorMessage = await response.text();
+                            alert(errorMessage);
+                            return null;
+                        }
+                        const reservationDetail = await response.json();
+
+                        openModal('adminIssueReview', {issueId, issueDetail, reservationDetail});
+
+                    }catch (e) {
+                        console.error('Error fetching reservation data:', e);
+                        alert('Failed to fetch reservation data.');
+                    }
+
+
+                } catch (e) {
+                    console.error('Error fetching issue data:', e);
+                    alert('Failed to fetch issue data.');
+                }
+
+
                 console.log('Move to Issue Review', issueId);
             }
 
             return (
-                status!=="PENDING" ? (
+                status !== "PENDING" ? (
                     <button onClick={handleIssueReview}>
                         이슈 조회하기
                     </button>
-                ): (
+                ) : (
                     <button onClick={handleMoveToChat}>
                         채팅방으로 이동
                     </button>
