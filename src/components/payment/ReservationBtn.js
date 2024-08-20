@@ -1,23 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from "../../pages/product/BottomPlaceOrder.module.scss";
 import {authFetch} from "../../utils/authUtil";
 import {useModal} from "../../pages/common/ModalProvider";
 import * as PortOne from "@portone/browser-sdk/v2";
 import {createReservationFetch, requestPayment} from "./payment";
+import PaymentRequestModal from "../../pages/payment/PaymentRequestModal";
+import SubModalPortal from "../../pages/payment/SubModalPortal";
 
-const ReservationBtn = ({ tar : {remainProduct, productDetail, initialCount }}) => {
-    const { closeModal } = useModal();
+const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, initialCount, cntHandler=null }}) => {
+    const [isShow, setIsShow] = useState(false);
+    const { closeModal, openModal } = useModal();
     const isReservation = remainProduct === 0;
-    const storeId = productDetail.storeInfo?.storeId || '';
+    const storeId = storeInfo?.storeId || '';
     const handleMakeReservation = async () => {
         if (remainProduct === 0) {
             alert('해당 상품은 품절되었습니다.');
             return;
         }
-        console.log(productDetail.productId, " ", Date.now());
-        const paymentId = `${productDetail.productId}`;
+        const paymentId = `${storeInfo.productDetail.productId}-${Date.now()}`;
+        const createResponse = await createReservationFetch(storeId, initialCount, paymentId);
+        console.log(createResponse);
+        if (createResponse.ok) {
+            cntHandler && cntHandler(storeId, initialCount);
+            setIsShow(true);
+        } else {
+            alert("잠시 후 다시 이용해주세요.");
+        }
+
+
         // const [cateResponse, paymentResponse] = await Promise.all(
-        //     createReservationFetch(storeId, initialCount, paymentId),
         //     requestPayment(productDetail, initialCount, paymentId)
         // )
 
@@ -45,13 +56,24 @@ const ReservationBtn = ({ tar : {remainProduct, productDetail, initialCount }}) 
         //     alert('예약 처리 중 오류가 발생했습니다!');
         // }
     };
+
+    const closeHandler = () => {
+        setIsShow(false);
+    }
     return (
-        <div
-            className={`${styles.placeOrderBtn} ${isReservation ? styles.reservation : ''}`}
-            onClick={handleMakeReservation}
-        >
-            <p>{isReservation ? 'SOLD OUT' : '구매하기'}</p>
-        </div>
+        <>
+            <div
+                className={`${styles.placeOrderBtn} ${isReservation ? styles.reservation : ''}`}
+                onClick={handleMakeReservation}
+            >
+                <p>{isReservation ? 'SOLD OUT' : '구매하기'}</p>
+            </div>
+            { isShow &&
+                <SubModalPortal onClose={closeHandler}>
+                    <PaymentRequestModal/>
+                </SubModalPortal>
+            }
+        </>
     );
 };
 

@@ -144,6 +144,7 @@ const Modal = () => {
                     {/*    />*/}
                     {/*)}*/}
                 </div>
+                <div id="sub-modal-root"/>
             </div>
         </div>,
         document.getElementById('modal-root')
