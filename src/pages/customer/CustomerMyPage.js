@@ -236,7 +236,7 @@ const CustomerMyPage = () => {
                             hasMore={hasMore}
                             isLoading={isLoading}
                             onApplyFilters={applyFilters}
-                            onFetchReservations={() => fetchReservations(userInfo.token, userInfo.refreshToken)} // 수정된 부분
+                            onFetchReservations={() => fetchReservations(userInfo.token, userInfo.refreshToken)}
                         />
 
                         {width > 400 && (

@@ -81,7 +81,7 @@ const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm, onC
                 <div className={styles.imgSection}>
                     <img
                         className={styles.reservedProductImg}
-                        src={reservationDetail.productImg||DEFAULT_IMG}
+                        src={reservationDetail.productImg || DEFAULT_IMG}
                         alt="상품 이미지"
                         onError={imgErrorHandler}
                     />
@@ -118,6 +118,13 @@ const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm, onC
                         <button className={styles.pickupCancelBtn} onClick={handleCancelPickUp}>예약 취소</button>
                     </>
                     : <></>}
+                {/*{reservationDetail.status === 'PICKEDUP' ?*/}
+                {/*    */}
+                {/*    <>*/}
+                {/*        <button className={styles.writeReview} >리뷰 작성</button>
+                {/*    </>*/}
+                {/*    : <></>*/}
+                {/*}*/}
 
                 <div className={styles.needHelp}>도움이 필요하신가요?</div>
                 {/* 추후 추가될 기능 문의하기 버튼 */}
