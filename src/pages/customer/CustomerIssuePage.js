@@ -9,10 +9,10 @@ const CustomerIssuePage = () => {
 
     const location = useLocation();
     const reservationDetail = location.state?.reservationDetail;
+    const issueId = location.state?.issueId;
 
-    // 이제 reservationDetail을 사용할 수 있습니다.
     console.log('Received Reservation Detail:', reservationDetail);
-
+    console.log('Received Issue Id:', issueId);
 
     useEffect(() => {
         const handleResize = () => {
@@ -29,7 +29,7 @@ const CustomerIssuePage = () => {
     return (
         <div className={styles.customerIssuePage}>
             {!isMobileView && <IssueImage/>}
-            <IssueContent reservationDetail={reservationDetail}/>
+            <IssueContent reservationDetail={reservationDetail} issueId={issueId}/>
         </div>
     );
 };

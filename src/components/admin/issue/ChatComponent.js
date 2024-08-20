@@ -155,7 +155,6 @@ const ChatComponent = ({issueId, type}) => {
                         해결 완료
                     </button>
                 </div>
-                
                 <div>
                     <button onClick={quitIssueHandler}>
                         채팅 끝내기

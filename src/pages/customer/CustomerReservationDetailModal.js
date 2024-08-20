@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from "./CustomerReservationDetailModal.module.scss";
 import {useModal} from "../common/ModalProvider";
 import {Link, useNavigate} from "react-router-dom";
 import {DEFAULT_IMG, imgErrorHandler} from "../../utils/error";
-
 const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm}) => {
     const {closeModal} = useModal();
     const navigate = useNavigate();
@@ -16,7 +15,7 @@ const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm}) =>
 
     const issuePageHandler = () => {
         closeModal();
-        navigate('/customer/issue' ,{ state: { reservationDetail } });
+        navigate('/customer/issue' ,{ state: { reservationDetail} });
     }
 
     let tag = '';

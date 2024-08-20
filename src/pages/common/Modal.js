@@ -20,12 +20,13 @@ const AddFavFoodModal = lazy(() => import("../customer/modal/AddFavFoodModal"));
 const MyFavAreaEditModal = lazy(() => import("../customer/FavAreaEditModal"));
 const CustomerIssueChattingModal = lazy(() => import("../../components/customer/issue/CustomerIssueChattingModal"));
 const AdminIssueChattingModal = lazy(() => import("../../components/admin/issue/AdminIssueChattingModal"));
+const AdminIssueReviewModal = lazy(() => import("../../components/admin/issue/AdminIssueReviewModal"));
 
 const Modal = () => {
     const {modalState, closeModal} = useModal();
     const {isOpen, type, props} = modalState;
     const [customStyle, setCustomStyle] = useState({width: '100%'});
-    const [customInnerContentStyle , setCustomInnerContentStyle] = useState({}); // 추가
+    const [customInnerContentStyle, setCustomInnerContentStyle] = useState({}); // 추가
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 400); // 추가
 
     useEffect(() => {
@@ -43,10 +44,9 @@ const Modal = () => {
                     setCustomStyle({width: '750px'});
                 }
             } else if (type === 'customerIssueChatting' || type === 'adminIssueChatting') {
-                setCustomStyle({bottom: '0', height: '78%' , overflowY: 'none'})
+                setCustomStyle({bottom: '0', height: '78%', overflowY: 'none'})
                 setCustomInnerContentStyle({height: '764px', marginBottom: '50px', padding: '0'})
-            }
-            else {
+            } else {
                 setCustomStyle({});
             }
             setIsMobile(window.innerWidth <= 400); // 추가
@@ -120,6 +120,9 @@ const Modal = () => {
         case 'adminIssueChatting':
             ModalComponent = AdminIssueChattingModal;
             break;
+        case 'adminIssueReview':
+            ModalComponent = AdminIssueReviewModal;
+            break;
         default:
             ModalComponent = null;
     }
@@ -132,13 +135,16 @@ const Modal = () => {
 
     return ReactDOM.createPortal(
         <div className={styles.modal} onClick={handleClose}>
-            <div className={styles.modalContent} style={type === 'productDetail' || 'favAreaEdit' || 'customerIssueChatting' || 'adminIssueChatting'? customStyle : {}}
+            <div className={styles.modalContent}
+                 style={type === 'productDetail' || 'favAreaEdit' || 'customerIssueChatting' || 'adminIssueChatting' ? customStyle : {}}
                  onClick={(e) => e.stopPropagation()}>
                 <div className={styles.close}>
-                    {((type === 'customerIssueChatting') || (type ==='adminIssueChatting')) ? <span>customer support</span> : ''}
+                    {((type === 'customerIssueChatting') || (type === 'adminIssueChatting')) ?
+                        <span>customer support</span> : ''}
                     <span><FontAwesomeIcon className={styles.closeBtn} onClick={closeModal} icon={faTimes}/></span>
                 </div>
-                <div className={styles.modalInnerContent} style={(type === 'customerIssueChatting' || 'adminIssueChatting') ? customInnerContentStyle : {}}>
+                <div className={styles.modalInnerContent}
+                     style={(type === 'customerIssueChatting' || 'adminIssueChatting') ? customInnerContentStyle : {}}>
                     {ModalComponent && (
                         <Suspense fallback={<div>Loading...</div>}>
                             <ModalComponent {...props}/>

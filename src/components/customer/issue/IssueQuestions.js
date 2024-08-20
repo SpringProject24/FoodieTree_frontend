@@ -13,13 +13,10 @@ const IssueQuestions = ({reservationDetail}) => {
     };
 
     console.log('reservationDetail:!!!!', reservationDetail);
-
-
     const handleIssueChatting = () => {
         console.log('handleIssueChatting');
         // 이슈 테이블에 이슈 추가 post 요청
-        // makeIssue();
-        openModal('customerIssueChatting', {issueId: 7});
+        makeIssue().then(r => {});
     }
 
     const makeIssue = async () => {
@@ -33,7 +30,7 @@ const IssueQuestions = ({reservationDetail}) => {
                 },
                 body: JSON.stringify({
                     customerId: getUserEmail(),
-                    issueCategory: 'ETC',
+                    reservationId: reservationDetail.reservationId,
                 }),
             });
 
@@ -43,8 +40,10 @@ const IssueQuestions = ({reservationDetail}) => {
                 return null;
             }
 
-            const DATA = await res.json();
-            console.log('DATA:', DATA)
+            const issueId = await res.json();
+            console.log('issueId!!!!!!!!!!!!!!!!:', issueId)
+
+            openModal('customerIssueChatting', {issueId});
         }catch (e) {
             console.error('Error:', e);
         }

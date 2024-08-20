@@ -54,10 +54,20 @@ export const IssueColumns = (openModal) => [
                 console.log('Move to Chat Room', issueId);
             };
 
+            const handleIssueReview = () => {
+                const issueId = props.row.original.issueId; // Replace with the correct identifier for your issue
+                openModal('adminIssueReview', {issueId});
+                console.log('Move to Issue Review', issueId);
+            }
+
             return (
-                !status && (
+                status ? (
+                    <button onClick={handleIssueReview}>
+                        이슈 조회하기
+                    </button>
+                ): (
                     <button onClick={handleMoveToChat}>
-                        Move to Chat Room
+                        채팅방으로 이동
                     </button>
                 )
             );
