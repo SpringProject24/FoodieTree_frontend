@@ -81,6 +81,7 @@ const Header = () => {
             {/* 로고 */}
             <div className={styles.logoBtn}></div>
 
+            {/* 현재 위치 */}
             <div className={styles.locationPinIcon}></div>
             <div className={styles.areaName}>{userArea}</div>
             <div className={styles.dot}>・</div>
