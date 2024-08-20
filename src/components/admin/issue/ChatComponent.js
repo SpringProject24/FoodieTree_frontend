@@ -1,21 +1,21 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
-import {Stomp} from '@stomp/stompjs';
+import { Stomp } from '@stomp/stompjs';
 import styles from './ChatComponent.module.scss';
-import {ISSUE_URL} from "../../../config/host-config";
-import {useModal} from "../../../pages/common/ModalProvider";
+import { ISSUE_URL } from "../../../config/host-config";
+import { useModal } from "../../../pages/common/ModalProvider";
 
-const ChatComponent = ({issueId, type}) => {
+const ChatComponent = ({ issueId, type }) => {
     const [stompClient, setStompClient] = useState(null);
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState('');
-    const [selectedFiles, setSelectedFiles] = useState([]); // 여러 파일 선택 가능하도록 변경
+    const [selectedFiles, setSelectedFiles] = useState([]);
     const [categorySelected, setCategorySelected] = useState(false);
-    const [adminStarted, setAdminStarted] = useState(false); // 관리자가 채팅 시작 여부
+    const [adminStarted, setAdminStarted] = useState(false);
     const chatBoxRef = useRef(null);
-    const {closeModal} = useModal();
-    const [previewImages, setPreviewImages] = useState([]); // 미리보기 이미지 상태 추가
+    const { closeModal } = useModal();
+    const [previewImages, setPreviewImages] = useState([]);
 
     useEffect(() => {
         const socket = new SockJS('http://172.30.1.73:3000/chat');
@@ -29,7 +29,7 @@ const ChatComponent = ({issueId, type}) => {
                 const parsedMessage = JSON.parse(message.body);
                 console.log('Received message:', parsedMessage);
                 if (parsedMessage.sender === 'admin') {
-                    setAdminStarted(true); // 관리자가 메시지를 보내면 채팅 시작
+                    setAdminStarted(true);
                 }
                 showMessage(parsedMessage);
             });
@@ -75,7 +75,7 @@ const ChatComponent = ({issueId, type}) => {
 
     const handleCategorySelect = (selectedCategory) => {
         setCategorySelected(true);
-        console.log("selectedCATEGORYYYYYY: "+selectedCategory);
+        console.log("selectedCATEGORYYYYYY: " + selectedCategory);
         updateIssueCategory(selectedCategory, issueId).then(r => {
             sendMessage({
                 content: `Issue Category Selected: ${selectedCategory}`,
@@ -88,20 +88,31 @@ const ChatComponent = ({issueId, type}) => {
         const files = event.target.files;
         const fileArray = Array.from(files);
 
-        setSelectedFiles(fileArray);
+        // 미리보기용 base64 데이터 생성
+        const previewUrls = fileArray.map(file => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file); // base64로 변환
+            });
+        });
 
-        const previewUrls = fileArray.map(file => URL.createObjectURL(file));
-        setPreviewImages(previewUrls);
+        // 모든 파일의 base64 URL을 생성하고 상태 업데이트
+        Promise.all(previewUrls)
+            .then(urls => {
+                setPreviewImages(urls); // 미리보기 이미지 업데이트
+                setSelectedFiles(fileArray); // 실제 파일 저장
+            })
+            .catch(error => console.error('Error creating preview:', error));
     };
 
     const sendMessage = (messageOverride = null) => {
         const messageToSend = messageOverride || {
             content: messageInput ? messageInput.trim() : '',
             issueId: issueId,
-            sender: type // 'admin' 또는 'customer'
+            sender: type
         };
-
-        console.log('Message to Send:', messageToSend);
 
         if (!messageToSend.content || messageToSend.content.trim() === '') {
             console.error('Message content is empty. MessageToSend:', messageToSend);
@@ -109,7 +120,6 @@ const ChatComponent = ({issueId, type}) => {
         }
 
         if (connected && stompClient) {
-            console.log('Sending message:', messageToSend);
             stompClient.send(`/app/sendMessage/${issueId}`, {}, JSON.stringify(messageToSend));
             if (!messageOverride) setMessageInput('');
         } else {
@@ -148,14 +158,14 @@ const ChatComponent = ({issueId, type}) => {
             }
 
             setSelectedFiles([]); // 파일 선택 초기화
-            setPreviewImages([]); // 미리보기 이미지 초기화
         } catch (error) {
             console.error('Error uploading files:', error);
         }
     };
 
     const saveChatToDatabase = async (done) => {
-        const fullChatText = messages.map(msg => `${msg.sender === 'customer' ? 'Customer' : 'Admin'}: ${msg.content}`).join('\n');
+        const textMessages = messages.filter(msg => !msg.content.startsWith('data:image/'))
+            .map(msg => `${msg.sender === 'customer' ? 'Customer' : 'Admin'}: ${msg.content}`).join('\n');
 
         try {
             const response = await fetch(ISSUE_URL + `/saveText`, {
@@ -165,7 +175,7 @@ const ChatComponent = ({issueId, type}) => {
                 },
                 body: JSON.stringify({
                     issueId: issueId,
-                    issueText: fullChatText,
+                    issueText: textMessages,
                     done: done,
                 }),
             });
@@ -186,7 +196,6 @@ const ChatComponent = ({issueId, type}) => {
         const done = "solved";
         saveChatToDatabase(done).then(() => {
             alert("이슈가 해결되어 채팅 내용이 저장됩니다.");
-            console.log("Issue solved and chat saved.");
             closeModal();
         });
     };
@@ -195,7 +204,6 @@ const ChatComponent = ({issueId, type}) => {
         const done = "cancel";
         saveChatToDatabase(done).then(() => {
             alert("채팅을 종료합니다.");
-            console.log("Chat ended and saved.");
             closeModal();
         });
     };
@@ -220,7 +228,7 @@ const ChatComponent = ({issueId, type}) => {
                 <h2>Customer Support</h2>
                 <div className={styles.loading}>
                     Customer support team is on their way...
-                    <br/>
+                    <br />
                     잠시만 기다려주세요!
                 </div>
             </div>
@@ -238,7 +246,11 @@ const ChatComponent = ({issueId, type}) => {
                         }`}
                     >
                         {msg.sender === 'customer' ? 'Customer: ' : 'Admin: '}
-                        {msg.content}
+                        {msg.content.startsWith('data:image/') ? (
+                            <img src={msg.content} alt="Uploaded" className={styles.chatImage} />
+                        ) : (
+                            msg.content
+                        )}
                     </div>
                 ))}
             </div>
@@ -248,7 +260,7 @@ const ChatComponent = ({issueId, type}) => {
                     value={messageInput}
                     onChange={(e) => setMessageInput(e.target.value)}
                     placeholder="Type your message..."
-                    disabled={type === 'customer' && !adminStarted} // 관리자가 시작하지 않으면 고객은 메시지 입력 불가
+                    disabled={type === 'customer' && !adminStarted}
                 />
                 <button onClick={() => sendMessage()}
                         disabled={!connected || (type === 'customer' && !adminStarted)}>Send
