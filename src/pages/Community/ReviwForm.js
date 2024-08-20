@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './ReviewForm.module.scss';
 import Rating from '@mui/material/Rating';
 import {useLocation} from "react-router-dom";
+import {getRefreshToken, getToken, getUserEmail} from "../../utils/authUtil";
 
 // 해시태그를 백엔드에서 기대하는 Enum으로 매핑
 const hashtagMapping = {
@@ -28,7 +29,7 @@ const convertToEnumHashtags = (selectedKeywords) => {
   return selectedKeywords.map(keyword => hashtagMapping[keyword]);
 };
 
-const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
+const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
   const [image, setImage] = useState(null);
   const [content, setContent] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState([]);
@@ -38,6 +39,8 @@ const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
   const queryParams = new URLSearchParams(location.search);
   const rId = queryParams.get('r');
   console.log('알림에서 전달된 예약Id ', rId);
+  const customerId  = getUserEmail();
+  console.log('customerId : ',customerId);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -80,9 +83,12 @@ const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization' : 'Bearer ' + getToken(),
+          'refreshToken' : getRefreshToken()
         },
         body: JSON.stringify(reviewData),
       });
+      console.log("review / save API 응답 데이터 : {}" , reviewData);
 
       if (response.ok) {
         console.log('Review saved successfully!');
@@ -90,24 +96,39 @@ const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
         setContent('');
         setSelectedKeywords([]);
         setRating(0);
+
       } else {
-        console.error('Failed to save review');
+        // 서버 응답의 Content-Type 확인
+        const contentType = response.headers.get("content-type");
+
+        // JSON 형식 응답 처리
+        if (contentType && contentType.includes("application/json")) {
+          const errorMessage = await response.json(); // JSON 형식의 에러 메시지 처리
+          console.error('Failed to save review:', errorMessage);
+          alert(`리뷰 저장 실패: ${errorMessage.message || '오류가 발생했습니다.'}`);
+        } else {
+          // 텍스트 형식 응답 처리
+          const errorMessage = await response.text(); // 텍스트 형식의 에러 메시지 처리
+          console.error('Failed to save review:', errorMessage);
+          alert(`리뷰 저장 실패: ${errorMessage}`);
+        }
       }
     } catch (error) {
       console.error('Error occurred while saving review:', error);
+      alert('리뷰 저장 중 오류가 발생했습니다.');
     }
   };
 
   return (
 <>
-      {/* 가게 정보 섹션
+      {/*가게 정보 섹션*/}
          <div className={styles.formStoreInfo}>
           <img src={storeImage} alt={storeName} className={styles.storeImage} />
           <div className={styles.storeDetails}>
             <div className={styles.storeName}>{storeName}</div>
             <div className={styles.storeVisit}>에 방문했군요!</div>
           </div>
-        </div> */}
+        </div>
 
     <div className={styles.reviewForm}>
     <div className={styles.reviewCard}>
