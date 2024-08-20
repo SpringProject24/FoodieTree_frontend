@@ -132,6 +132,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
             if (reservationDetail) {
                 openModal('customerReservationDetail', {
                     reservationDetail,
+                    onCancelClick: () => cancelReservation(reservationId),
                     onPickupConfirm: async () => await completePickup(reservationId)
                 });
             } else {
@@ -247,24 +248,24 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
                                         <>
                                             <span>픽업하러 가는 중이에요!</span>
                                             <span>{reservation.pickupTimeF}까지</span>
-                                            <button
-                                                className={`${styles.reservationCancelBtn} ${styles.calendarButton} ${styles.cancelRes}`}
-                                                onClick={(event) => handleCancelReservationClick(reservation.reservationId, event)}
-                                            >
-                                                {isMobileView ? '예약 취소' : '예약 취소하기'}
-                                            </button>
+                                            {/*<button*/}
+                                            {/*    className={`${styles.reservationCancelBtn} ${styles.calendarButton} ${styles.cancelRes}`}*/}
+                                            {/*    onClick={(event) => handleCancelReservationClick(reservation.reservationId, event)}*/}
+                                            {/*>*/}
+                                            {/*    {isMobileView ? '예약 취소' : '예약 취소하기'}*/}
+                                            {/*</button>*/}
                                         </>
                                     )}
                                     {reservation.status === 'PICKEDUP' && (
                                         <>
                                             <span>픽업을 완료했어요</span>
                                             <span>{reservation.pickedUpAtF}</span>
-                                            <button
-                                                className={`${styles.reviewBtn} ${styles.calendarButton} ${styles.writeReview}`}
-                                                onClick={(event) => handleWriteReviewClick(reservation.reservationId, event)}
-                                            >
-                                                {isMobileView ? '리뷰 작성' : '리뷰 작성하기'}
-                                            </button>
+                                            {/*<button*/}
+                                            {/*    className={`${styles.reviewBtn} ${styles.calendarButton} ${styles.writeReview}`}*/}
+                                            {/*    onClick={(event) => handleWriteReviewClick(reservation.reservationId, event)}*/}
+                                            {/*>*/}
+                                            {/*    {isMobileView ? '리뷰 작성' : '리뷰 작성하기'}*/}
+                                            {/*</button>*/}
                                         </>
                                     )}
                                 </div>
