@@ -67,9 +67,9 @@ const ChattingList = () => {
     return (
         <div className={styles.chatListContainer}>
             <IssueSummary stats={stats} />
-            <div className={styles.tableInteraction}>
-                {/*<FiltersInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters} />*/}
-            </div>
+            {/*<div className={styles.tableInteraction}>*/}
+            {/*    /!*<FiltersInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters} />*!/*/}
+            {/*</div>*/}
             <TansTable style={styles.tansTable} table={table} />
             <TansPagination style={styles.tansPageContainer} table={table} />
         </div>

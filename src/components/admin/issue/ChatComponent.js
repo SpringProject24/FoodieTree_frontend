@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
+import {Stomp} from '@stomp/stompjs';
 import styles from './ChatComponent.module.scss';
-import { ISSUE_URL } from "../../../config/host-config";
-import { useModal } from "../../../pages/common/ModalProvider";
+import {ISSUE_URL} from "../../../config/host-config";
+import {useModal} from "../../../pages/common/ModalProvider";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
-const ChatComponent = ({ issueId, type }) => {
+const ChatComponent = ({issueId, type}) => {
     const [stompClient, setStompClient] = useState(null);
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
@@ -14,11 +16,11 @@ const ChatComponent = ({ issueId, type }) => {
     const [categorySelected, setCategorySelected] = useState(false);
     const [adminStarted, setAdminStarted] = useState(false);
     const chatBoxRef = useRef(null);
-    const { closeModal } = useModal();
+    const {closeModal} = useModal();
     const [previewImages, setPreviewImages] = useState([]);
 
     useEffect(() => {
-        const socket = new SockJS('http://172.30.1.73:3000/chat');
+        const socket = new SockJS('http://localhost:3000/chat');
         const stompClient = Stomp.over(() => socket);
 
         stompClient.connect({}, (frame) => {
@@ -189,6 +191,7 @@ const ChatComponent = ({ issueId, type }) => {
             }
 
             setSelectedFiles([]); // 파일 선택 초기화
+            setPreviewImages([]); // 미리보기 초기화
         } catch (error) {
             console.error('Error uploading files:', error);
         }
@@ -244,12 +247,15 @@ const ChatComponent = ({ issueId, type }) => {
             <div className={styles.chatContainer}>
                 <h2 className={styles.chatTitle}>문의 유형을 선택해주세요!</h2>
                 <div className={styles.categorySelection}>
-                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('상품')}>상품 관련 문의에요</button>
-                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('업체')}>업체 관련 문의에요</button>
-                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('시스템')}>시스템 관련 문의에요</button>
+                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('상품')}>상품 관련 문의에요
+                    </button>
+                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('업체')}>업체 관련 문의에요
+                    </button>
+                    <button className={styles.categoryBtn} onClick={() => handleCategorySelect('시스템')}>시스템 관련 문의에요
+                    </button>
                     <button className={styles.categoryBtn} onClick={() => handleCategorySelect('기타')}>그 외의 문의에요</button>
                 </div>
-                    <div className={styles.quitChatBtn} onClick={() => quitIssueHandler()}>채팅 나가기</div>
+                <div className={styles.quitChatBtn} onClick={() => quitIssueHandler()}>채팅 나가기</div>
             </div>
         );
     }
@@ -260,7 +266,7 @@ const ChatComponent = ({ issueId, type }) => {
                 <h2>Customer Support</h2>
                 <div className={styles.loading}>
                     Customer support team is on their way...
-                    <br />
+                    <br/>
                     잠시만 기다려주세요!
                 </div>
             </div>
@@ -270,6 +276,16 @@ const ChatComponent = ({ issueId, type }) => {
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
+            sendMessage();
+        }
+    };
+
+    const handleSend = async () => {
+        if (selectedFiles.length > 0) {
+            // If images are selected, upload and send them
+            await sendFiles();
+        } else if (messageInput.trim() !== '') {
+            // If no images but text is entered, send the text message
             sendMessage();
         }
     };
@@ -285,9 +301,8 @@ const ChatComponent = ({ issueId, type }) => {
                             msg.sender === type ? styles.myMessage : styles.otherMessage
                         }`}
                     >
-                        {msg.sender === 'customer' ? 'Customer: ' : 'Admin: '}
                         {msg.content.startsWith('data:image/') ? (
-                            <img src={msg.content} alt="Uploaded" className={styles.chatImage} />
+                            <img src={msg.content} alt="Uploaded" className={styles.chatImage}/>
                         ) : (
                             msg.content
                         )}
@@ -295,37 +310,45 @@ const ChatComponent = ({ issueId, type }) => {
                 ))}
             </div>
             <div className={styles.chatBoxFooter}>
-                <input
-                    type="text"
-                    value={messageInput}
-                    onChange={(e) => setMessageInput(e.target.value)}
-                    onKeyDown={handleKeyPress} // 엔터 키 이벤트 핸들러 추가
-                    placeholder="Type your message..."
-                    disabled={type === 'customer' && !adminStarted}
-                />
-                <button onClick={() => sendMessage()}
-                        disabled={!connected || (type === 'customer' && !adminStarted)}>Send
-                </button>
-            </div>
-            <div className={styles.fileUpload}>
-                <input
-                    type="file"
-                    multiple
-                    onChange={handleFileChange}
-                />
-                <button onClick={sendFiles} disabled={!connected || (type === 'customer' && !adminStarted)}>Upload
-                    Image(s)
-                </button>
-            </div>
-            <div className={styles.imagePreviewContainer}>
-                {previewImages.map((image, index) => (
-                    <img
-                        key={index}
-                        src={image}
-                        alt={`preview-${index}`}
-                        className={styles.previewImage}
+                <div className={styles.inputContainer}>
+
+                    <div className={styles.fileUpload}>
+                        <label className={styles.uploadLabel}>
+                            <span className={styles.plusButton}><FontAwesomeIcon icon={faPlus}/></span> {/* + 버튼 */}
+                            <input
+                                type="file"
+                                multiple
+                                onChange={handleFileChange}
+                                className={styles.fileInput} // 숨겨진 파일 입력
+                            />
+                        </label>
+                    </div>
+                    <input
+                        className={styles.messageInput}
+                        type="text"
+                        value={messageInput}
+                        onChange={(e) => setMessageInput(e.target.value)}
+                        onKeyDown={handleKeyPress} // 엔터 키 이벤트 핸들러 추가
+                        placeholder="Type your message..."
+                        disabled={type === 'customer' && !adminStarted}
                     />
-                ))}
+                    <button
+                        onClick={handleSend}
+                        disabled={!connected || (type === 'customer' && !adminStarted)}
+                    >
+                        Send
+                    </button>
+                </div>
+                <div className={styles.imagePreviewContainer}>
+                    {previewImages.map((image, index) => (
+                        <img
+                            key={index}
+                            src={image}
+                            alt={`preview-${index}`}
+                            className={styles.previewImage}
+                        />
+                    ))}
+                </div>
             </div>
             <div className={styles.chatButtonBox}>
                 <div>
