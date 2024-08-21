@@ -4,6 +4,11 @@
   height: 100%;
   overflow: hidden;
 
+  .quitChatBtn{
+    color: #4b4a4f;
+    font-size: 15px;
+  }
+
   .chatButtonBox {
     position: absolute;
     bottom: 25px;
@@ -132,9 +137,18 @@ button:disabled {
 
 @media (max-width: 400px){
     .chatContainer {
-        .chatButtonBox {
 
+      .chatTitle{
+        margin-top: 27px;
+      }
+
+      .categorySelection{
+        height: 90%;
+
+        .categoryBtn{
+        width: 80%;
         }
+      }
     }
 }
 
