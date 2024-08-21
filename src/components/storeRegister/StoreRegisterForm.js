@@ -187,7 +187,7 @@ export const storeRegisterAction = async ({request}) => {
   });
   if(!response.ok) {
     const errorMessage = await response.text();
-    alert(errorMessage);
+    alert('storeRegisterForm 액션 결과 : '+ errorMessage);
     return null;
   }
   return redirect('/store/approval/p');

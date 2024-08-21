@@ -99,9 +99,6 @@ const ProductRegisterForm = () => {
         className={formStyle.registration}
         onSubmit={submitHandler}
       >
-        <h2>스페셜팩 등록</h2>
-        <h3>푸디트리를 통해 새로운 로컬 고객을 만나보세요!</h3>
-
         <UploadInput onAdd={onAdd}/>
           {errors.productImage && <ErrorSpan message={errors.productImage} />}
         <label htmlFor="productCnt">스페셜팩 수량

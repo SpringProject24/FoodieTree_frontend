@@ -24,7 +24,7 @@
   overflow: hidden;
   //border: 1px solid blue;
 
-  img {
+  .img-left {
     width: 500px;
     border-radius: 5px;
     object-fit: cover;
@@ -45,7 +45,7 @@
       font-size: 1rem;
     }
   }
-  img {
+  .img-left {
     display: none;
   }
 }

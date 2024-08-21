@@ -9,7 +9,7 @@ const StoreRegister = () => {
       <div className={styles['img-container']}>
         <h2>스토어 등록</h2>
         <h3>푸디트리와 지구를 위한 한 걸음, 함께 시작해요!</h3>
-        <img src={storeRegisterImg} alt=""/>
+        <img className={styles['img-left']} src={storeRegisterImg} alt='스토어 등록 이미지'/>
       </div>
       <StoreRegisterForm/>
     </div>
