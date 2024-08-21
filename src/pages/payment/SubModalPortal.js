@@ -1,11 +1,11 @@
 import ReactDOM from "react-dom";
 import styles from "./SubModalPortal.module.scss";
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import Spinner from "../../components/payment/Spinner";
 
 const SubModalPortal = ({children, onClose, isLoading}) => {
     return ReactDOM.createPortal(
-        <div className={styles.modal} onClick={onClose}>
+        <div className={styles.modal} id={"sub-modal"}>
             {
                 isLoading ? <Spinner/> : (
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>

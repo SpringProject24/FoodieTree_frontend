@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
 import styles from './Modal.module.scss';
 import {useModal} from "./ModalProvider";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -22,6 +22,7 @@ const MyFavAreaEditModal = lazy(() => import("../customer/FavAreaEditModal"));
 
 const Modal = () => {
     const {modalState, closeModal} = useModal();
+    const divRef = useRef(null);
     const {isOpen, type, props} = modalState;
     const [customStyle, setCustomStyle] = useState({width: '100%'});
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 400); // 추가
@@ -113,6 +114,8 @@ const Modal = () => {
     }
 
     const handleClose = (e) => {
+        const $subModalId = divRef.current.querySelector("#sub-modal");
+        if ($subModalId) return ;
         if (e.target === e.currentTarget) {
             closeModal();
         }
@@ -144,7 +147,7 @@ const Modal = () => {
                     {/*    />*/}
                     {/*)}*/}
                 </div>
-                <div id="sub-modal-root"/>
+                <div id="sub-modal-root" ref={divRef} />
             </div>
         </div>,
         document.getElementById('modal-root')
