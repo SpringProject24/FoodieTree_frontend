@@ -162,80 +162,82 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
   };
 
   return (
-<>
-    <div className={styles.reviewForm}>
 
-    <div className={styles.reviewCard}>
-      <form className={styles.reviewForm} onSubmit={handleSubmit}>
-        {/*가게 정보 섹션*/}
-        <div className={styles.formStoreInfo}>
-          <img src={storeDetails.storeImg} alt={storeDetails.storeName} className={styles.storeImage} />
-          <div className={styles.storeDetails}>
-            <div className={styles.storeName}>{storeDetails.storeName}</div>
-            <div className={styles.storeVisit}>에 방문했군요!</div>
-          </div>
-        </div>
-        {/* 별점 입력 섹션 */}
-        <div className={styles.formGroup}>
-          <p className={styles.title}>가게에 별점을 매겨주세요!</p>
-          <Rating
-            name="store-rating"
-            size="large"
-            value={rating}
-            onChange={(event, newRating) => {
-              setRating(newRating);
-              console.log(`Selected Rating: ${newRating}`);
-            }}
-          />
-        </div>
+      <>
+        <div className={styles.reviewForm}>
 
-        {/* 키워드 선택 섹션 */}
-        <div className={styles.keywordSection}>
-          <p className={styles.title}>이 가게에 어울리는 키워드를 선택해주세요!</p>
-          <div className={styles.keywordContainer}>
-            {Object.keys(hashtagMapping).map((keyword) => (
-              <span
-                key={keyword}
-                className={`${styles.keyword} ${selectedKeywords.includes(keyword) ? styles.selectedKeyword : ''}`}
-                onClick={() => handleKeywordClick(keyword)}
-              >
+          <div className={styles.reviewCard}>
+            <form className={styles.reviewForm} onSubmit={handleSubmit}>
+              {/*가게 정보 섹션*/}
+              <div className={styles.formStoreInfo}>
+                <img src={storeDetails.storeImg} alt={storeDetails.storeName} className={styles.storeImage} />
+                <div className={styles.storeDetails}>
+                  <div className={styles.storeName}>{storeDetails.storeName}</div>
+                  <div className={styles.storeVisit}>에 방문했군요!</div>
+                </div>
+              </div>
+              {/* 별점 입력 섹션 */}
+              <div className={styles.formGroup}>
+                <p className={styles.title}>가게에 별점을 매겨주세요!</p>
+                <Rating
+                    name="store-rating"
+                    size="large"
+                    value={rating}
+                    onChange={(event, newRating) => {
+                      setRating(newRating);
+                      console.log(`Selected Rating: ${newRating}`);
+                    }}
+                />
+              </div>
+
+              {/* 키워드 선택 섹션 */}
+              <div className={styles.keywordSection}>
+                <p className={styles.title}>이 가게에 어울리는 키워드를 선택해주세요!</p>
+                <div className={styles.keywordContainer}>
+                  {Object.keys(hashtagMapping).map((keyword) => (
+                      <span
+                          key={keyword}
+                          className={`${styles.keyword} ${selectedKeywords.includes(keyword) ? styles.selectedKeyword : ''}`}
+                          onClick={() => handleKeywordClick(keyword)}
+                      >
                 {keyword}
               </span>
-            ))}
+                  ))}
+                </div>
+              </div>
+
+              {/* 사진 업로드 섹션 */}
+              <div className={styles.formGroup}>
+                <label htmlFor="image" className={styles.title}>사진 업로드</label>
+                <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className={styles.fileInput}
+                />
+                {image && <img src={image} alt="미리보기" className={styles.previewImage} />}
+              </div>
+
+              {/* 리뷰 내용 입력 섹션 */}
+              <div className={styles.formGroup}>
+                <label htmlFor="content" className={styles.title}>리뷰 내용</label>
+                <textarea
+                    id="content"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className={styles.textarea}
+                    placeholder="내용을 입력하세요!"
+                    required
+                />
+              </div>
+
+              <button type="submit" className={styles.submitButton}>리뷰 작성</button>
+            </form>
           </div>
         </div>
+      </>
 
-        {/* 사진 업로드 섹션 */}
-        <div className={styles.formGroup}>
-          <label htmlFor="image" className={styles.title}>사진 업로드</label>
-          <input
-            type="file"
-            id="image"
-            accept="image/*"
-            onChange={handleImageChange}
-            className={styles.fileInput}
-          />
-          {image && <img src={image} alt="미리보기" className={styles.previewImage} />}
-        </div>
-
-        {/* 리뷰 내용 입력 섹션 */}
-        <div className={styles.formGroup}>
-          <label htmlFor="content" className={styles.title}>리뷰 내용</label>
-          <textarea
-            id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className={styles.textarea}
-            placeholder="내용을 입력하세요!"
-            required
-          />
-        </div>
-
-        <button type="submit" className={styles.submitButton}>리뷰 작성</button>
-      </form>
-    </div>
-    </div>
-</>
   );
 };
 
