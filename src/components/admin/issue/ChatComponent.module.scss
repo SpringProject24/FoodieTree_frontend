@@ -34,6 +34,29 @@
       max-width: 364px;
     }
 
+
+    .myMessage {
+      background-color: #d1e7dd;
+      text-align: right;
+      float: right;
+      margin: 5px;
+      padding: 10px;
+      border-radius: 10px;
+      width: fit-content;
+      align-self: end;
+    }
+
+    .otherMessage {
+      background-color: #f8d7da;
+      text-align: left;
+      float: left;
+      margin: 5px;
+      padding: 10px;
+      border-radius: 10px;
+      width: fit-content;
+      align-self: start;
+    }
+
     .chatImage{
       max-width: 190px;
       max-height: 190px;
@@ -159,17 +182,6 @@
   }
 }
 
-.chatBoxHeader {
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  flex-shrink: 0; /* 고정 */
-}
-
-
-
 
 .chatBoxFooter input {
   height: 50px;
@@ -178,6 +190,7 @@
   border: 1px solid #ccc;
   margin-right: 8px;
   font-size: 17px;
+  padding-left: 8px;
 }
 
 .chatBoxFooter button {
@@ -191,25 +204,6 @@
 
 
 
-.myMessage {
-  background-color: #d1e7dd;
-  text-align: right;
-  float: right;
-  margin: 5px;
-  padding: 10px;
-  border-radius: 10px;
-  width: fit-content;
-}
-
-.otherMessage {
-  background-color: #f8d7da;
-  text-align: left;
-  float: left;
-  margin: 5px;
-  padding: 10px;
-  border-radius: 10px;
-  width: fit-content;
-}
 
 
 
