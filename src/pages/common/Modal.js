@@ -45,9 +45,9 @@ const Modal = () => {
                 }
             } else if (type === 'customerIssueChatting' || type === 'adminIssueChatting') {
                 if(window.innerWidth <= 400) {
-                    setCustomStyle({bottom: '0px', left: '0px', height: '70%', overflowY: 'none', padding: '0'})
+                    setCustomStyle({bottom: '0px', left: '0px', height: '70%', padding: '0'})
                 }else{
-                    setCustomStyle({bottom: '172px', left: '308px', height: '70%', overflowY: 'none'})
+                    setCustomStyle({bottom: '172px', left: '308px', height: '70%'})
                 }
                 setCustomInnerContentStyle({height: '764px', marginBottom: '50px', padding: '0'})
             } else {
@@ -132,12 +132,12 @@ const Modal = () => {
     }
 
     const handleClose = (e) => {
-        if (e.target === e.currentTarget) {
-            closeModal();
-        }
 
         if (type === 'customerIssueChatting' || type === 'adminIssueChatting') {
-            alert("채팅방에서 나가시면 채팅이 종료됩니다.");
+            alert("채팅방에서 나가시려면 '나가기' 버튼을 눌러주세요.");
+            return;
+        }
+        if (e.target === e.currentTarget) {
             closeModal();
         }
     };
