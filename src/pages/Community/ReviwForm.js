@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './ReviewForm.module.scss';
 import Rating from '@mui/material/Rating';
-import {useLocation} from "react-router-dom";
-import {getRefreshToken, getToken, getUserEmail} from "../../utils/authUtil";
+import {useLocation, useNavigate} from "react-router-dom";
+import {checkAuthToken, getRefreshToken, getToken, getUserEmail} from "../../utils/authUtil";
 
 // 해시태그를 백엔드에서 기대하는 Enum으로 매핑
 const hashtagMapping = {
@@ -34,13 +34,55 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
   const [content, setContent] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [rating, setRating] = useState(0); // 별점 상태 추가
+  const [storeDetails, setStoreDetails] = useState({
+    storeName: '',
+    storeImg: '',
+    storeAddress: ''
+  });
+  const navigate = useNavigate();
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const rId = queryParams.get('r');
+  // const reservationId = queryParams.get('r');
   console.log('알림에서 전달된 예약Id ', rId);
   const customerId  = getUserEmail();
   console.log('customerId : ',customerId);
+
+  useEffect(() => {
+    checkAuthToken(navigate)
+    fetchStoreDetails();
+  }, []);
+
+
+  const fetchStoreDetails = async () => {
+    if (!rId) {
+      console.error('Reservation ID is missing');
+      return;
+    }
+    console.log("상점정보 가져오기 !!!!!!!!!!!!!!!!!!!!");
+    try {
+      const response = await fetch(`/review/storeInfo?reservationId=${rId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + getToken(),
+          'refreshToken': getRefreshToken()
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setStoreDetails(data);
+
+        console.log("상점정보 get fetch : ", data);
+      } else {
+        console.error('Failed to fetch store details');
+      }
+    } catch (error) {
+      console.error('Error fetching store details:', error);
+    }
+  };
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -122,10 +164,11 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
   return (
 <>
       {/*가게 정보 섹션*/}
+
          <div className={styles.formStoreInfo}>
-          <img src={storeImage} alt={storeName} className={styles.storeImage} />
+          <img src={storeDetails.storeImg} alt={storeDetails.storeName} className={styles.storeImage} />
           <div className={styles.storeDetails}>
-            <div className={styles.storeName}>{storeName}</div>
+            <div className={styles.storeName}>{storeDetails.storeName}</div>
             <div className={styles.storeVisit}>에 방문했군요!</div>
           </div>
         </div>
