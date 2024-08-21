@@ -45,7 +45,7 @@ const Modal = () => {
                 }
             } else if (type === 'customerIssueChatting' || type === 'adminIssueChatting') {
                 if(window.innerWidth <= 400) {
-                    setCustomStyle({bottom: '0px', left: '0px', height: '70%', overflowY: 'none'})
+                    setCustomStyle({bottom: '0px', left: '0px', height: '70%', overflowY: 'none', padding: '0'})
                 }else{
                     setCustomStyle({bottom: '251px', left: '494px', height: '70%', overflowY: 'none'})
                 }
@@ -149,7 +149,7 @@ const Modal = () => {
                  onClick={(e) => e.stopPropagation()}>
                 <div className={styles.close}>
                     {((type === 'customerIssueChatting') || (type === 'adminIssueChatting')) ?
-                        <span>customer support</span> :
+                        <span className={styles.customerSupportTitle}>customer support</span> :
                         <span><FontAwesomeIcon className={styles.closeBtn} onClick={closeModal} icon={faTimes}/></span>}
                 </div>
                 <div className={styles.modalInnerContent}
