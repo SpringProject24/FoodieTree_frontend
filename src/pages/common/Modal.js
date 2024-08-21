@@ -44,7 +44,11 @@ const Modal = () => {
                     setCustomStyle({width: '750px'});
                 }
             } else if (type === 'customerIssueChatting' || type === 'adminIssueChatting') {
-                setCustomStyle({bottom: '0px', height: '78%', overflowY: 'none'})
+                if(window.innerWidth <= 400) {
+                    setCustomStyle({bottom: '0px', left: '0px', height: '70%', overflowY: 'none'})
+                }else{
+                    setCustomStyle({bottom: '251px', left: '494px', height: '70%', overflowY: 'none'})
+                }
                 setCustomInnerContentStyle({height: '764px', marginBottom: '50px', padding: '0'})
             } else {
                 setCustomStyle({});
@@ -131,6 +135,11 @@ const Modal = () => {
         if (e.target === e.currentTarget) {
             closeModal();
         }
+
+        if (type === 'customerIssueChatting' || type === 'adminIssueChatting') {
+            alert("채팅방에서 나가시면 채팅이 종료됩니다.");
+            closeModal();
+        }
     };
 
     return ReactDOM.createPortal(
@@ -140,8 +149,8 @@ const Modal = () => {
                  onClick={(e) => e.stopPropagation()}>
                 <div className={styles.close}>
                     {((type === 'customerIssueChatting') || (type === 'adminIssueChatting')) ?
-                        <span>customer support</span> : ''}
-                    <span><FontAwesomeIcon className={styles.closeBtn} onClick={closeModal} icon={faTimes}/></span>
+                        <span>customer support</span> :
+                        <span><FontAwesomeIcon className={styles.closeBtn} onClick={closeModal} icon={faTimes}/></span>}
                 </div>
                 <div className={styles.modalInnerContent}
                      style={(type === 'customerIssueChatting' || 'adminIssueChatting') ? customInnerContentStyle : {}}>
