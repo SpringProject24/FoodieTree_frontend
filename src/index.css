@@ -3,7 +3,8 @@
 }
 
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
+  /*font-family: Inter, Avenir, Helvetica, Arial, sans-serif;*/
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -60,4 +61,10 @@ footer {
   width: 100%;
   max-width: 1920px;
   margin: 0 auto; /* 중앙 정렬 */
+}
+button {
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
+}
+input {
+
 }
