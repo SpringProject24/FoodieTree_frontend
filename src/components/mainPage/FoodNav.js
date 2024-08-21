@@ -237,7 +237,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
             <div
               key={index}
               onClick={() => handleClick(store)}
-              className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
+              className={`${styles.storeItem} ${store.productCnt === 0 ? styles['low-stock'] : ''}`}
             >
               <div 
                 className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
@@ -251,7 +251,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
                 />
               </div>
               <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} onError={imgErrorHandler}/>
-              {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
+              {store.productCnt === 0 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>수량 : {store.productCnt}</span>
@@ -268,7 +268,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
             <div
               key={index}
               onClick={() => handleClick(store)}
-              className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
+              className={`${styles.storeItem} ${store.productCnt === 0 ? styles['low-stock'] : ''}`}
             >
               <div 
                 className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
@@ -282,7 +282,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
                 />
               </div>
               <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} onError={imgErrorHandler}/>
-              {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
+              {store.productCnt === 0 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>수량 : {store.productCnt}</span>
@@ -299,7 +299,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
             <div
               key={index}
               onClick={() => handleClick(store)}
-              className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
+              className={`${styles.storeItem} ${store.productCnt === 0 ? styles['low-stock'] : ''}`}
             >
               <div 
                 className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
@@ -313,11 +313,10 @@ const FoodNav = ({ selectedCategory, stores }) => {
                 />
               </div>
               <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} className={styles.image} onError={imgErrorHandler} />
-              <span className={styles.category}>{extractFoodType(store.category)}</span>
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>수량 : {store.productCnt}</span>
-              {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
+              {store.productCnt === 0 && <div className={styles.overlay}>SOLD OUT</div>}
             </div>
           ))}
         </Slider>
@@ -331,7 +330,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
             <div
               key={index}
               onClick={() => handleClick(store)}
-              className={`${styles.storeItem} ${store.productCnt === 1 ? styles['low-stock'] : ''}`}
+              className={`${styles.storeItem} ${store.productCnt === 0 ? styles['low-stock'] : ''}`}
             >
               <div 
                 className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
@@ -349,7 +348,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>수량 : {store.productCnt}</span>
-              {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
+              {store.productCnt === 0 && <div className={styles.overlay}>SOLD OUT</div>}
             </div>
           ))}
         </Slider>
