@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './ReviewForm.module.scss';
 import Rating from '@mui/material/Rating';
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import {checkAuthToken, getRefreshToken, getToken, getUserEmail} from "../../utils/authUtil";
 
 // 해시태그를 백엔드에서 기대하는 Enum으로 매핑
 const hashtagMapping = {
@@ -28,16 +29,60 @@ const convertToEnumHashtags = (selectedKeywords) => {
   return selectedKeywords.map(keyword => hashtagMapping[keyword]);
 };
 
-const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
+const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
   const [image, setImage] = useState(null);
   const [content, setContent] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [rating, setRating] = useState(0); // 별점 상태 추가
+  const [storeDetails, setStoreDetails] = useState({
+    storeName: '',
+    storeImg: '',
+    storeAddress: ''
+  });
+  const navigate = useNavigate();
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const rId = queryParams.get('r');
-  console.log('알림에서 전달된 예약Id ', rId)
+  // const reservationId = queryParams.get('r');
+  console.log('알림에서 전달된 예약Id ', rId);
+  const customerId  = getUserEmail();
+  console.log('customerId : ',customerId);
+
+  useEffect(() => {
+    checkAuthToken(navigate)
+    fetchStoreDetails();
+  }, []);
+
+
+  const fetchStoreDetails = async () => {
+    if (!rId) {
+      console.error('Reservation ID is missing');
+      return;
+    }
+    console.log("상점정보 가져오기 !!!!!!!!!!!!!!!!!!!!");
+    try {
+      const response = await fetch(`/review/storeInfo?reservationId=${rId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + getToken(),
+          'refreshToken': getRefreshToken()
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setStoreDetails(data);
+
+        console.log("상점정보 get fetch : ", data);
+      } else {
+        console.error('Failed to fetch store details');
+      }
+    } catch (error) {
+      console.error('Error fetching store details:', error);
+    }
+  };
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -66,7 +111,7 @@ const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
     const convertedHashtags = convertToEnumHashtags(selectedKeywords);
 
     const reviewData = {
-      reservationId: reservationId,
+      reservationId: rId,
       customerId: customerId,
       storeImg: storeImg,
       reviewScore: rating,
@@ -80,9 +125,12 @@ const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization' : 'Bearer ' + getToken(),
+          'refreshToken' : getRefreshToken()
         },
         body: JSON.stringify(reviewData),
       });
+      console.log("review / save API 응답 데이터 : {}" , reviewData);
 
       if (response.ok) {
         console.log('Review saved successfully!');
@@ -90,28 +138,43 @@ const ReviewForm = ({ onSubmit, reservationId, customerId, storeImg }) => {
         setContent('');
         setSelectedKeywords([]);
         setRating(0);
+
       } else {
-        console.error('Failed to save review');
+        // 서버 응답의 Content-Type 확인
+        const contentType = response.headers.get("content-type");
+
+        // JSON 형식 응답 처리
+        if (contentType && contentType.includes("application/json")) {
+          const errorMessage = await response.json(); // JSON 형식의 에러 메시지 처리
+          console.error('Failed to save review:', errorMessage);
+          alert(`리뷰 저장 실패: ${errorMessage.message || '오류가 발생했습니다.'}`);
+        } else {
+          // 텍스트 형식 응답 처리
+          const errorMessage = await response.text(); // 텍스트 형식의 에러 메시지 처리
+          console.error('Failed to save review:', errorMessage);
+          alert(`리뷰 저장 실패: ${errorMessage}`);
+        }
       }
     } catch (error) {
       console.error('Error occurred while saving review:', error);
+      alert('리뷰 저장 중 오류가 발생했습니다.');
     }
   };
 
   return (
 <>
-      {/* 가게 정보 섹션
-         <div className={styles.formStoreInfo}>
-          <img src={storeImage} alt={storeName} className={styles.storeImage} />
-          <div className={styles.storeDetails}>
-            <div className={styles.storeName}>{storeName}</div>
-            <div className={styles.storeVisit}>에 방문했군요!</div>
-          </div>
-        </div> */}
-
     <div className={styles.reviewForm}>
+
     <div className={styles.reviewCard}>
       <form className={styles.reviewForm} onSubmit={handleSubmit}>
+        {/*가게 정보 섹션*/}
+        <div className={styles.formStoreInfo}>
+          <img src={storeDetails.storeImg} alt={storeDetails.storeName} className={styles.storeImage} />
+          <div className={styles.storeDetails}>
+            <div className={styles.storeName}>{storeDetails.storeName}</div>
+            <div className={styles.storeVisit}>에 방문했군요!</div>
+          </div>
+        </div>
         {/* 별점 입력 섹션 */}
         <div className={styles.formGroup}>
           <p className={styles.title}>가게에 별점을 매겨주세요!</p>
