@@ -29,16 +29,36 @@ const convertToEnumHashtags = (selectedKeywords) => {
   return selectedKeywords.map(keyword => hashtagMapping[keyword]);
 };
 
+// Base64 문자열을 Blob으로 변환하는 함수
+const base64ToBlob = (base64String, contentType = 'image/jpeg') => {
+  const base64Data = base64String.split(',')[1];
+  const byteCharacters = atob(base64Data);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  return new Blob([byteArray], { type: contentType });
+};
+
+// Base64 문자열을 File로 변환하는 함수
+const base64ToFile = (base64String, fileName, contentType = 'image/jpeg') => {
+  const blob = base64ToBlob(base64String, contentType);
+  return new File([blob], fileName, { type: contentType });
+};
+
+
 const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
   const [image, setImage] = useState(null);
   const [content, setContent] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState([]);
-  const [rating, setRating] = useState(0); // 별점 상태 추가
+  const [rating, setRating] = useState(0);
   const [storeDetails, setStoreDetails] = useState({
     storeName: '',
     storeImg: '',
     storeAddress: ''
   });
+  const [selectedFile, setSelectedFile] = useState(null); //선택한 이미지
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -89,7 +109,10 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result);
+        // Base64 문자열로 변환된 이미지
+        const base64Image = reader.result;
+        setImage(base64Image);
+        setSelectedFile(file);
       };
       reader.readAsDataURL(file);
     }
@@ -107,50 +130,57 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 변환된 해시태그 배열 생성
+    // 해시태그 변환
     const convertedHashtags = convertToEnumHashtags(selectedKeywords);
 
+    // DTO 객체 생성
     const reviewData = {
       reservationId: rId,
       customerId: customerId,
       storeImg: storeImg,
       reviewScore: rating,
-      reviewImg: image,
       reviewContent: content,
-      hashtags: convertedHashtags, // Enum 형태로 변환된 해시태그
+      hashtags: convertedHashtags,
     };
 
     try {
+      const formData = new FormData();
+
+      // 이미지 파일을 FormData에 추가
+      if (image) {
+        const fileName = selectedFile ? selectedFile.name : 'image.jpg';
+        const file = base64ToFile(image, fileName);
+        formData.append('reviewImg', file); // 파일 객체를 추가
+      }
+
+      // DTO를 JSON 문자열로 변환하여 FormData에 추가
+      formData.append('reviewData', JSON.stringify(reviewData));
+
+      // 데이터 전송
       const response = await fetch('/review/save', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization' : 'Bearer ' + getToken(),
-          'refreshToken' : getRefreshToken()
+          'Authorization': 'Bearer ' + getToken(),
+          'refreshToken': getRefreshToken(),
         },
-        body: JSON.stringify(reviewData),
+        body: formData,
       });
-      console.log("review / save API 응답 데이터 : {}" , reviewData);
 
       if (response.ok) {
         console.log('Review saved successfully!');
+        // 폼 초기화
         setImage(null);
         setContent('');
         setSelectedKeywords([]);
         setRating(0);
-
       } else {
-        // 서버 응답의 Content-Type 확인
         const contentType = response.headers.get("content-type");
-
-        // JSON 형식 응답 처리
         if (contentType && contentType.includes("application/json")) {
-          const errorMessage = await response.json(); // JSON 형식의 에러 메시지 처리
+          const errorMessage = await response.json();
           console.error('Failed to save review:', errorMessage);
           alert(`리뷰 저장 실패: ${errorMessage.message || '오류가 발생했습니다.'}`);
         } else {
-          // 텍스트 형식 응답 처리
-          const errorMessage = await response.text(); // 텍스트 형식의 에러 메시지 처리
+          const errorMessage = await response.text();
           console.error('Failed to save review:', errorMessage);
           alert(`리뷰 저장 실패: ${errorMessage}`);
         }
