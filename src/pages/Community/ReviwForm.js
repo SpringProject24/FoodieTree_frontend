@@ -164,7 +164,6 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
   return (
 <>
 
-
     <div className={styles.reviewForm}>
 
     <div className={styles.reviewCard}>
