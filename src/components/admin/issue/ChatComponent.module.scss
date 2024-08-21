@@ -70,16 +70,24 @@
   background-color: #f8f9fa;
   padding: 10px;
   display: flex;
+  flex-direction: column;
   flex-shrink: 0; /* 고정 */
   border-top: 1px solid #ccc;
+  justify-content: space-between;
+
+  .inputContainer{
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .chatBoxFooter input {
+  height: 50px;
   flex-grow: 1;
-  padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
-  margin-right: 10px;
+  margin-right: 8px;
+  font-size: 17px;
 }
 
 .chatBoxFooter button {
@@ -117,7 +125,6 @@
 input[type="text"] {
   width: 100%;
   padding: 8px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -133,6 +140,56 @@ button {
 
 button:disabled {
   background-color: #ccc;
+}
+
+
+.fileUpload {
+  display: flex;
+  align-items: center;
+}
+
+.uploadLabel {
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  background-color: #ddd;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.plusButton {
+  font-size: 24px;
+  color: #555;
+  margin-right: 8px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.imagePreviewContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px auto auto;
+}
+
+.previewImage {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.chatImage{
+  max-width: 190px;
+  max-height: 190px;
 }
 
 @media (max-width: 400px){
