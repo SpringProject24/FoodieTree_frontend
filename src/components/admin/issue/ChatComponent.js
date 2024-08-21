@@ -52,6 +52,21 @@ const ChatComponent = ({ issueId, type }) => {
         }
     }, [messages]);
 
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            quitIssueHandler(); // 채팅 종료 및 자동 저장 로직 호출
+            event.returnValue = ''; // 사용자에게 경고 메시지 표시
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [stompClient, connected]);
+
+
     const showMessage = (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
     };
@@ -75,7 +90,6 @@ const ChatComponent = ({ issueId, type }) => {
 
     const handleCategorySelect = (selectedCategory) => {
         setCategorySelected(true);
-        console.log("selectedCATEGORYYYYYY: " + selectedCategory);
         updateIssueCategory(selectedCategory, issueId).then(r => {
             sendMessage({
                 content: `Issue Category Selected: ${selectedCategory}`,
@@ -86,36 +100,41 @@ const ChatComponent = ({ issueId, type }) => {
 
     const handleFileChange = (event) => {
         const files = event.target.files;
-        const fileArray = Array.from(files);
 
-        // 미리보기용 base64 데이터 생성
+
+        const fileArray = Array.from(files).slice(0, 3); // 3개로 제한
+
+        if (fileArray.length > 3) {
+            alert('최대 3개까지 업로드 가능합니다.');
+            return;
+        }
+
         const previewUrls = fileArray.map(file => {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onloadend = () => resolve(reader.result);
                 reader.onerror = reject;
-                reader.readAsDataURL(file); // base64로 변환
+                reader.readAsDataURL(file);
             });
         });
 
-        // 모든 파일의 base64 URL을 생성하고 상태 업데이트
         Promise.all(previewUrls)
             .then(urls => {
-                setPreviewImages(urls); // 미리보기 이미지 업데이트
-                setSelectedFiles(fileArray); // 실제 파일 저장
+                setPreviewImages(urls);
+                setSelectedFiles(fileArray);
             })
             .catch(error => console.error('Error creating preview:', error));
     };
 
     const sendMessage = (messageOverride = null) => {
         const messageToSend = messageOverride || {
-            content: messageInput ? messageInput.trim() : '',
+            content: messageInput.trim().slice(0, 100), // 글자 수 제한
             issueId: issueId,
             sender: type
         };
 
         if (!messageToSend.content || messageToSend.content.trim() === '') {
-            console.error('Message content is empty. MessageToSend:', messageToSend);
+            console.error('Message content is empty or too long.');
             return;
         }
 
@@ -230,6 +249,7 @@ const ChatComponent = ({ issueId, type }) => {
                     <button className={styles.categoryBtn} onClick={() => handleCategorySelect('시스템')}>시스템 관련 문의에요</button>
                     <button className={styles.categoryBtn} onClick={() => handleCategorySelect('기타')}>그 외의 문의에요</button>
                 </div>
+                    <div className={styles.quitChatBtn} onClick={() => quitIssueHandler()}>채팅 나가기</div>
             </div>
         );
     }
@@ -246,6 +266,14 @@ const ChatComponent = ({ issueId, type }) => {
             </div>
         );
     }
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendMessage();
+        }
+    };
+
 
     return (
         <div className={styles.chatContainer}>
@@ -271,6 +299,7 @@ const ChatComponent = ({ issueId, type }) => {
                     type="text"
                     value={messageInput}
                     onChange={(e) => setMessageInput(e.target.value)}
+                    onKeyDown={handleKeyPress} // 엔터 키 이벤트 핸들러 추가
                     placeholder="Type your message..."
                     disabled={type === 'customer' && !adminStarted}
                 />
