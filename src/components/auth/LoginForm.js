@@ -2,7 +2,6 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import styles from './LoginForm.module.scss';
-import commonStyles from '../../common.module.scss';
 import _ from "lodash";
 import {checkLoggedIn} from "../../utils/authUtil";
 
@@ -29,6 +28,27 @@ const LoginForm = ({ userType, onVerificationSent }) => {
         return emailRegex.test(email);
     };
 
+    //admin : customer 테이블에 저장되지만, role은 admin으로 저장됨
+    const checkAdminDupId = async (email) => {
+        try {
+            const response = await fetch(`/customer/check?email=${email}`);
+            const result = await response.json();
+            if (result) {
+                console.log(`입력하신 이메일 [ ${email} ] 은 customer 회원입니다.`);
+                setIsExistingUser(true);
+                return true;
+            } else {
+                console.error(`입력하신 이메일 [ ${email} ] 은 customer 회원이 아닙니다.`);
+                setIsExistingUser(false);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            return false;
+        }
+    }
+
+    //customer
     const checkCustomerDupId = async (email) => {
         try {
             const response = await fetch(`/customer/check?email=${email}`);
@@ -48,6 +68,7 @@ const LoginForm = ({ userType, onVerificationSent }) => {
         }
     }
 
+    //store
     const checkStoreDupId = async (email) => {
         try {
             const response = await fetch(`/store/check?email=${email}`);
@@ -74,6 +95,8 @@ const LoginForm = ({ userType, onVerificationSent }) => {
                 return await checkCustomerDupId(email);
             case 'store':
                 return await checkStoreDupId(email);
+            case 'admin':
+                return await checkAdminDupId(email);
             default:
                 return false;
         }

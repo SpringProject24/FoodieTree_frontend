@@ -1,13 +1,12 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {
-  flexRender,
   getCoreRowModel,
-  getFilteredRowModel, getPaginationRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
 import FiltersInTable from "./FiltersInTable";
-import {BiSortAlt2, BiSortDown, BiSortUp} from "react-icons/bi";
 import styles from "./ApprovalTables.module.scss";
 import {ApprovalColumns} from "./ApprovalColumns";
 import DateRangePicker from "./DateRangePicker";
@@ -15,6 +14,8 @@ import ApprovalButtons from "./ApprovalButton";
 import TansPagination from "./TansPagination";
 import TansTable from "./TansTable";
 import ApprovalSummary from "./ApprovalSummary";
+import {checkAuthToken, getRefreshToken, getToken, getUserRole} from "../../../utils/authUtil";
+import {useNavigate} from "react-router-dom";
 
 const ApprovalTable = () => {
   const [data, setData] = useState([]);
@@ -24,6 +25,7 @@ const ApprovalTable = () => {
   const [startDate, setStartDate] = useState(new Date('2024-07-01'));
   const [endDate, setEndDate] = useState(new Date());
   const [stats, setStats] = useState({});
+  const navigate = useNavigate();
 
   const table = useReactTable({
     data,
@@ -38,6 +40,7 @@ const ApprovalTable = () => {
       rowSelection,
     },
   });
+
   const fetchApprovals = async () => {
     console.log('fetchApprovals 실행중!')
 
@@ -47,6 +50,9 @@ const ApprovalTable = () => {
     // const token = localStorage.getItem('token');
     // const refreshToken = localStorage.getItem('refreshToken');
 
+    let userRole = getUserRole();
+    console.log("userRole :",userRole);
+
     const res = await fetch(
       `/admin/approve?start=${startISO}&end=${endISO}`,
       {
@@ -54,8 +60,8 @@ const ApprovalTable = () => {
         headers: {
           'Content-Type' : 'application/json',
           'Cache-Control': 'no-cache',
-          // 'Authorization' : 'Bearer ' + getUserToken(),
-          // 'refreshToken': refreshToken,
+          // 'Authorization' : 'Bearer ' + getToken(),
+          // 'refreshToken': getRefreshToken(),
         },
       });
     if(!res.ok) {
@@ -67,22 +73,17 @@ const ApprovalTable = () => {
     setData(DATA.approvals);
     setStats(() => DATA.stats);
   }
-  const onFetch = ({result}) => {
-    const {status, ids} = result;
+  const onFetch = (payload) => {
+    const {actionType, approvalIdList} = payload;
+    const status = actionType === 'APPROVED' ? '승인' : '거절'
     setData(prevData => {
-      const idsToUpdate = new Set(ids);
-
-      // result.status를 모든 data에 적용
-      const updatedData = prevData.map(item => {
+      const idsToUpdate = new Set(approvalIdList);
+      return prevData.map(item => {
         if (idsToUpdate.has(item.id)) {
-          // id가 ids에 있는 경우 status를 업데이트
-          return { ...item, status: status };
+          return {...item, status: status};
         }
-        // id가 ids에 없는 경우 원래의 데이터 유지
         return item;
       });
-      console.log('onFetch updatedData', updatedData)
-      return updatedData;
     });
   }
 
@@ -91,6 +92,24 @@ const ApprovalTable = () => {
     console.log('approval useEffect 실행중!')
     fetchApprovals();
   }, [startDate, endDate]);
+
+  // useEffect 훅 사용하여 admin이 아닐 경우 접근 제한
+  useEffect(() => {
+  debugger
+    const userInfo = checkAuthToken(navigate);
+
+        if (userInfo) {
+          const requiredRole = 'admin'; // 단일 역할을 설정
+          const userRole = getUserRole(); // 사용자 역할 가져오기
+
+          if (userRole !== requiredRole) { // 문자열 비교
+            alert('접근 권한이 없습니다.');
+            navigate('/main');
+            return;
+          }
+        }
+  },
+  []);
 
   return (
     <div className={styles['table-section']}>

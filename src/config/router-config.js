@@ -26,6 +26,12 @@ import Main from "../pages/Main";
 import ChatComponent from "../components/admin/issue/ChatComponent";
 import IssueSection from "../components/admin/issue/IssueSection";
 import CustomerIssuePage from "../pages/customer/CustomerIssuePage";
+import CommunityReviewPage from "../pages/Community/CommunityPage";
+import ReviewForm from "../pages/Community/ReviwForm";
+import CommunityMainPage from "../pages/Community/CommunityMainPage";
+import Search from "../pages/search/Search";
+import ProtectedRouter from "../pages/auth/ProtectedRouter";
+import CustomerMyPageOutlet from "../pages/customer/CustomerMyPageOutlet";
 
 const homeRouter = [
     {
@@ -61,6 +67,22 @@ const homeRouter = [
         path: '/:categoryName',
         element: <CategoriesPage/>,
     },
+    {
+        path: '/reviewCommunity',
+        element: <CommunityReviewPage />,
+    },
+    {
+        path: '/reviewForm',
+        element: <ReviewForm />,
+    },
+    {
+        path: '/reviewMain',
+        element: <CommunityMainPage />,
+    },
+    {
+        path: '/search',
+        element: <Search/>,
+    }
 ];
 const customerMyPageRouter = [
     {
@@ -121,15 +143,29 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/store',
-                element: <StoreMyPageOutlet/>,
+                element: (
+                    <ProtectedRouter>
+                        <StoreMyPageOutlet/>
+                    </ProtectedRouter>
+                ),
                 children: storeRouter
             },
             {
                 path: '/customer',
+                element: (
+                    <ProtectedRouter>
+                        <CustomerMyPageOutlet/>
+                    </ProtectedRouter>
+                ),
                 children: customerMyPageRouter
             },
             {
                 path: '/admin',
+                element: (
+                    <ProtectedRouter>
+                        <AdminPage/>
+                    </ProtectedRouter>
+                ),
                 // element: <AdminPage/>,
                 children: adminRouter
             }

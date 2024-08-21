@@ -12,9 +12,11 @@ const SignUpPage = () => {
     setUserType(type);
   };
 
-  const handleSignUp = (email, password) => {
-    console.log('User Sign Up:', email, password);
+  const handleSignUp = (email, userType) => {
+    console.log('User Sign Up:', email, userType);
+    // 여기서 userType을 백엔드에 전달하여 처리
   };
+
 
   const handleResendEmail = () => {
     console.log('이메일 재전송 버튼 누름 !');
@@ -29,7 +31,6 @@ const SignUpPage = () => {
   return (
       <div className={styles['sign-up-page']}>
         <div className={styles.container}>
-          <div className={styles['logo']}>FoodieTree</div>
           <div className={styles['sign-up-section']}>
             {!verificationSent && ( // 이메일 발송 후 사용자 유형 버튼 숨기기
                 <div className={styles['user-type-buttons']}>
@@ -48,6 +49,14 @@ const SignUpPage = () => {
                       onClick={() => handleUserTypeChange('store')}
                   >
                     Store
+                  </button>
+                  <button
+                      className={`${styles['user-type-button']} ${
+                          userType === 'admin' ? styles.active : ''
+                      }`}
+                      onClick={() => handleUserTypeChange('admin')}
+                  >
+                    Admin
                   </button>
                 </div>
             )}
