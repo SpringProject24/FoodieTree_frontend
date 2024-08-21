@@ -163,19 +163,20 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
 
   return (
 <>
-      {/*가게 정보 섹션*/}
 
-         <div className={styles.formStoreInfo}>
+
+    <div className={styles.reviewForm}>
+
+    <div className={styles.reviewCard}>
+      <form className={styles.reviewForm} onSubmit={handleSubmit}>
+        {/*가게 정보 섹션*/}
+        <div className={styles.formStoreInfo}>
           <img src={storeDetails.storeImg} alt={storeDetails.storeName} className={styles.storeImage} />
           <div className={styles.storeDetails}>
             <div className={styles.storeName}>{storeDetails.storeName}</div>
             <div className={styles.storeVisit}>에 방문했군요!</div>
           </div>
         </div>
-
-    <div className={styles.reviewForm}>
-    <div className={styles.reviewCard}>
-      <form className={styles.reviewForm} onSubmit={handleSubmit}>
         {/* 별점 입력 섹션 */}
         <div className={styles.formGroup}>
           <p className={styles.title}>가게에 별점을 매겨주세요!</p>
