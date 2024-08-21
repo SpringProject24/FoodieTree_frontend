@@ -19,12 +19,12 @@ export const updateReservationFetch = (paymentId) => authFetch(RESERVATION_URL, 
 });
 
 
-export const requestPayment = (productDetail, cnt, paymentId) => PortOne.requestPayment({
+export const requestPayment = (storeInfo, price, paymentId) => PortOne.requestPayment({
     storeId: process.env.REACT_APP_PAYMENT_STORE_ID,
     channelKey: process.env.REACT_APP_KAKAOPAY_CHANNEL_KEY,
     paymentId: paymentId,
-    orderName: `${productDetail.storeInfo.storeName}의 스페셜팩!`,
-    totalAmount: `${productDetail.storeInfo.price * cnt || 3900}`,
+    orderName: `${storeInfo.storeName}의 스페셜팩!`,
+    totalAmount: `${price}`,
     currency: "CURRENCY_KRW",
     payMethod: "EASY_PAY",
     redirectUrl: `http://${window.location.hostname}:3000/main`,

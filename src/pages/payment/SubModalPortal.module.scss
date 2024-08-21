@@ -2,7 +2,7 @@
   font-size: 18px;
   display: block; // 모달 숨기기
   position: absolute;
-  z-index: 1; // 다른 요소들 위에
+  z-index: 100; // 다른 요소들 위에
   left: 0;
   top: 0;
   width: 100%; // 전체 너비
@@ -12,18 +12,20 @@
 
   .modalContent {
     position: relative;
-    z-index: -2;
+    z-index: 12;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     color: black;
     background-color: #fefefe;
     margin: 15% auto; // 화면 가운데 배치
+    padding: 20px;
     width: 500px; // 너비 조절
-    border-radius: 15px;
+    border-radius: 5px;
     line-height: 2;
     overflow: hidden;
     max-height: 80vh; // 모달 최대 높이 설정
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
 
     .close {
       color: #aaa;
@@ -60,7 +62,7 @@
     }
 
     .modalInnerContent {
-      padding: 0 20px 30px;
+      padding: 0 20px;
       overflow-y: auto; // 세로 스크롤 활성화
       max-height: calc(70vh - 40px); // 닫기 버튼 높이 제외한 최대 높이 설정
       text-align: center;
@@ -93,6 +95,9 @@
       border-radius: 15px; // 모서리 둥글게
       line-height: 2;
       position: absolute;
+      margin: 15% auto; // 화면 가운데 배치
+      left: 50%;
+      transform: translateX(-50%);
 
       // 애니메이션 추가
 

@@ -1,20 +1,22 @@
 import ReactDOM from "react-dom";
 import styles from "./SubModalPortal.module.scss";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimes} from "@fortawesome/free-solid-svg-icons";
-import React  from "react";
+import React from "react";
+import Spinner from "../../components/payment/Spinner";
 
-const SubModalPortal = ({ children, onClose }) => {
+const SubModalPortal = ({children, onClose, isLoading}) => {
     return ReactDOM.createPortal(
         <div className={styles.modal} onClick={onClose}>
-            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                <div className={styles.close}>
-                    <span><FontAwesomeIcon className={styles.closeBtn} onClick={onClose} icon={faTimes}/></span>
-                </div>
-                <div className={styles.modalInnerContent}>
-                    { children }
-                </div>
-            </div>
+            {
+                isLoading ? <Spinner/> : (
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <div className={styles.modalInnerContent}>
+                            {
+                                isLoading ? <Spinner/> : children
+                            }
+                        </div>
+                    </div>
+                )
+            }
         </div>
         , document.getElementById('sub-modal-root'));
 };
