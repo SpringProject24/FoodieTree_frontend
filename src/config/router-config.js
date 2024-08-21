@@ -166,8 +166,14 @@ export const router = createBrowserRouter([
                         <AdminPage/>
                     </ProtectedRouter>
                 ),
-                // element: <AdminPage/>,
-                children: adminRouter
+            },
+            {
+                path: '/admin/issue',
+                element: (
+                    <ProtectedRouter>
+                        <IssueSection/>
+                    </ProtectedRouter>
+                ),
             }
         ]
     },
