@@ -34,6 +34,8 @@ const Profile = ({ storeInfo, stats, isShow, width }) => {
         }
     };
 
+    const isMyPage = location.pathname === '/store';
+
     const handleLogout = async () => {
         await logoutAction(navigate);
         navigate('/sign-in');
@@ -48,7 +50,9 @@ const Profile = ({ storeInfo, stats, isShow, width }) => {
                 <h2>{storeInfo.storeName}</h2>
                 <p>{storeInfo.storeId}</p>
                 <ul className={styles.nav}>
-                    <Link to={'/store'} className={styles.navItem} onClick={handleReload}>마이페이지</Link>
+                    <Link to={'/store'}
+                          className={`${styles.navItem} ${isMyPage ? styles.active : ''}`}
+                          onClick={handleReload}>마이페이지</Link>
                     <Link to={'/store/edit'} className={styles.navItem}>개인정보수정</Link>
                     <button className={styles.logoutButton} onClick={handleLogout}>로그아웃</button>
                 </ul>
