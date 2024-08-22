@@ -111,12 +111,19 @@ const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm, onC
                     {tag}
                 </div>
                 {reservationDetail.status === 'RESERVED' ?
+                    reservationDetail.paymentTime === null ?
+                            <>
+                                <p className={styles.btnDes}>결제가 아직 완료되지 않았어요!<br/>아래의 결제하기 버튼을 눌러서 결제를 완료해 주세요</p>
+                                <button className={styles.paymentBtn} >결제하기</button>
+                            </>
+                        :
                     <>
                         {/*<p className={styles.btnDes}>가게에 도착해 스페셜 팩을 수령했다면 <br/> '픽업 확인' 버튼을 눌러주세요!</p>*/}
                         {/*<button className={styles.pickupConfirmBtn} onClick={handleConfirmPickUp}>픽업 확인</button>*/}
                         <p className={styles.btnDes}>예약을 취소하고 싶으시면 <br/> '예약 취소' 버튼을 눌러주세요!</p>
                         <button className={styles.pickupCancelBtn} onClick={handleCancelPickUp}>예약 취소</button>
                     </>
+
                     : <></>}
                 {/*{reservationDetail.status === 'PICKEDUP' ?*/}
                 {/*    */}

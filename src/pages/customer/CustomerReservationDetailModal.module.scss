@@ -50,7 +50,7 @@
     margin-top: 20px;
 
   }
-    .pickupConfirmBtn{
+    .pickupConfirmBtn, .paymentBtn{
       justify-content: center;
       padding: 13px 144px;
       font-size: 19px;
@@ -109,7 +109,7 @@
       }
 
     }
-    .pickupConfirmBtn, .pickupCancelBtn {
+    .pickupConfirmBtn, .pickupCancelBtn, .paymentBtn {
       width: 100%;
       padding: 13px 0;
     }
