@@ -142,35 +142,35 @@ const FoodNav = ({ selectedCategory, stores }) => {
   const [loading, setLoading] = useState(true);  // 로딩 상태 추가
   const { openModal } = useModal();
 
-  // customerId값
   const customerId = getUserEmail();
 
   useEffect(() => {
     if (customerId) {
       // 데이터 불러오기 시작 전에 로딩 상태 설정
-      setLoading(true);
-      Promise.all([
-        fetchFavorites(customerId, setFavorites),
-        fetchFavoriteAndOrderStores(customerId, setMyFavoriteAndOrderStores),
-        fetchRecommendedStores(customerId, setRecommendedStores)
-      ]).then(() => setLoading(false)) // 데이터 로드 후 로딩 상태 해제
-      .catch(() => setLoading(false));
+      const fetchData = async () => {
+        try {
+          await Promise.all([
+            fetchFavorites(customerId, setFavorites),
+            fetchFavoriteAndOrderStores(customerId, setMyFavoriteAndOrderStores),
+            fetchRecommendedStores(customerId, setRecommendedStores)
+          ]);
+        } catch (error) {
+          console.error('⚠️Error fetching data:', error);
+        } finally {
+          // 데이터가 로드된 후 최소 1.5초 동안 스켈레톤 유지
+          setTimeout(() => setLoading(false), 1500);
+        }
+      };
+
+      fetchData();
     }
   }, [customerId]);
 
   useEffect(() => {
-    // store 정보
-    console.log('Stores:', stores);
-    // 선택된 area 정보
-    console.log('Selected Area:', selectedArea);
-
     if (selectedArea !== null) {
-      // 선택된 area와 같은 address를 가진 가게 리스트 필터링
       const newFilteredStores = stores.filter(store => {
         const address = store.address || '';
-        const isMatch = address.includes(selectedArea);
-        console.log(`Checking store ${store.storeName}: ${address} - Match: ${isMatch}`);
-        return isMatch;
+        return address.includes(selectedArea);
       });
 
       setFilteredStores(newFilteredStores);
