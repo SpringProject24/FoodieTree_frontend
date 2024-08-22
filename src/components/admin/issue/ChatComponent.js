@@ -18,9 +18,10 @@ const ChatComponent = ({issueId, type}) => {
     const chatBoxRef = useRef(null);
     const {closeModal} = useModal();
     const [previewImages, setPreviewImages] = useState([]);
+    const BASE_URL = window.location.origin;
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:3000/chat');
+        const socket = new SockJS(`${BASE_URL}/chat`);
         const stompClient = Stomp.over(() => socket);
 
         stompClient.connect({}, (frame) => {
@@ -37,6 +38,8 @@ const ChatComponent = ({issueId, type}) => {
             });
 
         }, (error) => {
+            alert('채팅 서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
+            quitIssueHandler();
             console.error('Connection error:', error);
             setConnected(false);
         });
@@ -58,7 +61,7 @@ const ChatComponent = ({issueId, type}) => {
         const handleBeforeUnload = (event) => {
             event.preventDefault();
             quitIssueHandler(); // 채팅 종료 및 자동 저장 로직 호출
-            event.returnValue = ''; // 사용자에게 경고 메시지 표시
+            event.returnValue = 'caution!'; // 사용자에게 경고 메시지 표시
         };
 
         window.addEventListener('beforeunload', handleBeforeUnload);
@@ -218,24 +221,49 @@ const ChatComponent = ({issueId, type}) => {
                 throw new Error('Failed to save chat to the database.');
             }
 
-            alert('Chat saved successfully.');
-
         } catch (e) {
             console.error('Error saving chat:', e);
             alert('Failed to save chat.');
         }
     };
 
+    const sendDoneMessage = (messageOverride = null) => {
+        const messageToSend = messageOverride || {
+            content: '채팅이 끝났습니다.', // 글자 수 제한
+            issueId: issueId,
+            sender: type
+        };
+
+        if (connected && stompClient) {
+            stompClient.send(`/app/sendMessage/${issueId}`, {}, JSON.stringify(messageToSend));
+            if (!messageOverride) setMessageInput('');
+        } else {
+            console.error('STOMP client is not connected.');
+        }
+    }
+
     const solveIssueHandler = () => {
         const done = "solved";
+        let messageContent = `고객이 문의가 해결되어 채팅을 종료했습니다.`;
+        if (type === 'customer') {
+            messageContent = `문제가 해결 되었다니 다행이네요!`+ '\n' + `궁금한 점이나 다른 문의사항이 있으시면` + '\n' + `언제든지 문의해주세요 :)`;
+        }
+        sendMessage({content: messageContent, sender: "manger"});
+        setConnected(false);
         saveChatToDatabase(done).then(() => {
-            alert("이슈가 해결되어 채팅 내용이 저장됩니다.");
+            alert("이슈가 해결되어 채팅을 종료합니다.");
             closeModal();
         });
     };
 
     const quitIssueHandler = () => {
         const done = "cancel";
+        let messageContent = `고객이 채팅 끝내기를 선택했습니다.`;
+        if (type === 'customer') {
+            messageContent = `채팅창을 닫을게요`+ '\n' + `궁금한 점이나 다른 문의사항이 있으시면` + '\n' + `언제든지 문의해주세요 :)`;
+        }
+        sendMessage({content: messageContent, sender: "manger"});
+        setConnected(false);
         saveChatToDatabase(done).then(() => {
             alert("채팅을 종료합니다.");
             closeModal();
@@ -263,12 +291,17 @@ const ChatComponent = ({issueId, type}) => {
     if (!adminStarted && type === 'customer') {
         return (
             <div className={styles.chatContainer}>
-                <h2>Customer Support</h2>
                 <div className={styles.loading}>
-                    Customer support team is on their way...
+                    고객님을 도와드릴 상담 직원이 곧 도착할 거예요!
                     <br/>
-                    잠시만 기다려주세요!
+                    잠시만 기다려주세요~ 😊
                 </div>
+                <img
+                    src="/assets/img/loading.gif"
+                    alt="Loading..."
+                    className={styles.loadingGif} // GIF에 적용할 스타일을 위해 CSS 클래스 추가
+                />
+                <div className={styles.quitChatBtn} onClick={() => quitIssueHandler()}>채팅 나가기</div>
             </div>
         );
     }
@@ -299,7 +332,7 @@ const ChatComponent = ({issueId, type}) => {
                         key={index}
                         className={`${styles.message} ${
                             msg.sender === type ? styles.myMessage : styles.otherMessage
-                        }`}
+                        } ${msg.sender === 'manger' && styles.mangerMessage}`}
                     >
                         {msg.content.startsWith('data:image/') ? (
                             <img src={msg.content} alt="Uploaded" className={styles.chatImage}/>
@@ -328,15 +361,15 @@ const ChatComponent = ({issueId, type}) => {
                         type="text"
                         value={messageInput}
                         onChange={(e) => setMessageInput(e.target.value)}
-                        onKeyDown={handleKeyPress} // 엔터 키 이벤트 핸들러 추가
+                        onKeyUp={handleKeyPress} // 엔터 키 이벤트 핸들러 추가
                         placeholder="Type your message..."
-                        disabled={type === 'customer' && !adminStarted}
+                        disabled={!connected || (type === 'customer' && !adminStarted)}
                     />
                     <button
                         onClick={handleSend}
                         disabled={!connected || (type === 'customer' && !adminStarted)}
                     >
-                        Send
+                        전송
                     </button>
                 </div>
                 <div className={styles.imagePreviewContainer}>
