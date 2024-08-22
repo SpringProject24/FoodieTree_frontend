@@ -8,16 +8,15 @@ const CustomerReservationDetailModal = ({reservationDetail, onPickupConfirm, onC
     const {closeModal} = useModal();
 
     const handleConfirmPickUp = () => {
-        onPickupConfirm(reservationDetail.id); // props로 받아온 함수 실행
+        onPickupConfirm(reservationDetail.reservationId); // props로 받아온 함수 실행
         alert('픽업이 확인되었습니다. 감사합니다.');
         closeModal();
         // 추후 리뷰 기능 추가 가능
     };
 
     const handleCancelPickUp = () => {
-        onCancelClick(reservationDetail.id);
-        alert('예약이 취소되었습니다.')
         closeModal();
+        onCancelClick(reservationDetail.reservationId);
     }
 
     let tag = '';

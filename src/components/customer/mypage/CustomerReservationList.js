@@ -129,11 +129,13 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
     const handleReservationClick = async (reservationId) => {
         try {
             const reservationDetail = await fetchReservationDetail(reservationId);
+            console.log(reservationDetail);
+            console.log(reservationId);
             if (reservationDetail) {
                 openModal('customerReservationDetail', {
                     reservationDetail,
-                    onCancelClick: () => cancelReservation(reservationId),
-                    onPickupConfirm: async () => await completePickup(reservationId)
+                    onCancelClick: () => handleCancelReservationClick(reservationId),
+                    onPickupConfirm: async () => await completePickup(reservationId),
                 });
             } else {
                 alert('Failed to fetch reservation details');
@@ -144,8 +146,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
     };
 
     // 예약 취소 모달을 여는 함수
-    const handleCancelReservationClick = async (reservationId, event) => {
-        event.stopPropagation(); // 이벤트 버블링 방지
+    const handleCancelReservationClick = async (reservationId) => {
         try {
             const reservationDetail = reservations.find(r => r.reservationId === reservationId);
 
@@ -159,6 +160,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
             console.error('Error fetching cancel reservation detail:', error);
         }
     };
+
 
     // 리뷰 작성 모달을 여는 함수
     const handleWriteReviewClick = async (reservationId, event) => {
