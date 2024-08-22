@@ -108,7 +108,7 @@ const storeRouter = [
     },
     {
         path: 'approval/p',
-        element: <ProductRegisterForm/>,
+        element: <StoreRegisterPage/>,
     }
 ]
 
