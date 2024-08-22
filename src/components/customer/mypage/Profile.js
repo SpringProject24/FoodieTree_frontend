@@ -46,6 +46,7 @@ const Profile = ({ customerMyPageDto, stats, isShow, width }) => {
                 <h2>{userData.nickname}</h2>
                 <p>{userData.customerId}</p>
                 <ul className={styles.nav}>
+                    <Link to={'/customer'} className={styles.navItem} onClick={handleReload}>마이페이지</Link>
                     <Link to={'/customer/edit'} className={styles.navItem}>개인정보수정</Link>
                     <button className={styles.logoutButton} onClick={handleLogout}>로그아웃</button>
                 </ul>
