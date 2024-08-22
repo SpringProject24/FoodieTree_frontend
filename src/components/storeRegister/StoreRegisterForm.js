@@ -90,7 +90,7 @@ const StoreRegisterForm = () => {
         onChange={changeHandler}
         type="text"
         maxLength={10}
-        placeholder="숫자만 입력해주세요."
+        placeholder="'-'를 제외한 10자리 숫자만 입력하세요."
       />
 
       <label htmlFor='bizName'>상호명
@@ -103,7 +103,7 @@ const StoreRegisterForm = () => {
         onChange={changeHandler}
         type="text"
         maxLength={30}
-        placeholder="상호명은 필수 입력 값입니다."
+        placeholder="상호명을 입력하세요."
         required
       />
       <label htmlFor='bizAddress'>주소
@@ -139,7 +139,7 @@ const StoreRegisterForm = () => {
         value={values.bizPhoneNum}
         onChange={changeHandler}
         type="text"
-        placeholder="가게 연락처는 필수 입력 값입니다."
+        placeholder="전화 번호 또는 휴대전화 번호를 입력하세요."
         required
       />
       <label htmlFor='bizCategory'>업종
