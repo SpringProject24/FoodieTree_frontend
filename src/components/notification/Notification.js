@@ -17,7 +17,6 @@ const Notification = ({email, role}) => {
   const navigate = useNavigate();
   const notifyRef = useRef(null);
 
-  console.log('이메일 ', email, role);
   let customerId = null;
   let storeId = null;
   if (role === 'store') {
@@ -34,7 +33,6 @@ const Notification = ({email, role}) => {
         console.error('실패 fetch notifications');
       }
       const data = await res.json();
-      console.log('fetchNotifications data 결과 ', data)
       setNotifications(data);
       if(data.some(d => d.read == null)) {
         setHasNewMessage(true);
@@ -45,7 +43,6 @@ const Notification = ({email, role}) => {
   };
   // REST API로 알림 목록 fetch (링크 이동 시 리렌더링)
   useEffect(() => {
-    console.log("fetch 알림 리스트 useEffect 실행!")
     fetchNotifications();
   }, [location.pathname]);
 
@@ -59,7 +56,6 @@ const Notification = ({email, role}) => {
         if (role === 'customer') {
           // 고객 알림 구독
           client.subscribe(`/queue/customer/${customerId}`, (message) => {
-            console.log('Received message : ', message);
             const notification = JSON.parse(message.body);
             setNotifications(prev => [...prev, notification]);
             setHasNewMessage(true);
@@ -67,7 +63,6 @@ const Notification = ({email, role}) => {
         } else if (role === 'store') {
           // 가게 알림 구독
           client.subscribe(`/topic/store/${storeId}`, (message) => {
-            console.log('Received message for store: ', message);
             const notification = JSON.parse(message.body);
             setNotifications(prev => [...prev, notification]);
             setHasNewMessage(true);
@@ -148,7 +143,7 @@ const Notification = ({email, role}) => {
       navigate(`/${role}`);
     }
   };
-  // 모든 알림 읽음 처리
+  // 목록에 있는 알림 모두 읽음 처리
   const readAllHandler = async () => {
     const payload = {
       ids: notifications.filter(n=>n.read === false).map(n=>n.id)

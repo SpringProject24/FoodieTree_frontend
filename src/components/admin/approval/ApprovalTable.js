@@ -18,11 +18,12 @@ import {authFetch, checkAuthToken, getRefreshToken, getToken, getUserRole} from 
 import {useNavigate} from "react-router-dom";
 
 const ApprovalTable = () => {
+  const beginDate = '2024-07-01';
   const [data, setData] = useState([]);
   const columns = useMemo(() => ApprovalColumns, []);
   const [columnFilters, setColumnFilters] = useState([]);
   const [rowSelection, setRowSelection] = useState({}); // 선택한 행
-  const [startDate, setStartDate] = useState(new Date('2024-07-01'));
+  const [startDate, setStartDate] = useState(new Date(beginDate));
   const [endDate, setEndDate] = useState(new Date());
   const [stats, setStats] = useState({});
   const navigate = useNavigate();
@@ -106,12 +107,27 @@ const ApprovalTable = () => {
     },
     []);
 
+  const btnClickHandler = (type) => {
+    const today = new Date();
+    if (type === 'all') {
+      setStartDate(new Date(beginDate));
+      setEndDate(today);
+    } else if (type === 'today') {
+      setStartDate(today);
+      setEndDate(today);
+    }
+  };
+
   return (
     <div className={styles['table-section']}>
       <ApprovalSummary stats={stats}/>
       <div className={styles['table-interaction']}>
         <FiltersInTable columnFilters={columnFilters} setColumnFilters={setColumnFilters}/>
         <div className={styles['left-interactions']}>
+          <div className={styles['date-btn-box']}>
+            <button className={styles['date-btn']} onClick={() => btnClickHandler('all')}>전체</button>
+            <button className={styles['date-btn']} onClick={() => btnClickHandler('today')}>오늘</button>
+          </div>
           <DateRangePicker
             startDate={startDate}
             endDate={endDate}
