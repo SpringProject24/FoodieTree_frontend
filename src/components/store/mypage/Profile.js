@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from './Profile.module.scss';
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import { imgErrorHandler } from "../../../utils/error";
+import {DEFAULT_IMG, imgErrorHandler} from "../../../utils/error";
 import ProductCount from "./ProductCount";
 import Calendar from "./Calendar";
 import { useModal } from "../../../pages/common/ModalProvider";
@@ -45,7 +45,7 @@ const Profile = ({ storeInfo, stats, isShow, width }) => {
         <div className={`${styles.profileSection} ${isShow ? styles.on : undefined}`}>
             <div className={styles.profile}>
                 <a className={styles.imgBox} href="#" id="avatar">
-                    <img src={storeInfo.storeImg} onError={imgErrorHandler} alt="store image"/>
+                    <img src={storeInfo.storeImg || DEFAULT_IMG} onError={imgErrorHandler} alt="store image"/>
                 </a>
                 <h2>{storeInfo.storeName}</h2>
                 <p>{storeInfo.storeId}</p>
