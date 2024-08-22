@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
 import styles from './Modal.module.scss';
 import {useModal} from "./ModalProvider";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
