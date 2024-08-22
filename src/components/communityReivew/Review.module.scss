@@ -35,7 +35,8 @@
 
 .reviewImage {
   width: 100%;
-  height: auto;
+  height: 500px;
+  object-fit: cover;
   margin: 10px 0;
 }
 
@@ -115,4 +116,10 @@
   border-radius: 8px;
   cursor: pointer;
   transition: border-color 0.3s;
+}
+
+@media (max-width: 400px) {
+  .reviewImage {
+    height: 230px;
+  }
 }
