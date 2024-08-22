@@ -43,7 +43,7 @@ const ReservationList = ({ reservations, onUpdateReservations, isLoading, loadMo
         try {
             openModal('storeReservationDetail', {
                 reservationInfo: reservation,
-                onPickupConfirm: () => completePickup(reservation.reservationId)  // 픽업 확인 함수 전달
+                onPickupConfirm: () => completePickup(reservation.reservationId)
             });
         } catch (error) {
             console.error('Error opening modal:', error);
