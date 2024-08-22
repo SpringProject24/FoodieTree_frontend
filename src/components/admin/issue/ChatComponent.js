@@ -330,7 +330,7 @@ const ChatComponent = ({issueId, type}) => {
                         type="text"
                         value={messageInput}
                         onChange={(e) => setMessageInput(e.target.value)}
-                        onKeyDown={handleKeyPress} // 엔터 키 이벤트 핸들러 추가
+                        onKeyUp={handleKeyPress} // 엔터 키 이벤트 핸들러 추가
                         placeholder="Type your message..."
                         disabled={type === 'customer' && !adminStarted}
                     />
