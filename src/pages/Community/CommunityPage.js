@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Review from '../../components/communityReivew/Review';
 import styles from './CommunityPage.module.scss';
+import Review from '../.././components/communityReivew/Review'
 
 const REVIEWS_API_URL = '/review/all';
 const STORE_INFO_API_URL = '/review/storeInfo';
@@ -73,6 +73,7 @@ const CommunityPage = () => {
             reviewText={review.reviewContent}
             store={storeInfo.storeName || review.storeName} 
             storeAddress={storeInfo.address || review.address} 
+            hashtags={review.hashtags || []} // 해시태그 전달
           />
         );
       })}
