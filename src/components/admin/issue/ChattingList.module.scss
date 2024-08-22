@@ -1,0 +1,28 @@
+.chatListContainer{
+  width: 50%;
+  min-height: 650px;
+  border-right: 1px solid rgba(80, 80, 80, 0.24);
+
+  .tableInteraction{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: baseline;
+    flex-wrap: nowrap;
+    margin: 5px auto;
+  }
+
+  .tansPageContainer{
+    display: flex;
+    flex-direction: row;
+    width: 20%;
+    margin: 0 auto;
+    justify-content: space-evenly;
+    align-items: center;
+    line-height: 24px;
+  }
+
+  .tansTable{
+    width: 740px;
+  }
+}
