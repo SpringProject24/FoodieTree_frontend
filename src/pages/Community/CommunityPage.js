@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Review from '../../components/communityReivew/Review';
 import styles from './CommunityPage.module.scss';
+import Review from '../.././components/communityReivew/Review'
 
 const REVIEWS_API_URL = '/review/all';
 const STORE_INFO_API_URL = '/review/storeInfo';
@@ -71,8 +71,9 @@ const CommunityPage = () => {
             name={name}
             reviewImage={review.reviewImg}
             reviewText={review.reviewContent}
-            store={storeInfo.storeName || review.storeName} // 가게 이름
-            storeAddress={storeInfo.address || review.address} // 가게 주소
+            store={storeInfo.storeName || review.storeName} 
+            storeAddress={storeInfo.address || review.address} 
+            hashtags={review.hashtags || []} // 해시태그 전달
           />
         );
       })}
