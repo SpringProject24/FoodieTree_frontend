@@ -71,8 +71,8 @@ const CommunityPage = () => {
             name={name}
             reviewImage={review.reviewImg}
             reviewText={review.reviewContent}
-            store={storeInfo.storeName || review.storeName} // 가게 이름
-            storeAddress={storeInfo.address || review.address} // 가게 주소
+            store={storeInfo.storeName || review.storeName} 
+            storeAddress={storeInfo.address || review.address} 
           />
         );
       })}
