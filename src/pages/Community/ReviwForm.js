@@ -137,10 +137,12 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
     const reviewData = {
       reservationId: rId,
       customerId: customerId,
-      storeImg: storeImg,
       reviewScore: rating,
       reviewContent: content,
       hashtags: convertedHashtags,
+      storeImg: storeDetails.storeImg,
+      storeAddress: storeDetails.storeAddress,
+      // paymentTime: reser
     };
 
     try {
