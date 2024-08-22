@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from "../../pages/product/BottomPlaceOrder.module.scss";
 import {useModal} from "../../pages/common/ModalProvider";
 import {createReservationFetch} from "./fetch-payment";
 import PaymentRequestModal from "../../pages/payment/PaymentRequestModal";
 import SubModalPortal from "../../pages/payment/SubModalPortal";
+import ClickPortal from "../../pages/payment/ClickPortal";
 
 const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, initialCount, cntHandler=null }}) => {
     const [isShow, setIsShow] = useState(false);
@@ -13,6 +14,7 @@ const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, init
     const isReservation = remainProduct === 0;
     const storeId = storeInfo?.storeId || '';
     const price = storeInfo?.price * initialCount;
+
     const handleMakeReservation = async () => {
         if (remainProduct === 0) {
             alert('해당 상품은 품절되었습니다.');
@@ -42,6 +44,7 @@ const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, init
 
     const closeHandler = () => {
         setIsShow(false);
+        closeModal();
     }
     return (
         <>
@@ -49,11 +52,11 @@ const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, init
                 className={`${styles.placeOrderBtn} ${isReservation ? styles.reservation : ''}`}
                 onClick={handleMakeReservation}
             >
-                <p>{isReservation ? 'SOLD OUT' : '구매하기'}</p>
+                <p>{isReservation ? 'SOLD OUT' : '예약하기'}</p>
             </div>
             { isShow &&
                 <SubModalPortal onClose={closeHandler} isLoading={isLoading}>
-                    <PaymentRequestModal storeName={storeInfo.storeName} price={price} paymentId={paymentId}/>
+                    <PaymentRequestModal storeName={storeInfo.storeName} price={price} paymentId={paymentId} onClose={closeHandler}/>
                 </SubModalPortal>
             }
         </>
