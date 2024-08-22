@@ -141,7 +141,7 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
       reviewContent: content,
       hashtags: convertedHashtags,
       storeImg: storeDetails.storeImg,
-      storeAddress: storeDetails.storeAddress,
+      address: storeDetails.storeAddress,
       // paymentTime: reser
     };
 
