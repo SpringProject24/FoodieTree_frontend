@@ -190,6 +190,9 @@
 
 .pendingReviewsList {
   width: 100%;
+  max-height: 600px;
+  overflow: scroll;
+  margin-bottom: 60px;
 }
 
 .pendingReviewItem {
