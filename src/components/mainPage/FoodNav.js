@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { useModal } from "../../pages/common/ModalProvider";
 import styles from "./FoodNav.module.scss";
+import Skeleton from "./Skeleton";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './slick-theme.css';
@@ -138,6 +139,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
   const [selectedArea, setSelectedArea] = useState(null);
   const [myFavoriteAndOrderStores, setMyFavoriteAndOrderStores] = useState([]);
   const [recommendedStores, setRecommendedStores] = useState([]);
+  const [loading, setLoading] = useState(true);  // 로딩 상태 추가
   const { openModal } = useModal();
 
   // customerId값
@@ -145,9 +147,14 @@ const FoodNav = ({ selectedCategory, stores }) => {
 
   useEffect(() => {
     if (customerId) {
-      fetchFavorites(customerId, setFavorites);
-      fetchFavoriteAndOrderStores(customerId, setMyFavoriteAndOrderStores);
-      fetchRecommendedStores(customerId, setRecommendedStores);
+      // 데이터 불러오기 시작 전에 로딩 상태 설정
+      setLoading(true);
+      Promise.all([
+        fetchFavorites(customerId, setFavorites),
+        fetchFavoriteAndOrderStores(customerId, setMyFavoriteAndOrderStores),
+        fetchRecommendedStores(customerId, setRecommendedStores)
+      ]).then(() => setLoading(false)) // 데이터 로드 후 로딩 상태 해제
+      .catch(() => setLoading(false));
     }
   }, [customerId]);
 
@@ -225,6 +232,11 @@ const FoodNav = ({ selectedCategory, stores }) => {
     ],
   });
 
+  // 로딩 상태일 때 Skeleton 컴포넌트 렌더링
+  if (loading) {
+    return <Skeleton count={4} init={true} />;
+  }
+
   return (
     <>
       <FavAreaSelector onAreaSelect={setSelectedArea} />
@@ -243,8 +255,8 @@ const FoodNav = ({ selectedCategory, stores }) => {
                 className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleFavoriteClick(store.storeId);
-                }}
+                    handleFavoriteClick(store.storeId);
+                  }}
               >
                 <FontAwesomeIcon 
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
@@ -252,7 +264,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               </div>
               <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} onError={imgErrorHandler}/>
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
-              <p className={styles.storeName}>{store.storeName}</p>
+                <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>(수량 {store.productCnt})</span>
             </div>
@@ -305,8 +317,8 @@ const FoodNav = ({ selectedCategory, stores }) => {
                 className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleFavoriteClick(store.storeId);
-                }}
+                    handleFavoriteClick(store.storeId);
+                  }}
               >
                 <FontAwesomeIcon 
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
@@ -314,7 +326,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               </div>
               <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} className={styles.image} onError={imgErrorHandler} />
               <span className={styles.category}>{extractFoodType(store.category)}</span>
-              <p className={styles.storeName}>{store.storeName}</p>
+                <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>(수량 {store.productCnt})</span>
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
@@ -337,8 +349,8 @@ const FoodNav = ({ selectedCategory, stores }) => {
                 className={`${styles.heartIcon} ${favorites[store.storeId] ? styles.favorited : styles.notFavorited}`} 
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleFavoriteClick(store.storeId);
-                }}
+                    handleFavoriteClick(store.storeId);
+                  }}
               >
                 <FontAwesomeIcon 
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
@@ -346,7 +358,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               </div>
               <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} className={styles.image} onError={imgErrorHandler} />
               <span className={styles.category}>{extractFoodType(store.category)}</span>
-              <p className={styles.storeName}>{store.storeName}</p>
+                <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
               <span className={styles.productCnt}>(수량 : {store.productCnt})</span>
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
