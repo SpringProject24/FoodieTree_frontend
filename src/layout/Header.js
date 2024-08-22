@@ -77,8 +77,6 @@ const Header = () => {
 
     return (
         <header className={styles.header}>
-            {/* 햄버거 버튼 */}
-            {width > 400 && <SideBarBtn onShow={toggleModal}/>}
             {/* 로고 */}
             <div className={styles.logoBtn} onClick={clickHandler}></div>
 
