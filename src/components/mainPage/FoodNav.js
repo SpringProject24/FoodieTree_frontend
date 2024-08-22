@@ -254,7 +254,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
-              <span className={styles.productCnt}>수량 : {store.productCnt}</span>
+              <span className={styles.productCnt}>(수량 {store.productCnt})</span>
             </div>
           ))}
         </Slider>
@@ -285,7 +285,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
-              <span className={styles.productCnt}>수량 : {store.productCnt}</span>
+              <span className={styles.productCnt}>(수량 {store.productCnt})</span>
             </div>
           ))}
         </Slider>
@@ -316,7 +316,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               <span className={styles.category}>{extractFoodType(store.category)}</span>
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
-              <span className={styles.productCnt}>수량 : {store.productCnt}</span>
+              <span className={styles.productCnt}>(수량 {store.productCnt})</span>
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
             </div>
           ))}
@@ -348,7 +348,7 @@ const FoodNav = ({ selectedCategory, stores }) => {
               <span className={styles.category}>{extractFoodType(store.category)}</span>
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
-              <span className={styles.productCnt}>수량 : {store.productCnt}</span>
+              <span className={styles.productCnt}>(수량 : {store.productCnt})</span>
               {store.productCnt === 1 && <div className={styles.overlay}>SOLD OUT</div>}
             </div>
           ))}
