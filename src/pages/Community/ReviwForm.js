@@ -175,6 +175,9 @@ const ReviewForm = ({ onSubmit, reservationId, storeImg }) => {
         setContent('');
         setSelectedKeywords([]);
         setRating(0);
+
+        // 성공적으로 리뷰를 저장한 후 /communityPage로 네비게이션
+        navigate('/reviewCommunity');
       } else {
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
