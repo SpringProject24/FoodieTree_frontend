@@ -1,6 +1,6 @@
 $upload-w: 500px;
 $upload-h: 300px;
-$color-main: #50B498;
+$color-main: var(--color-main-300);
 $color-light: #e3ffef;
 
 .image-upload {
