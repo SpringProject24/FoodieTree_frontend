@@ -4,6 +4,23 @@
   height: 100%;
   overflow: hidden;
 
+
+  button {
+    padding: 12px 33px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(140, 143, 148, 0.85);
+    color: rgba(0, 0, 0, 0.69);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  button:disabled {
+    background-color: #ccc;
+  }
+
+
   .chatBoxBody {
     flex-grow: 1; /* 가변 영역 */
     overflow-y: auto;
@@ -15,6 +32,36 @@
 
     .message{
       max-width: 364px;
+    }
+
+
+    .myMessage {
+      background-color: #d1e7dd;
+      text-align: right;
+      float: right;
+      margin: 5px;
+      padding: 10px;
+      border-radius: 10px;
+      width: fit-content;
+      align-self: end;
+    }
+
+    .otherMessage {
+      background-color: #f8d7da;
+      text-align: left;
+      float: left;
+      margin: 5px;
+      padding: 10px;
+      border-radius: 10px;
+      width: fit-content;
+      align-self: start;
+    }
+
+    .mangerMessage{
+      width: 100%;
+      text-align: center;
+      align-self: center;
+      background-color: rgba(245, 228, 207, 0.76);
     }
 
     .chatImage{
@@ -105,6 +152,15 @@
       justify-content: space-evenly;
   }
 
+  .loading{
+    margin-top: 60px;
+  }
+
+  .loadingGif{
+    width: 250px;
+    align-self: center;
+  }
+
 
   .quitChatBtn{
     color: #4b4a4f;
@@ -142,17 +198,6 @@
   }
 }
 
-.chatBoxHeader {
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  flex-shrink: 0; /* 고정 */
-}
-
-
-
 
 .chatBoxFooter input {
   height: 50px;
@@ -161,6 +206,7 @@
   border: 1px solid #ccc;
   margin-right: 8px;
   font-size: 17px;
+  padding-left: 8px;
 }
 
 .chatBoxFooter button {
@@ -173,45 +219,6 @@
 }
 
 
-
-.myMessage {
-  background-color: #d1e7dd;
-  text-align: right;
-  float: right;
-  margin: 5px;
-  padding: 10px;
-  border-radius: 10px;
-  width: fit-content;
-}
-
-.otherMessage {
-  background-color: #f8d7da;
-  text-align: left;
-  float: left;
-  margin: 5px;
-  padding: 10px;
-  border-radius: 10px;
-  width: fit-content;
-}
-input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-button:disabled {
-  background-color: #ccc;
-}
 
 
 
