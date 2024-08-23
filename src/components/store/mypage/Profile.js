@@ -7,8 +7,6 @@ import Calendar from "./Calendar";
 import { useModal } from "../../../pages/common/ModalProvider";
 import {logoutAction} from "../../../utils/authUtil";
 
-const BASE_URL = window.location.origin;
-
 const Profile = ({ storeInfo, stats, isShow, width }) => {
     const location = useLocation();
     const { closeModal } = useModal();

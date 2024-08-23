@@ -4,8 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faCircleCheck, faSpinner, faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "../../../pages/common/ModalProvider";
 import {imgErrorHandler} from "../../../utils/error";
-
-const BASE_URL = window.location.origin;
+import {RESERVATION_URL} from "../../../config/host-config";
 
 const ReservationList = ({ reservations, onUpdateReservations, isLoading, loadMore, hasMore, width, initialFilters, onApplyFilters }) => {
     const { openModal } = useModal();
@@ -28,7 +27,7 @@ const ReservationList = ({ reservations, onUpdateReservations, isLoading, loadMo
     // 예약 픽업 fetch 함수
     const completePickup = async (reservationId) => {
         try {
-            const response = await fetch(`${BASE_URL}/reservation/pickup?reservationId=${reservationId}`, {
+            const response = await fetch(`${RESERVATION_URL}/pickup?reservationId=${reservationId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
