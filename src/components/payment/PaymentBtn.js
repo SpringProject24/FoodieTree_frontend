@@ -5,14 +5,14 @@ import SubModalPortal from "../../pages/payment/SubModalPortal";
 import styles from "../../pages/customer/CustomerReservationDetailModal.module.scss"
 import {patchReservationFetch} from "./fetch-payment";
 
-const ReservationBtn = ({ storeInfo }) => {
+const PaymentBtn = ({ storeInfo }) => {
     const [isShow, setIsShow] = useState(false);
     const [paymentId, setPaymentId] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { closeModal, openModal } = useModal();
     const storeId = storeInfo?.storeId || '';
     const price = storeInfo?.price;
-    console.log(storeInfo);
+
     const handleMakeReservation = async () => {
         setIsLoading(true);
         const tarId = `${storeInfo.productId}-${Date.now()}`;
@@ -39,6 +39,7 @@ const ReservationBtn = ({ storeInfo }) => {
     const closeHandler = () => {
         setIsShow(false);
         closeModal();
+        window.location.reload();
     }
     return (
         <>
@@ -52,4 +53,4 @@ const ReservationBtn = ({ storeInfo }) => {
     );
 };
 
-export default ReservationBtn;
+export default PaymentBtn;

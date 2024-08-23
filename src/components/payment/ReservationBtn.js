@@ -13,7 +13,7 @@ const ReservationBtn = ({ children, style, tar : {remainProduct, productDetail: 
     const storeId = storeInfo?.storeId || '';
     const storeName = storeInfo?.storeName || '';
     const price = storeInfo?.price * initialCount;
-    console.log(storeInfo)
+
     const handleMakeReservation = async () => {
         if (remainProduct === 0) {
             alert('해당 상품은 품절되었습니다.');

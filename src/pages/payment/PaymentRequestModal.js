@@ -17,10 +17,11 @@ const PaymentRequestModal = ({storeName, price, paymentId, onClose}) => {
         const data = await updateRes.text();
         if (updateRes.ok) {
             alert("결제가 완료되었습니다!");
-            closeModal();
+            onClose();
         } else {
             alert("잠시 후 다시 이용해주세요");
             console.log(data)
+            onClose();
         }
     }
 

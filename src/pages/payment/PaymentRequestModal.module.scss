@@ -4,7 +4,7 @@
   cursor: pointer;
   height: 50px;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
   color: #fff;
 
   .x-btn {
@@ -14,7 +14,7 @@
     background-color: rgba(100, 100, 100, 0.5);
     box-shadow: transparent 0px 0px 0px 1px inset;
     font-weight: 700;
-    font-size: 16px;
+    font-size: inherit;
     color: inherit;
     display: flex;
     align-items: center;
@@ -29,7 +29,7 @@
     background-color: rgba(87, 173, 88, 0.98);
     box-shadow: transparent 0px 0px 0px 1px inset;
     font-weight: 700;
-    font-size: 16px;
+    font-size: inherit;
     color: inherit;
     display: flex;
     align-items: center;
