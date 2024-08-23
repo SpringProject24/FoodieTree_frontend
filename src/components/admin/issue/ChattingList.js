@@ -16,6 +16,7 @@ import IssueSummary from "./IssueSummary";
 import {useModal} from "../../../pages/common/ModalProvider";
 import {checkAuthToken, getUserRole} from "../../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
+import {ISSUE_URL} from "../../../config/host-config";
 
 const ChattingList = () => {
     const {openModal} = useModal();
@@ -46,7 +47,7 @@ const ChattingList = () => {
         let userRole = getUserRole();
         console.log("userRole :", userRole);
 
-        const res = await fetch('/issue', {
+        const res = await fetch(ISSUE_URL, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

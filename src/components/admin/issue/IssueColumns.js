@@ -1,5 +1,5 @@
 import React from "react";
-import {ISSUE_URL} from "../../../config/host-config";
+import {ISSUE_URL, RESERVATION_URL} from "../../../config/host-config";
 const BASE_URL = window.location.origin;
 
 const centerFlex = {style: {justifyContent: 'center', paddingLeft: '0'}};
@@ -79,7 +79,7 @@ export const IssueColumns = (openModal) => [
                     const reservationId = issueDetail.reservationId;
                     console.log('Reservation ID:', reservationId);
                     try{
-                        const response = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
+                        const response = await fetch(`${RESERVATION_URL}/${reservationId}/modal/detail`);
 
                         if (!res.ok) {
                             const errorMessage = await response.text();

@@ -16,6 +16,7 @@ import TansTable from "./TansTable";
 import ApprovalSummary from "./ApprovalSummary";
 import {authFetch, checkAuthToken, getRefreshToken, getToken, getUserRole} from "../../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
+import {ADMIN_URL} from "../../../config/host-config";
 
 const ApprovalTable = () => {
   const beginDate = '2024-07-01';
@@ -52,7 +53,7 @@ const ApprovalTable = () => {
     console.log("userRole :", userRole);
 
     const res = await authFetch(
-      `/admin/approve?start=${startISO}&end=${endISO}`,
+      `${ADMIN_URL}/approve?start=${startISO}&end=${endISO}`,
       {
         method: 'GET',
         headers: {

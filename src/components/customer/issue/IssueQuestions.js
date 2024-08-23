@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDown, faAngleUp} from "@fortawesome/free-solid-svg-icons";
 import {useModal} from "../../../pages/common/ModalProvider";
 import {getRefreshToken, getToken, getUserEmail} from "../../../utils/authUtil";
+import {ISSUE_URL} from "../../../config/host-config";
 
 const IssueQuestions = ({reservationDetail}) => {
     const [activeQuestion, setActiveQuestion] = useState(null);
@@ -21,7 +22,7 @@ const IssueQuestions = ({reservationDetail}) => {
 
     const makeIssue = async () => {
         try {
-            const res = await fetch('/issue', {
+            const res = await fetch(ISSUE_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

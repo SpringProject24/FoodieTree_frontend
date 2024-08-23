@@ -3,6 +3,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import SearchList from "../../components/search/SearchList";
 import Skeleton from "../../components/search/Skeleton";
 import {checkAuthFn, checkAuthToken} from "../../utils/authUtil";
+import {SEARCH_URL} from "../../config/host-config";
 
 const Search = () => {
     const [word, setWord] = useSearchParams();
@@ -59,7 +60,7 @@ const Search = () => {
     };
 
     const fetchSearch = async (pageNo) => {
-        const response = await fetch(`/search?pageNo=${pageNo}&keyword=${word.get('q')}`);
+        const response = await fetch(`${SEARCH_URL}?pageNo=${pageNo}&keyword=${word.get('q')}`);
         if (!response.ok) {
             console.error("잠시 후 다시 이용해주세요");
             alert("잠시 후 다시 이용해주세요");

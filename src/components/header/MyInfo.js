@@ -5,6 +5,7 @@ import styles from "./MyInfo.module.scss";
 import { useNavigate } from "react-router-dom";
 import {getRefreshToken, getSubName, getToken, getUserRole} from "../../utils/authUtil";
 import Notification from "../notification/Notification";
+import {USER_URL} from "../../config/host-config";
 
 // 내 정보 들어가기
 const MyInfo = () => {
@@ -14,7 +15,7 @@ const MyInfo = () => {
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await fetch(`/user/info`, {
+                const response = await fetch(`${USER_URL}/info`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ` + getToken(),
