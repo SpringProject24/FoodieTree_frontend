@@ -1,38 +1,32 @@
-import React, {useEffect, useState} from 'react';
-import styles from "../../pages/product/BottomPlaceOrder.module.scss";
+import React, {useState} from 'react';
 import {useModal} from "../../pages/common/ModalProvider";
-import {createReservationFetch} from "./fetch-payment";
 import PaymentRequestModal from "../../pages/payment/PaymentRequestModal";
 import SubModalPortal from "../../pages/payment/SubModalPortal";
+import styles from "../../pages/customer/CustomerReservationDetailModal.module.scss"
+import {patchReservationFetch} from "./fetch-payment";
 
-const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, initialCount, cntHandler=null }}) => {
+const ReservationBtn = ({ storeInfo }) => {
     const [isShow, setIsShow] = useState(false);
     const [paymentId, setPaymentId] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { closeModal, openModal } = useModal();
-    const isReservation = remainProduct === 0;
     const storeId = storeInfo?.storeId || '';
-    const storeName = storeInfo?.storeName || '';
-    const price = storeInfo?.price * initialCount;
-
+    const price = storeInfo?.price;
+    console.log(storeInfo);
     const handleMakeReservation = async () => {
-        if (remainProduct === 0) {
-            alert('해당 상품은 품절되었습니다.');
-            return;
-        }
         setIsLoading(true);
-        setIsShow(true);
-        const tarId = `${storeInfo.productDetail.productId}-${Date.now()}`;
+        const tarId = `${storeInfo.productId}-${Date.now()}`;
         setPaymentId(tarId);
         try {
-            const response = await createReservationFetch(storeId, initialCount, tarId, storeName);
+            const response = await patchReservationFetch(tarId, storeInfo.reservationId);
             const data = await response.json();
             setIsLoading(false);
             if (response.ok && data) {
-                cntHandler && cntHandler(storeId, initialCount);
+                setIsShow(true);
             } else {
-                alert("잠시 후 다시 이용해주세요.");
-                setIsShow(false);
+                alert("결제 유효 시간이 지났습니다.");
+                closeModal();
+                window.location.reload();
             }
         } catch (e) {
             alert("잠시 후 다시 이용해주세요.");
@@ -48,12 +42,7 @@ const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, init
     }
     return (
         <>
-            <div
-                className={`${styles.placeOrderBtn} ${isReservation ? styles.reservation : ''}`}
-                onClick={handleMakeReservation}
-            >
-                <p>{isReservation ? 'SOLD OUT' : '예약하기'}</p>
-            </div>
+            <button className={styles.paymentBtn} onClick={handleMakeReservation}>결제하기</button>
             { isShow &&
                 <SubModalPortal onClose={closeHandler} isLoading={isLoading}>
                     <PaymentRequestModal storeName={storeInfo.storeName} price={price} paymentId={paymentId} onClose={closeHandler}/>
