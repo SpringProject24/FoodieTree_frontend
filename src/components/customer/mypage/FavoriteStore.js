@@ -4,6 +4,7 @@ import styles from './FavoriteStore.module.scss';
 import {DEFAULT_IMG, imgErrorHandler} from "../../../utils/error";
 
 const FavoriteStore = ({ favStores = [] }) => {
+    console.log('favStores: ', favStores);
     return (
         <div className={styles.favoriteStoreForm}>
             <div className={styles.title}>
@@ -14,7 +15,7 @@ const FavoriteStore = ({ favStores = [] }) => {
                     {favStores.length > 0 ? (
                         favStores.map((store) => (
                             <li key={store.storeId}>
-                                <Link to="#" className={styles.storeLink}>
+                                <Link to={`/search?q=${store.storeName}`} className={styles.storeLink} onClick={() => window.scrollTo(0, 0)}>
                                     <div className={styles.imgBox}>
                                         <img src={store.storeImg || DEFAULT_IMG} onError={imgErrorHandler} alt="최애가게이미지" />
                                     </div>

@@ -3,9 +3,8 @@ import styles from './CustomerReservationList.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faCircleCheck, faSpinner, faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useModal } from "../../../pages/common/ModalProvider";
-import {DEFAULT_IMG, imgErrorHandler} from "../../../utils/error";
-
-const BASE_URL = window.location.origin;
+import { DEFAULT_IMG, imgErrorHandler } from "../../../utils/error";
+import { RESERVATION_URL } from "../../../config/host-config";
 
 const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading, loadMore, hasMore, initialFilters, onApplyFilters, onFetchReservations }) => {
     const { openModal } = useModal();
@@ -54,16 +53,18 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
         const day = date.getDate();
         const hours = date.getHours();
         const minutes = date.getMinutes();
-        return `${month}월 ${day}일 ${hours}시 ${minutes}분`;
+        const formattedHours = hours.toString();
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+
+        return `${month}월 ${day}일 ${formattedHours}시 ${formattedMinutes}분`;
     };
 
     // 예약 상세내역을 가져오는 함수
     const fetchReservationDetail = async (reservationId) => {
         try {
-            const res = await fetch(`${BASE_URL}/reservation/${reservationId}/modal/detail`);
+            const res = await fetch(`${RESERVATION_URL}/${reservationId}/modal/detail`);
             if (res.ok) {
-                const data = await res.json();
-                return data;
+                return await res.json();
             } else {
                 console.error('Failed to fetch reservation details');
                 return null;
@@ -77,7 +78,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
     // 예약 취소 fetch 함수
     const cancelReservation = async (reservationId) => {
         try {
-            const response = await fetch(`${BASE_URL}/reservation/cancel?reservationId=${reservationId}`, {
+            const response = await fetch(`${RESERVATION_URL}/cancel?reservationId=${reservationId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -104,7 +105,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
     // 예약 픽업 fetch 함수
     const completePickup = async (reservationId) => {
         try {
-            const response = await fetch(`${BASE_URL}/reservation/pickup?reservationId=${reservationId}`, {
+            const response = await fetch(`${RESERVATION_URL}/pickup?reservationId=${reservationId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -159,15 +160,12 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
         }
     };
 
-
     // 리뷰 작성 모달을 여는 함수
     const handleWriteReviewClick = async (reservationId, event) => {
-        event.stopPropagation(); // 이벤트 버블링 방지
+        event.stopPropagation();
         try {
             const reservationDetail = reservations.find(r => r.reservationId === reservationId);
-            openModal('writeReview', {
-                reservationDetail
-            });
+            openModal('writeReview', { reservationDetail });
         } catch (error) {
             console.error('Error fetching reservation detail for review:', error);
         }
@@ -179,22 +177,16 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
             onApply: handleApplyFilters,
             initialFilters: filters
         });
-        console.log("filters: ", filters);
     };
 
     // 필터 적용 함수
     const handleApplyFilters = (newFilters) => {
-        const updatedFilters = {
-            ...newFilters
-        };
-
-        // 기존 필터 상태와 병합하여 업데이트
         setFilters(prevFilters => ({
             ...prevFilters,
-            ...updatedFilters
+            ...newFilters
         }));
 
-        onApplyFilters(updatedFilters);
+        onApplyFilters(newFilters);
     };
 
     return (
@@ -235,37 +227,32 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
                                     {reservation.status === 'CANCELED' && (
                                         <>
                                             <span>예약을 취소했어요</span>
-                                            <span>{reservation.cancelReservationAtF}</span>
+                                            <span>{formatDate(reservation.cancelReservationAt)}</span>
                                         </>
                                     )}
                                     {reservation.status === 'NOSHOW' && (
                                         <>
                                             <span>미방문하여 예약이 취소됐어요</span>
-                                            <span>{reservation.pickupTimeF}</span>
+                                            <span>{formatDate(reservation.pickupTime)}</span>
                                         </>
                                     )}
                                     {reservation.status === 'RESERVED' && (
-                                        <>
-                                            <span>픽업하러 가는 중이에요!</span>
-                                            <span>{reservation.pickupTimeF}까지</span>
-                                            {/*<button*/}
-                                            {/*    className={`${styles.reservationCancelBtn} ${styles.calendarButton} ${styles.cancelRes}`}*/}
-                                            {/*    onClick={(event) => handleCancelReservationClick(reservation.reservationId, event)}*/}
-                                            {/*>*/}
-                                            {/*    {isMobileView ? '예약 취소' : '예약 취소하기'}*/}
-                                            {/*</button>*/}
-                                        </>
+                                        reservation.paymentTime === null ? (
+                                            <>
+                                                <span>결제가 아직 완료되지 않았어요!</span>
+                                                <span>{formatDate(new Date(new Date(reservation.reservationTime).setMinutes(new Date(reservation.reservationTime).getMinutes() + 4)))} 까지</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>픽업하러 가는 중이에요!</span>
+                                                <span>{formatDate(reservation.pickupTime)} 까지</span>
+                                            </>
+                                        )
                                     )}
                                     {reservation.status === 'PICKEDUP' && (
                                         <>
                                             <span>픽업을 완료했어요</span>
-                                            <span>{reservation.pickedUpAtF}</span>
-                                            {/*<button*/}
-                                            {/*    className={`${styles.reviewBtn} ${styles.calendarButton} ${styles.writeReview}`}*/}
-                                            {/*    onClick={(event) => handleWriteReviewClick(reservation.reservationId, event)}*/}
-                                            {/*>*/}
-                                            {/*    {isMobileView ? '리뷰 작성' : '리뷰 작성하기'}*/}
-                                            {/*</button>*/}
+                                            <span>{formatDate(reservation.pickedUpAt)}</span>
                                         </>
                                     )}
                                 </div>
