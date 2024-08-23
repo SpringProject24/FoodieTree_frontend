@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Profile from "../../components/customer/mypage/Profile";
 import styles from "./CustomerMyPage.module.scss";
 import CustomerReservationList from "../../components/customer/mypage/CustomerReservationList";
@@ -9,8 +9,7 @@ import SideBarBtn from "../../components/store/mypage-edit/SideBarBtn";
 
 import {authFetch, checkAuthToken} from "../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
-
-const BASE_URL = window.location.origin;
+import {CUSTOMER_URL, RESERVATION_URL} from '../../config/host-config';
 
 const CustomerMyPage = () => {
     const [width, setWidth] = useState(window.innerWidth);
@@ -69,7 +68,7 @@ const CustomerMyPage = () => {
 
     const fetchCustomerData = async (token, refreshToken, customerId) => {
         try {
-            const response = await fetch(`${BASE_URL}/customer/info?customerId=${customerId}`, {
+            const response = await fetch(`${CUSTOMER_URL}/info?customerId=${customerId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,7 +88,7 @@ const CustomerMyPage = () => {
 
     const fetchReservations = async (token, refreshToken) => {
         try {
-            const response = await authFetch(`${BASE_URL}/reservation/list`, {
+            const response = await authFetch(`${RESERVATION_URL}/list`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,7 +112,7 @@ const CustomerMyPage = () => {
 
     const fetchStats = async (token, refreshToken, customerId) => {
         try {
-            const response = await authFetch(`${BASE_URL}/customer/stats?customerId=${customerId}`, {
+            const response = await authFetch(`${CUSTOMER_URL}/stats?customerId=${customerId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -210,7 +209,7 @@ const CustomerMyPage = () => {
     };
 
     const applyFilters = (filters) => {
-        const { category, dateRange, status } = filters;
+        const {category, dateRange, status} = filters;
 
         const filtered = reservations.filter(reservation => {
             const categoryMatch = category.length === 0 || category.includes(reservation.category);
@@ -235,10 +234,10 @@ const CustomerMyPage = () => {
     // console.log("reservation: ", reservations);
     return (
         <>
-            {width <= 400 && <SideBarBtn onShow={showHandler} />}
+            {width <= 400 && <SideBarBtn onShow={showHandler}/>}
             <div className={styles.myPageArea}>
                 <div className={styles.container}>
-                    <Profile customerMyPageDto={customerData} stats={stats} isShow={show} width={width} />
+                    <Profile customerMyPageDto={customerData} stats={stats} isShow={show} width={width}/>
                     <div className={styles.content}>
                         <CustomerReservationList
                             reservations={displayReservations}
@@ -252,9 +251,9 @@ const CustomerMyPage = () => {
 
                         {width > 400 && (
                             <>
-                                <PreferredArea preferredAreas={customerData.preferredArea} />
-                                <PreferredFood preferredFoods={customerData.preferredFood} />
-                                <FavoriteStore favStores={customerData.favStore} />
+                                <PreferredArea preferredAreas={customerData.preferredArea}/>
+                                <PreferredFood preferredFoods={customerData.preferredFood}/>
+                                <FavoriteStore favStores={customerData.favStore}/>
                             </>
                         )}
                     </div>
