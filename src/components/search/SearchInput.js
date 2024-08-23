@@ -25,7 +25,7 @@ const SearchInput = () => {
         return () => {
             window.removeEventListener("resize", updatePlaceholder); // 이벤트 리스너 정리
         };
-    }, []);
+    }, [word]);
 
     const onClickHandler = () => {
         checkAuthFn(() => window.location.replace(`/search?q=${inputRef.current.value}`), navigate);

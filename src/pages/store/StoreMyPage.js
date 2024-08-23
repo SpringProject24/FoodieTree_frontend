@@ -4,16 +4,13 @@ import styles from './StoreMyPage.module.scss';
 import ReservationList from "../../components/store/mypage/ReservationList";
 import ProductCount from "../../components/store/mypage/ProductCount";
 import Calendar from "../../components/store/mypage/Calendar";
-import { useModal } from '../common/ModalProvider';
 import SideBarBtn from "../../components/store/mypage-edit/SideBarBtn";
 import {authFetch} from "../../utils/authUtil";
 import {useNavigate} from "react-router-dom";
 import {checkAuthToken} from "../../utils/authUtil";
-
-const BASE_URL = window.location.origin;
+import {STORE_URL} from "../../config/host-config";
 
 const StoreMyPage = () => {
-    const { openModal } = useModal();
     const [width, setWidth] = useState(window.innerWidth); // 현재 창 너비 설정
     const [show, setShow] = useState(false); // 모바일 반응형에서 사이드바 표시 여부 설정
     const [storeInfo, setStoreInfo] = useState({}); // 가게 정보 저장
@@ -40,7 +37,7 @@ const StoreMyPage = () => {
      */
     const fetchStoreInfo = async () => {
         try {
-            const response = await authFetch(`${BASE_URL}/store/info`);
+            const response = await authFetch(`${STORE_URL}/info`);
             if (!response.ok) {
                 throw new Error('Failed to fetch store info');
             }
@@ -56,7 +53,7 @@ const StoreMyPage = () => {
      */
     const fetchStats = async () => {
         try {
-            const response = await authFetch(`${BASE_URL}/store/stats`);
+            const response = await authFetch(`${STORE_URL}/stats`);
             if (!response.ok) {
                 throw new Error('Failed to fetch stats');
             }
@@ -72,7 +69,7 @@ const StoreMyPage = () => {
      */
     const fetchReservations = async () => {
         try {
-            const response = await authFetch(`${BASE_URL}/store/reservations`);
+            const response = await authFetch(`${STORE_URL}/reservations`);
             if (!response.ok) {
                 throw new Error('Failed to fetch reservations');
             }

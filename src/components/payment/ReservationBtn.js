@@ -11,6 +11,7 @@ const ReservationBtn = ({ children, style, tar : {remainProduct, productDetail: 
     const { closeModal, openModal } = useModal();
     const isReservation = remainProduct === 0;
     const storeId = storeInfo?.storeId || '';
+    const storeName = storeInfo?.storeName || '';
     const price = storeInfo?.price * initialCount;
     console.log(storeInfo)
     const handleMakeReservation = async () => {
@@ -23,7 +24,7 @@ const ReservationBtn = ({ children, style, tar : {remainProduct, productDetail: 
         const tarId = `${storeInfo.productDetail.productId}-${Date.now()}`;
         setPaymentId(tarId);
         try {
-            const response = await createReservationFetch(storeId, initialCount, tarId);
+            const response = await createReservationFetch(storeId, initialCount, tarId, storeName);
             const data = await response.json();
             setIsLoading(false);
             if (response.ok && data) {
