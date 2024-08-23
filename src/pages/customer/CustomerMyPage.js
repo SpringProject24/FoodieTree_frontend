@@ -160,9 +160,19 @@ const CustomerMyPage = () => {
                 }
             };
 
-            // RESERVED 상태인 경우 시간 내림차순
+            // RESERVED 상태
             if (a.status === 'RESERVED' && b.status === 'RESERVED') {
-                return getTime(a) - getTime(b);
+                // paymentTime이 null인 경우
+                if (a.paymentTime === null && b.paymentTime === null) {
+                    return new Date(a.reservationTime) - new Date(b.reservationTime); // reservationTime이 빠른 순으로 정렬
+                }
+
+                // paymentTime이 null인 경우가 먼저 오도록 정렬
+                if (a.paymentTime === null) return -1; // a가 먼저 오도록 함
+                if (b.paymentTime === null) return 1;  // b가 먼저 오도록 함
+
+                // 둘 다 paymentTime이 있는 경우 시간 내림차순 정렬
+                return new Date(b.pickupTime) - new Date(a.pickupTime);
             }
 
             // 그 외의 상태인 경우 시간 오름차순
@@ -222,6 +232,7 @@ const CustomerMyPage = () => {
         setHasMore(filtered.length > ITEMS_PER_PAGE);
     };
 
+    // console.log("reservation: ", reservations);
     return (
         <>
             {width <= 400 && <SideBarBtn onShow={showHandler} />}
