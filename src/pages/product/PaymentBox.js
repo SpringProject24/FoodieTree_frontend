@@ -4,7 +4,7 @@ import { faMinus, faPlus, faShoppingCart, faStar, faTag } from "@fortawesome/fre
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReservationBtn from "../../components/payment/ReservationBtn";
 
-const PaymentBox = ({ makeReservation, productDetail, initialCount, handleIncrease, handleDecrease, remainProduct }) => {
+const PaymentBox = ({ makeReservation, productDetail, initialCount, handleIncrease, handleDecrease, remainProduct, cntHandler }) => {
     const howMuchSaved = Math.floor(((productDetail.storeInfo.price / 0.3) - productDetail.storeInfo.price) * initialCount);
     const totalPrice = productDetail.storeInfo.price * initialCount;
     const originalPrice = Math.floor(productDetail.storeInfo.price / 0.3) * initialCount;
@@ -33,7 +33,7 @@ const PaymentBox = ({ makeReservation, productDetail, initialCount, handleIncrea
                     <FontAwesomeIcon icon={faStar} />
                     {howMuchSaved}원을 아끼고 있어요!
                 </p>
-                    <ReservationBtn style={styles.reservationBtn} tar={{remainProduct, initialCount, productDetail}}>
+                    <ReservationBtn style={styles.reservationBtn} tar={{remainProduct, initialCount, productDetail ,cntHandler}}>
                         <p>Place Order</p>
                         <p>{totalPrice}원</p>
                     </ReservationBtn>

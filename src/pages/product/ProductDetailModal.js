@@ -6,7 +6,7 @@ import ProductDetail from './ProductDetail';
 import PaymentBox from './PaymentBox';
 import BottomPlaceOrder from './BottomPlaceOrder';
 
-const ProductDetailModal = ({productDetail, onClose, setStoreListHandler}) => {
+const ProductDetailModal = ({productDetail, onClose, setStoreListHandler, set}) => {
     const {closeModal} = useModal();
 
     const [initialCount, setInitialCount] = useState(1);
@@ -48,8 +48,7 @@ const ProductDetailModal = ({productDetail, onClose, setStoreListHandler}) => {
     if (!productDetail) return null;
 
 
-    const {storeName, address, storeImg, openAt, closedAt, storeContact, price, storeId, productCnt, productImg} = productDetail;
-
+    const {storeName, address, storeImg, openAt, closedAt, storeContact, price, storeId, productCnt, productImg , restCnt} = productDetail;
 
     const productInfo = {
         storeInfo: {
@@ -78,7 +77,7 @@ const ProductDetailModal = ({productDetail, onClose, setStoreListHandler}) => {
                     initialCount={initialCount}
                     handleIncrease={handleIncrease}
                     handleDecrease={handleDecrease}
-                    remainProduct={productCnt}
+                    remainProduct={restCnt}
                     closeModal={closeModal}
                     cntHandler={setStoreListHandler}
                 />
@@ -90,7 +89,8 @@ const ProductDetailModal = ({productDetail, onClose, setStoreListHandler}) => {
                     initialCount={initialCount}
                     handleIncrease={handleIncrease}
                     handleDecrease={handleDecrease}
-                    remainProduct={productCnt}
+                    remainProduct={restCnt}
+                    cntHandler={setStoreListHandler}
                 />
             )}
         </section>

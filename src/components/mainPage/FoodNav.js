@@ -13,6 +13,7 @@ import { FAVORITESTORE_URL, STORELISTS_URL } from '../../config/host-config';
 import { getUserEmail, getToken, getRefreshToken } from "../../utils/authUtil";
 import { DEFAULT_IMG, imgErrorHandler } from "../../utils/error";
 import FavAreaSelector from "./FavAreaSelector";
+import {categoryImgList} from "../../utils/img-handler";
 
 // 🌿 카테고리 문자열에서 실제 foodType만 추출하는 함수
 const extractFoodType = (category) => {
@@ -280,7 +281,7 @@ const filteredRecommendedStores = recommendedStores.filter(store => {
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
                 />
               </div>
-              <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} onError={imgErrorHandler}/>
+              <img src={store.storeImg || categoryImgList[store.category]} alt={store.storeName} onError={imgErrorHandler}/>
 
               {store.productCnt === 0 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
@@ -313,7 +314,7 @@ const filteredRecommendedStores = recommendedStores.filter(store => {
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
                 />
               </div>
-              <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} onError={imgErrorHandler}/>
+              <img src={store.storeImg || categoryImgList[store.category]} alt={store.storeName} onError={imgErrorHandler}/>
               {store.productCnt === 0 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
@@ -345,7 +346,7 @@ const filteredRecommendedStores = recommendedStores.filter(store => {
                 />
               </div>
 
-              <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} onError={imgErrorHandler}/>
+              <img src={store.storeImg || categoryImgList[store.category]} alt={store.storeName} onError={imgErrorHandler}/>
               {store.productCnt === 0 && <div className={styles.overlay}>SOLD OUT</div>}
               <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
@@ -376,7 +377,7 @@ const filteredRecommendedStores = recommendedStores.filter(store => {
                   icon={favorites[store.storeId] ? faHeartSolid : faHeartRegular} 
                 />
               </div>
-              <img src={store.storeImg || DEFAULT_IMG} alt={store.storeName} className={styles.image} onError={imgErrorHandler} />
+              <img src={store.storeImg || categoryImgList[store.category]} alt={store.storeName} className={styles.image} onError={imgErrorHandler} />
               <span className={styles.category}>{extractFoodType(store.category)}</span>
                 <p className={styles.storeName}>{store.storeName}</p>
               <span className={styles.storePrice}>{store.price}</span>
