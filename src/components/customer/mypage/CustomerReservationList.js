@@ -197,6 +197,7 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
         onApplyFilters(updatedFilters);
     };
 
+    console.log('reservation: ', reservations);
     return (
         <div className={styles.reservationListForm}>
             <div className={styles.title}>
@@ -244,7 +245,21 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
                                             <span>{reservation.pickupTimeF}</span>
                                         </>
                                     )}
-                                    {reservation.status === 'RESERVED' && (
+                                    {reservation.status === 'RESERVED' ?
+                                        reservation.paymentTime === null ?
+                                            (() => {
+                                                const reservationTime = new Date(reservation.reservationTime);
+                                                reservationTime.setMinutes(reservationTime.getMinutes() + 4);
+
+                                                const formattedTime = formatDate(reservationTime.toISOString());
+                                                return (
+                                                    <>
+                                                        <span>결제가 아직 완료되지 않았어요!</span>
+                                                        <span>{formattedTime}까지</span>
+                                                    </>
+                                                );
+                                            })()
+                                            :
                                         <>
                                             <span>픽업하러 가는 중이에요!</span>
                                             <span>{reservation.pickupTimeF}까지</span>
@@ -255,7 +270,9 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
                                             {/*    {isMobileView ? '예약 취소' : '예약 취소하기'}*/}
                                             {/*</button>*/}
                                         </>
-                                    )}
+                                        :
+                                        <></>
+                                    }
                                     {reservation.status === 'PICKEDUP' && (
                                         <>
                                             <span>픽업을 완료했어요</span>
