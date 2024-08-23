@@ -23,13 +23,18 @@ const PaymentRequestModal = ({storeName, price, paymentId, onClose}) => {
             console.log(data)
         }
     }
+
+    const delayPaymentClickHandler = () => {
+        alert("5분 이내로 결제를 해주세요.");
+        onClose();
+    }
     return (
         <div>
             <div>
                 <p>바로 결제 하시겠습니까?</p>
             </div>
             <div className={styles["btn-wrapper"]}>
-                <button className={styles["x-btn"]} onClick={onClose}>취소</button>
+                <button className={styles["x-btn"]} onClick={delayPaymentClickHandler}>나중에 결제</button>
                 <button className={styles["check-btn"]} onClick={clickHandler}>총 {formattedPrice}원 결제하기</button>
             </div>
         </div>

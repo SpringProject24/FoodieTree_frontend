@@ -90,6 +90,7 @@ const ProductDetailModal = ({productDetail, onClose, setStoreListHandler}) => {
                     initialCount={initialCount}
                     handleIncrease={handleIncrease}
                     handleDecrease={handleDecrease}
+                    remainProduct={productCnt}
                 />
             )}
         </section>

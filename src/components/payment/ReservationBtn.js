@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import styles from "../../pages/product/BottomPlaceOrder.module.scss";
 import {useModal} from "../../pages/common/ModalProvider";
 import {createReservationFetch} from "./fetch-payment";
 import PaymentRequestModal from "../../pages/payment/PaymentRequestModal";
 import SubModalPortal from "../../pages/payment/SubModalPortal";
 
-const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, initialCount, cntHandler=null }}) => {
+const ReservationBtn = ({ children, style, tar : {remainProduct, productDetail: {storeInfo}, initialCount, cntHandler=null }}) => {
     const [isShow, setIsShow] = useState(false);
     const [paymentId, setPaymentId] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +12,7 @@ const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, init
     const isReservation = remainProduct === 0;
     const storeId = storeInfo?.storeId || '';
     const price = storeInfo?.price * initialCount;
-
+    console.log(storeInfo)
     const handleMakeReservation = async () => {
         if (remainProduct === 0) {
             alert('해당 상품은 품절되었습니다.');
@@ -47,11 +46,8 @@ const ReservationBtn = ({ tar : {remainProduct, productDetail: {storeInfo}, init
     }
     return (
         <>
-            <div
-                className={`${styles.placeOrderBtn} ${isReservation ? styles.reservation : ''}`}
-                onClick={handleMakeReservation}
-            >
-                <p>{isReservation ? 'SOLD OUT' : '예약하기'}</p>
+            <div className={style} onClick={handleMakeReservation}>
+                {children}
             </div>
             { isShow &&
                 <SubModalPortal onClose={closeHandler} isLoading={isLoading}>
