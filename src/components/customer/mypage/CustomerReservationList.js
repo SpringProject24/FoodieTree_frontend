@@ -54,7 +54,11 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
         const day = date.getDate();
         const hours = date.getHours();
         const minutes = date.getMinutes();
-        return `${month}월 ${day}일 ${hours}시 ${minutes}분`;
+
+        const formattedHours = hours.toString();
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+
+        return `${month}월 ${day}일 ${formattedHours}시 ${formattedMinutes}분`;
     };
 
     // 예약 상세내역을 가져오는 함수
@@ -159,10 +163,9 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
         }
     };
 
-
     // 리뷰 작성 모달을 여는 함수
     const handleWriteReviewClick = async (reservationId, event) => {
-        event.stopPropagation(); // 이벤트 버블링 방지
+        event.stopPropagation();
         try {
             const reservationDetail = reservations.find(r => r.reservationId === reservationId);
             openModal('writeReview', {
@@ -197,7 +200,6 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
         onApplyFilters(updatedFilters);
     };
 
-    console.log('reservation: ', reservations);
     return (
         <div className={styles.reservationListForm}>
             <div className={styles.title}>
@@ -236,16 +238,16 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
                                     {reservation.status === 'CANCELED' && (
                                         <>
                                             <span>예약을 취소했어요</span>
-                                            <span>{reservation.cancelReservationAtF}</span>
+                                            <span>{formatDate(reservation.cancelReservationAt)}</span>
                                         </>
                                     )}
                                     {reservation.status === 'NOSHOW' && (
                                         <>
                                             <span>미방문하여 예약이 취소됐어요</span>
-                                            <span>{reservation.pickupTimeF}</span>
+                                            <span>{formatDate(reservation.pickupTime)}</span>
                                         </>
                                     )}
-                                    {reservation.status === 'RESERVED' ?
+                                    {reservation.status === 'RESERVED' && (
                                         reservation.paymentTime === null ?
                                             (() => {
                                                 const reservationTime = new Date(reservation.reservationTime);
@@ -255,34 +257,20 @@ const CustomerReservationList = ({ reservations, onUpdateReservations, isLoading
                                                 return (
                                                     <>
                                                         <span>결제가 아직 완료되지 않았어요!</span>
-                                                        <span>{formattedTime}까지</span>
+                                                        <span>{formattedTime} 까지</span>
                                                     </>
                                                 );
                                             })()
                                             :
-                                        <>
-                                            <span>픽업하러 가는 중이에요!</span>
-                                            <span>{reservation.pickupTimeF}까지</span>
-                                            {/*<button*/}
-                                            {/*    className={`${styles.reservationCancelBtn} ${styles.calendarButton} ${styles.cancelRes}`}*/}
-                                            {/*    onClick={(event) => handleCancelReservationClick(reservation.reservationId, event)}*/}
-                                            {/*>*/}
-                                            {/*    {isMobileView ? '예약 취소' : '예약 취소하기'}*/}
-                                            {/*</button>*/}
-                                        </>
-                                        :
-                                        <></>
-                                    }
+                                            <>
+                                                <span>픽업하러 가는 중이에요!</span>
+                                                <span>{formatDate(reservation.pickupTime)} 까지</span>
+                                            </>
+                                    )}
                                     {reservation.status === 'PICKEDUP' && (
                                         <>
                                             <span>픽업을 완료했어요</span>
-                                            <span>{reservation.pickedUpAtF}</span>
-                                            {/*<button*/}
-                                            {/*    className={`${styles.reviewBtn} ${styles.calendarButton} ${styles.writeReview}`}*/}
-                                            {/*    onClick={(event) => handleWriteReviewClick(reservation.reservationId, event)}*/}
-                                            {/*>*/}
-                                            {/*    {isMobileView ? '리뷰 작성' : '리뷰 작성하기'}*/}
-                                            {/*</button>*/}
+                                            <span>{formatDate(reservation.pickedUpAt)}</span>
                                         </>
                                     )}
                                 </div>

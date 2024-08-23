@@ -18,7 +18,11 @@ const ReservationList = ({ reservations, onUpdateReservations, isLoading, loadMo
         const day = date.getDate();
         const hours = date.getHours();
         const minutes = date.getMinutes();
-        return `${month}월 ${day}일 ${hours}시 ${minutes}분`;
+
+        const formattedHours = hours.toString();
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+
+        return `${month}월 ${day}일 ${formattedHours}시 ${formattedMinutes}분`;
     };
 
     // 예약 픽업 fetch 함수
@@ -37,7 +41,7 @@ const ReservationList = ({ reservations, onUpdateReservations, isLoading, loadMo
 
             // 예약 목록을 갱신
             const updatedReservations = reservations.map(reservation =>
-                reservation.reservationId === reservationId ? { ...reservation, status: 'PICKEDUP', pickedUpAtF: formatDate(new Date()) } : reservation
+                reservation.reservationId === reservationId ? { ...reservation, status: 'PICKEDUP', pickedUpAt: new Date() } : reservation
             );
             onUpdateReservations(updatedReservations);
         } catch (error) {
@@ -138,25 +142,25 @@ const ReservationList = ({ reservations, onUpdateReservations, isLoading, loadMo
                                 {reservation.status === 'CANCELED' && (
                                     <>
                                         <span>예약을 취소했어요</span>
-                                        <span>{reservation.cancelReservationAtF}</span>
+                                        <span>{formatDate(reservation.cancelReservationAt)}</span>
                                     </>
                                 )}
                                 {reservation.status === 'NOSHOW' && (
                                     <>
                                         <span>미방문하여 예약이 취소됐어요</span>
-                                        <span>{reservation.pickupTimeF}</span>
+                                        <span>{formatDate(reservation.pickupTime)}</span>
                                     </>
                                 )}
                                 {reservation.status === 'RESERVED' && (
                                     <>
                                         <span>픽업하러 오는 중이에요!</span>
-                                        <span>{reservation.pickupTimeF}</span>
+                                        <span>{formatDate(reservation.pickupTime)}</span>
                                     </>
                                 )}
                                 {reservation.status === 'PICKEDUP' && (
                                     <>
                                         <span>픽업을 완료했어요</span>
-                                        <span>{reservation.pickedUpAtF}</span>
+                                        <span>{formatDate(reservation.pickedUpAt)}</span>
                                     </>
                                 )}
                             </div>
