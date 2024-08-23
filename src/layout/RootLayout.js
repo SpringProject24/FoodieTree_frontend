@@ -30,7 +30,7 @@ const RootLayout = () => {
             <main>
                 <Outlet />
             </main>
-            {!shouldHideFooter && ( // shouldHideFooter가 true가 아닌 경우에만 footer 렌더링
+            {!isMobile && ( // shouldHideFooter가 true가 아닌 경우에만 footer 렌더링
                 < Footer />) }
         </ModalProvider>
     );
