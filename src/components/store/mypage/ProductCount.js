@@ -20,7 +20,7 @@ const ProductCount = () => {
      */
     const fetchProductCount = async () => {
         try {
-            const response = await authFetch(`${BASE_URL}/store/getProductCount`);
+            const response = await authFetch(`${STORE_URL}/getProductCount`);
             if (!response.ok) {
                 throw new Error('Failed to fetch product count');
             }
