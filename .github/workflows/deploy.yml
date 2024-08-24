@@ -16,15 +16,16 @@ jobs:
       - name: == npm build CI TEST ==
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
-          run: |
-            
-            echo ${{ secrets.ENV }} > .env
-            
-            ls -al 
-            
-            npm ci
+          node-version: '20'
+
+      - name: Install modules
+        run: npm install
+
+      - name: Build
+        run: |
+          echo ${{ secrets.ENV }} > .env
+          npm run build
+          
 
       - name: == host CI/CD ==
         uses: appleboy/ssh-action@master
@@ -38,6 +39,8 @@ jobs:
             
             echo changeDirectory
             cd ${{ secrets.RUN_PATH }}
+            
+            source $(brew --prefix nvm)/nvm.sh
             
             git pull
             
