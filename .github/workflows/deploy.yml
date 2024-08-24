@@ -30,7 +30,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             
+            
             source ~/.zshrc
+            
+            env | grep PATH
             
             echo changeDirectory
             cd ${{ secrets.RUN_PATH }}
