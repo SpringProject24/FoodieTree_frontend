@@ -24,7 +24,7 @@ jobs:
       - name: Build
         run: |
           echo ${{ secrets.ENV }} > .env
-          npm run build
+          CI=false npm run build
           
 
       - name: == host CI/CD ==
@@ -48,4 +48,16 @@ jobs:
             
             brew services restart nginx
             
-            
+      - name: Discord Alert Success
+        uses: sarisia/actions-status-discord@v1
+        if: success()
+        with:
+            webhook: ${{ secrets.DISCORD_WEBHOOK }}
+            description: "사이트가 배포되었습니다!"
+
+      - name: Discord Alert Failure
+        uses: sarisia/actions-status-discord@v1
+        if: failure()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          description: "사이트 배포를 실패하였습니다."
