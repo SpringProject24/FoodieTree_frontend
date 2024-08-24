@@ -25,7 +25,7 @@ jobs:
       - name: == host CI/CD ==
         uses: appleboy/ssh-action@master
         env:
-          PATH: ${{ secrets.PATH }}
+          node: /usr/local/bin/node
         with:
           username: ${{ secrets.NAME }}
           host: ${{ secrets.HOST }}
