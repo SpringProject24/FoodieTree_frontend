@@ -24,13 +24,13 @@ jobs:
 
       - name: == host CI/CD ==
         uses: appleboy/ssh-action@master
-        env:
-          node: /usr/local/bin/node
         with:
           username: ${{ secrets.NAME }}
           host: ${{ secrets.HOST }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            
+            source ~/.zshrc
             
             echo changeDirectory
             cd ${{ secrets.RUN_PATH }}
