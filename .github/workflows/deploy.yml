@@ -29,11 +29,14 @@ jobs:
           host: ${{ secrets.HOST }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            
             echo changeDirectory
-            cd ${{ secrets.PATH }}
+            cd ${{ secrets.RUN_PATH }}
+            
+            /usr/bin/git pull
             
             /usr/local/bin/npm run build
             
             /usr/local/bin/brew services restart nginx
             
-        
+            
