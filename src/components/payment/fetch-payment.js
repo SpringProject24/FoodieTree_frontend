@@ -27,7 +27,7 @@ export const updateReservationFetch = (paymentId) => authFetch(RESERVATION_URL, 
 });
 
 
-export const requestPayment = async (storeName, price, paymentId) => {
+export const requestPayment = async (storeName, price, paymentId, redirect) => {
     try {
         const data = await PortOne.requestPayment({
             storeId: process.env.REACT_APP_PAYMENT_STORE_ID,
@@ -37,7 +37,7 @@ export const requestPayment = async (storeName, price, paymentId) => {
             totalAmount: `${price}`,
             currency: "CURRENCY_KRW",
             payMethod: "EASY_PAY",
-            redirectUrl: `http://${window.location.hostname}:3000/main`,
+            redirectUrl: redirect,
             bypass: {
                 kakaopay: {
                     custom_message: "지구를 지키는 'FoodieTree'입니다"

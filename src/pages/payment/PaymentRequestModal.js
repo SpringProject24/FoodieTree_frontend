@@ -6,9 +6,10 @@ import {useModal} from "../common/ModalProvider";
 const PaymentRequestModal = ({storeName, price, paymentId, onClose}) => {
     const {modalState: {isOpen}, closeModal, aModal} = useModal();
     const formattedPrice = Intl.NumberFormat().format(price);
+    const redirect = window.location.href;
 
     const clickHandler = async () => {
-        const response = await requestPayment(storeName, price, paymentId);
+        const response = await requestPayment(storeName, price, paymentId, redirect);
         if (response.code === "FAILURE_TYPE_PG") {
             console.log(response);
             return
