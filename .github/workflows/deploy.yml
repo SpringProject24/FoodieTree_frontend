@@ -23,7 +23,7 @@ jobs:
 
       - name: Build
         run: |
-          cat ${{ secrets.ENV }} > .env
+          echo "${{ secrets.ENV }}" > .env
           CI=false npm run build
 
       - name: copy config file
@@ -46,7 +46,9 @@ jobs:
             
             export PATH=$PATH:/usr/local/bin
             
-            cat ${{ secrets.DOCKER_YML }} > ./docker-compose.yml
+            echo "${{ secrets.DOCKER_YML }}" > ./foodie-app/docker-compose.yml
+            
+            cd ./foodie-app
             
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
