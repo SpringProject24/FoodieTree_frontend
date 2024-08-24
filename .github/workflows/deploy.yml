@@ -24,6 +24,8 @@ jobs:
 
       - name: == host CI/CD ==
         uses: appleboy/ssh-action@master
+        env:
+          PATH: ${{ secrets.PATH }}
         with:
           username: ${{ secrets.NAME }}
           host: ${{ secrets.HOST }}
