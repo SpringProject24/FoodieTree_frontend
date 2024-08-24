@@ -13,7 +13,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: == npm build CI TEST ==
+      - name: == React app build ==
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -23,9 +23,18 @@ jobs:
 
       - name: Build
         run: |
-          echo ${{ secrets.ENV }} > .env
+          cat ${{ secrets.ENV }} > .env
           CI=false npm run build
-          
+
+      - name: copy config file
+        run: |
+          cat ${{ secrets.NGINX_CONF }} > nginx.conf
+
+      - name: docker image build
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/foodie-app:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/foodie-app:latest
 
       - name: == host CI/CD ==
         uses: appleboy/ssh-action@master
@@ -37,27 +46,32 @@ jobs:
             
             export PATH=$PATH:/usr/local/bin
             
-            echo changeDirectory
-            cd ${{ secrets.RUN_PATH }}
+            cat ${{ secrets.DOCKER_YML }} > ./docker-compose.yml
             
-            source $(brew --prefix nvm)/nvm.sh
-            
-            git pull
-            
-            npm run build
-            
-            brew services restart nginx
-            
-      - name: Discord Alert Success
-        uses: sarisia/actions-status-discord@v1
-        if: success()
-        with:
-            webhook: ${{ secrets.DISCORD_WEBHOOK }}
-            description: "사이트가 배포되었습니다!"
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Discord Alert Failure
-        uses: sarisia/actions-status-discord@v1
-        if: failure()
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          description: "사이트 배포를 실패하였습니다."
+            echo "Stopping existing container..."
+            docker compose down || true
+            
+            echo "Pulling Docker image..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/foodie-app:latest
+            
+            echo "Starting new container..."
+            docker compose up -d 
+
+
+#      - name: Discord Alert Success
+#        uses: sarisia/actions-status-discord@v1
+#        if: success()
+#        with:
+#            webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#            description: "사이트가 배포되었습니다!"
+#
+#      - name: Discord Alert Failure
+#        uses: sarisia/actions-status-discord@v1
+#        if: failure()
+#        with:
+#          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#          description: "사이트 배포를 실패하였습니다."
+
+
