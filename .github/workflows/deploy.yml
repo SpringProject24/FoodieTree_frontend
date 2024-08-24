@@ -46,6 +46,8 @@ jobs:
             
             export PATH=$PATH:/usr/local/bin
             
+            mkdir -p foodie-app
+            
             echo "${{ secrets.DOCKER_YML }}" > ./foodie-app/docker-compose.yml
             
             cd ./foodie-app
