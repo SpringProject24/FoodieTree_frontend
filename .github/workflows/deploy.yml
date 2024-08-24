@@ -19,8 +19,12 @@ jobs:
           node-version: 20
           cache: 'npm'
           run: |
-            echo "${{ secrets.ENV }}" > .env
-            npm run build
+            
+            echo ${{ secrets.ENV }} > .env
+            
+            ls -al 
+            
+            npm ci
 
       - name: == host CI/CD ==
         uses: appleboy/ssh-action@master
