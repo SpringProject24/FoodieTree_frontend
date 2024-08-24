@@ -28,7 +28,7 @@ jobs:
 
       - name: copy config file
         run: |
-          cat ${{ secrets.NGINX_CONF }} > nginx.conf
+          echo "${{ secrets.NGINX_CONF }}" > nginx.conf
 
       - name: docker image build
         run: |
