@@ -35,6 +35,8 @@ jobs:
             
             env | grep PATH
             
+            export PATH=$PATH:/usr/local/bin
+            
             echo changeDirectory
             cd ${{ secrets.RUN_PATH }}
             
