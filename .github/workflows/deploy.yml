@@ -30,20 +30,15 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             
-            
-            source ~/.zshrc
-            
-            env | grep PATH
-            
             export PATH=$PATH:/usr/local/bin
             
             echo changeDirectory
             cd ${{ secrets.RUN_PATH }}
             
-            /usr/bin/git pull
+            git pull
             
-            /usr/local/bin/npm run build
+            npm run build
             
-            /usr/local/bin/brew services restart nginx
+            brew services restart nginx
             
             
