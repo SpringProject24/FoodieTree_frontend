@@ -1,0 +1,39 @@
+name: Deploy foodietree front
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: == npm build CI TEST ==
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          run: |
+            echo "${{ secrets.ENV }}" > .env
+            npm run build
+
+      - name: == host CI/CD ==
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.NAME }}
+          host: ${{ secrets.HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo changeDirectory
+            cd ${{ secrets.PATH }}
+            
+            /usr/local/bin/npm run build
+            
+            /usr/local/bin/brew services restart nginx
+            
+        
