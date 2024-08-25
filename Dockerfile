@@ -3,7 +3,6 @@ FROM nginx:stable
 RUN mkdir -p /cert
 WORKDIR /app
 COPY build .
-COPY nginx.conf /etc/nginx/
 EXPOSE 443
 EXPOSE 8080
 
