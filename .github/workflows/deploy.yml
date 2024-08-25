@@ -48,10 +48,11 @@ jobs:
             
             mkdir -p foodie-app
             
-            echo "${{ secrets.DOCKER_YML }}" > ./foodie-app/docker-compose.yml
-            
             cd ./foodie-app
-            
+            echo "${{ secrets.DOCKER_YML }}" > ./docker-compose.yml
+            echo "${{ secrets.CERTI_CRT }}" > ./certi.crt
+            echo "${{ secrets.SSL_PRIVATE_KEY }}" > ./private.key
+
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
             echo "Stopping existing container..."
@@ -61,8 +62,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/foodie-app:latest
             
             echo "Starting new container..."
-            docker compose up -d 
-
+            docker compose up -d
 
 #      - name: Discord Alert Success
 #        uses: sarisia/actions-status-discord@v1
