@@ -51,12 +51,12 @@ export const requestPayment = async (storeName, price, paymentId, redirect) => {
     }
 }
 
-export const redirectPaymentRequest = async (paymentId, keyword) => {
+export const redirectPaymentRequest = async (paymentId) => {
     const updateRes = await updateReservationFetch(paymentId);
     const data = await updateRes.text();
     if (updateRes.ok) {
         alert("결제가 완료되었습니다!");
-        window.location.href = window.location.origin + `/search?q=` + keyword;
+        window.location.href = window.location.origin + window.location.pathname + window.location.search;
     } else {
         alert("잠시 후 다시 이용해주세요");
         console.log(data)
