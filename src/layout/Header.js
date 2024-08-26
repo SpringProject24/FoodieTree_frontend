@@ -66,8 +66,9 @@ const Header = () => {
 
     useEffect(() => {
         const paymentId = word.get("paymentId");
+        const keyword = word.get("q");
         if (paymentId !== null) {
-            redirectPaymentRequest(paymentId);
+            redirectPaymentRequest(paymentId, keyword);
         }
     }, [word]);
 
