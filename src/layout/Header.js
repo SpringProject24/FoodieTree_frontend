@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 import {getToken, getRefreshToken, extractArea} from '../utils/authUtil';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,7 @@ import MyInfo from "../components/header/MyInfo";
 import {getCurrentLocation, initializeNaverMapsForHeader, reverseGeocode} from "../utils/locationUtil";
 import SidebarModal from "../components/header/SidebarModal";
 import SearchInput from "../components/search/SearchInput";
+import {redirectPaymentRequest} from "../components/payment/fetch-payment";
 
 // 아이콘을 라이브러리에 추가
 library.add(faMagnifyingGlass);
@@ -22,6 +23,7 @@ const Header = () => {
     // 위치 가져오기
     const [address, setAddress] = useState('위치를 불러오는 중...'); // 기본 주소 상태 설정
     const [modalVisible, setModalVisible] = useState(false);
+    const [word, setWord ] = useSearchParams();
 
     useEffect(() => {
         // 로그인 한 사람 정보 가져오기
@@ -61,6 +63,14 @@ const Header = () => {
             setAddress(JSON.parse(storedAddress)); // 세션 스토리지에서 가져온 값을 JSON.parse로 변환
         }
     }, [isAuthenticated]);
+
+    useEffect(() => {
+        const paymentId = word.get("paymentId");
+        const keyword = word.get('q');
+        if (paymentId !== null) {
+            redirectPaymentRequest(paymentId, keyword);
+        }
+    }, [word]);
 
     const toggleModal = () => {
         setModalVisible(prev => !prev);
